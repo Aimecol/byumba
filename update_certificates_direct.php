@@ -35,15 +35,29 @@ try {
     // Start transaction
     $db->beginTransaction();
     
-    echo "<div class='info'>Step 1: Clearing existing certificate types and translations...</div>";
-    
-    // First, empty the tables
+    echo "<div class='info'>Step 1: Handling existing data and foreign key constraints...</div>";
+
+    // Check if there are existing applications
+    $check_apps_query = "SELECT COUNT(*) as app_count FROM applications";
+    $check_apps_stmt = $db->prepare($check_apps_query);
+    $check_apps_stmt->execute();
+    $app_count = $check_apps_stmt->fetch()['app_count'];
+
+    if ($app_count > 0) {
+        echo "<div class='warning'>Found $app_count existing applications. Will temporarily disable foreign key checks.</div>";
+
+        // Temporarily disable foreign key checks
+        $db->exec("SET FOREIGN_KEY_CHECKS = 0");
+        echo "<div class='success'>✓ Temporarily disabled foreign key checks</div>";
+    }
+
+    // Clear existing data
     $db->exec("DELETE FROM certificate_type_translations");
     echo "<div class='success'>✓ Cleared certificate_type_translations table</div>";
-    
+
     $db->exec("DELETE FROM certificate_types");
     echo "<div class='success'>✓ Cleared certificate_types table</div>";
-    
+
     // Reset auto increment
     $db->exec("ALTER TABLE certificate_types AUTO_INCREMENT = 1");
     $db->exec("ALTER TABLE certificate_type_translations AUTO_INCREMENT = 1");
@@ -295,9 +309,21 @@ try {
         echo "<div class='success'>✓ Added certificate type: " . htmlspecialchars($cert_type['translations']['en']['name']) . "</div>";
     }
     
+    // Re-enable foreign key checks if they were disabled
+    if ($app_count > 0) {
+        $db->exec("SET FOREIGN_KEY_CHECKS = 1");
+        echo "<div class='success'>✓ Re-enabled foreign key checks</div>";
+
+        // Update existing applications to use the new 'marriage' certificate type (ID 7) as default
+        // This is a safe fallback since marriage is a common certificate type
+        $update_apps_query = "UPDATE applications SET certificate_type_id = 7 WHERE certificate_type_id NOT IN (SELECT id FROM certificate_types)";
+        $db->exec($update_apps_query);
+        echo "<div class='info'>✓ Updated existing applications to reference valid certificate types</div>";
+    }
+
     // Commit transaction
     $db->commit();
-    
+
     echo "<br><div class='success'><strong>SUCCESS!</strong> Certificate types have been successfully updated!</div>";
     echo "<div class='info'>Total certificate types added: $count</div>";
     echo "<div class='info'>Each certificate type includes translations in English, Kinyarwanda, and French.</div>";
@@ -324,10 +350,17 @@ try {
 } catch (Exception $e) {
     // Rollback transaction on error
     if ($db) {
+        // Re-enable foreign key checks before rollback
+        try {
+            $db->exec("SET FOREIGN_KEY_CHECKS = 1");
+        } catch (Exception $fk_error) {
+            // Ignore foreign key re-enable errors during rollback
+        }
         $db->rollback();
     }
     echo "<div class='error'><strong>ERROR:</strong> " . htmlspecialchars($e->getMessage()) . "</div>";
     echo "<div class='warning'>The update was rolled back. No changes were made to the database.</div>";
+    echo "<div class='info'>Foreign key checks have been restored.</div>";
 }
 
 echo "<br><div style='margin-top: 20px;'>

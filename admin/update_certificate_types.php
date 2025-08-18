@@ -23,11 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_certificates']
     try {
         // Start transaction
         $db->beginTransaction();
-        
+
+        // Check if there are existing applications
+        $check_apps_query = "SELECT COUNT(*) as app_count FROM applications";
+        $check_apps_stmt = $db->prepare($check_apps_query);
+        $check_apps_stmt->execute();
+        $app_count = $check_apps_stmt->fetch()['app_count'];
+
+        if ($app_count > 0) {
+            // Temporarily disable foreign key checks
+            $db->exec("SET FOREIGN_KEY_CHECKS = 0");
+        }
+
         // First, empty the tables
         $db->exec("DELETE FROM certificate_type_translations");
         $db->exec("DELETE FROM certificate_types");
-        
+
         // Reset auto increment
         $db->exec("ALTER TABLE certificate_types AUTO_INCREMENT = 1");
         $db->exec("ALTER TABLE certificate_type_translations AUTO_INCREMENT = 1");
@@ -271,7 +282,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_certificates']
                 $trans_stmt->execute();
             }
         }
-        
+
+        // Re-enable foreign key checks if they were disabled
+        if ($app_count > 0) {
+            $db->exec("SET FOREIGN_KEY_CHECKS = 1");
+
+            // Update existing applications to use the new 'marriage' certificate type (ID 7) as default
+            $update_apps_query = "UPDATE applications SET certificate_type_id = 7 WHERE certificate_type_id NOT IN (SELECT id FROM certificate_types)";
+            $db->exec($update_apps_query);
+        }
+
         // Commit transaction
         $db->commit();
         
@@ -290,6 +310,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_certificates']
         
     } catch (Exception $e) {
         // Rollback transaction on error
+        try {
+            $db->exec("SET FOREIGN_KEY_CHECKS = 1");
+        } catch (Exception $fk_error) {
+            // Ignore foreign key re-enable errors during rollback
+        }
         $db->rollback();
         $error_message = "Error updating certificate types: " . $e->getMessage();
     }

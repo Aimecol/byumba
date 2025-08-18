@@ -3,72 +3,95 @@
 // Certificate Information Data
 function getCertificateInfo(certificateType) {
     const certificateData = {
-        'Baptism Certificate': {
-            icon: 'fas fa-cross',
-            processingTime: '3-5 business days',
+        'Abasheshakanguhe': {
+            icon: 'fas fa-certificate',
+            processingTime: '7 business days',
             fee: 'RWF 2,000',
             documents: [
-                'National ID or Passport copy',
-                'Birth Certificate',
-                'Parent\'s Marriage Certificate (if applicable)',
-                'Baptism Request Letter'
+                'National ID Copy',
+                'Membership Proof',
+                'Passport Photo'
             ]
         },
-        'Confirmation Certificate': {
-            icon: 'fas fa-hands-praying',
-            processingTime: '3-5 business days',
+        'Ebenezer': {
+            icon: 'fas fa-star',
+            processingTime: '7 business days',
+            fee: 'RWF 2,000',
+            documents: [
+                'National ID Copy',
+                'Group Membership Proof',
+                'Passport Photo'
+            ]
+        },
+        'Father\'s Union': {
+            icon: 'fas fa-users',
+            processingTime: '5 business days',
             fee: 'RWF 2,500',
             documents: [
-                'National ID or Passport copy',
-                'Baptism Certificate',
-                'Confirmation Request Letter',
-                'Sponsor Information'
+                'National ID Copy',
+                'Marriage Certificate',
+                'Passport Photo'
             ]
         },
-        'Marriage Certificate': {
+        'Icyemezo cyo gusura kwa korare': {
+            icon: 'fas fa-home',
+            processingTime: '3 business days',
+            fee: 'RWF 1,500',
+            documents: [
+                'National ID Copy',
+                'Request Letter',
+                'Passport Photo'
+            ]
+        },
+        'Icyemezo cyuko winjiye mumuryango wa GFS': {
+            icon: 'fas fa-female',
+            processingTime: '5 business days',
+            fee: 'RWF 2,000',
+            documents: [
+                'National ID Copy',
+                'Application Form',
+                'Passport Photo'
+            ]
+        },
+        'Icyemezo cyumukirisitu': {
+            icon: 'fas fa-cross',
+            processingTime: '3 business days',
+            fee: 'RWF 1,500',
+            documents: [
+                'National ID Copy',
+                'Baptism Certificate',
+                'Passport Photo'
+            ]
+        },
+        'Marriage': {
             icon: 'fas fa-ring',
-            processingTime: '5-7 business days',
+            processingTime: '7 business days',
             fee: 'RWF 5,000',
             documents: [
-                'National ID or Passport copy (Both spouses)',
-                'Birth Certificate (Both spouses)',
-                'Baptism Certificate (Both spouses)',
-                'Marriage Request Letter',
-                'Witness Information'
+                'National ID Copy',
+                'Birth Certificate',
+                'Passport Photo',
+                'Medical Certificate'
             ]
         },
-        'Ordination Certificate': {
-            icon: 'fas fa-church',
-            processingTime: '7-10 business days',
-            fee: 'RWF 10,000',
+        'Mother\'s Union': {
+            icon: 'fas fa-heart',
+            processingTime: '5 business days',
+            fee: 'RWF 2,500',
             documents: [
-                'National ID or Passport copy',
-                'Seminary Graduation Certificate',
-                'Baptism Certificate',
-                'Confirmation Certificate',
-                'Ordination Request Letter'
+                'National ID Copy',
+                'Marriage Certificate',
+                'Passport Photo'
             ]
         },
-        'Membership Certificate': {
-            icon: 'fas fa-users',
-            processingTime: '2-3 business days',
+        'Youth Union': {
+            icon: 'fas fa-graduation-cap',
+            processingTime: '3 business days',
             fee: 'RWF 1,500',
             documents: [
-                'National ID or Passport copy',
-                'Baptism Certificate',
-                'Parish Registration Form',
-                'Membership Request Letter'
-            ]
-        },
-        'Good Standing Certificate': {
-            icon: 'fas fa-certificate',
-            processingTime: '2-3 business days',
-            fee: 'RWF 1,500',
-            documents: [
-                'National ID or Passport copy',
-                'Baptism Certificate',
-                'Good Standing Request Letter',
-                'Purpose Statement'
+                'National ID Copy',
+                'School Certificate',
+                'Passport Photo'
             ]
         }
     };
@@ -345,58 +368,85 @@ function showCertificateSelection() {
             <p>Choose the type of certificate you would like to apply for:</p>
             
             <div class="certificate-types-grid">
-                <div class="certificate-type-card" data-type="Baptism Certificate">
-                    <div class="certificate-icon">
-                        <i class="fas fa-cross"></i>
-                    </div>
-                    <h4>Baptism Certificate</h4>
-                    <p>Official record of baptism</p>
-                    <span class="fee">RWF 2,000</span>
-                </div>
-                
-                <div class="certificate-type-card" data-type="Confirmation Certificate">
-                    <div class="certificate-icon">
-                        <i class="fas fa-hands-praying"></i>
-                    </div>
-                    <h4>Confirmation Certificate</h4>
-                    <p>Official record of confirmation</p>
-                    <span class="fee">RWF 2,500</span>
-                </div>
-                
-                <div class="certificate-type-card" data-type="Marriage Certificate">
-                    <div class="certificate-icon">
-                        <i class="fas fa-ring"></i>
-                    </div>
-                    <h4>Marriage Certificate</h4>
-                    <p>Official record of marriage</p>
-                    <span class="fee">RWF 5,000</span>
-                </div>
-                
-                <div class="certificate-type-card" data-type="Ordination Certificate">
-                    <div class="certificate-icon">
-                        <i class="fas fa-church"></i>
-                    </div>
-                    <h4>Ordination Certificate</h4>
-                    <p>Official record of ordination</p>
-                    <span class="fee">RWF 1,000</span>
-                </div>
-                
-                <div class="certificate-type-card" data-type="Membership Certificate">
-                    <div class="certificate-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h4>Membership Certificate</h4>
-                    <p>Parish membership record</p>
-                    <span class="fee">RWF 1,000</span>
-                </div>
-                
-                <div class="certificate-type-card" data-type="Good Standing Certificate">
+                <div class="certificate-type-card" data-type="Abasheshakanguhe">
                     <div class="certificate-icon">
                         <i class="fas fa-certificate"></i>
                     </div>
-                    <h4>Good Standing Certificate</h4>
-                    <p>Certificate of good standing</p>
-                    <span class="fee">RWF 1,000</span>
+                    <h4>Abasheshakanguhe</h4>
+                    <p>Certificate for Abasheshakanguhe members</p>
+                    <span class="fee">RWF 2,000</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Ebenezer">
+                    <div class="certificate-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Ebenezer</h4>
+                    <p>Certificate for Ebenezer group members</p>
+                    <span class="fee">RWF 2,000</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Father's Union">
+                    <div class="certificate-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Father's Union</h4>
+                    <p>Certificate for Father's Union members</p>
+                    <span class="fee">RWF 2,500</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Icyemezo cyo gusura kwa korare">
+                    <div class="certificate-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4>Icyemezo cyo gusura kwa korare</h4>
+                    <p>Certificate for visiting korare</p>
+                    <span class="fee">RWF 1,500</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Icyemezo cyuko winjiye mumuryango wa GFS">
+                    <div class="certificate-icon">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <h4>GFS Membership</h4>
+                    <p>Certificate for joining GFS organization</p>
+                    <span class="fee">RWF 2,000</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Icyemezo cyumukirisitu">
+                    <div class="certificate-icon">
+                        <i class="fas fa-cross"></i>
+                    </div>
+                    <h4>Icyemezo cyumukirisitu</h4>
+                    <p>Christian certificate</p>
+                    <span class="fee">RWF 1,500</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Marriage">
+                    <div class="certificate-icon">
+                        <i class="fas fa-ring"></i>
+                    </div>
+                    <h4>Marriage</h4>
+                    <p>Marriage certificate</p>
+                    <span class="fee">RWF 5,000</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Mother's Union">
+                    <div class="certificate-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Mother's Union</h4>
+                    <p>Certificate for Mother's Union members</p>
+                    <span class="fee">RWF 2,500</span>
+                </div>
+
+                <div class="certificate-type-card" data-type="Youth Union">
+                    <div class="certificate-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4>Youth Union</h4>
+                    <p>Certificate for Youth Union members</p>
+                    <span class="fee">RWF 1,500</span>
                 </div>
             </div>
         </div>
@@ -504,59 +554,208 @@ function initializeApplicationForm(certificateType) {
 // Certificate-specific form fields (if not available from script.js)
 function getCertificateSpecificFields(certificateType) {
     const specificFields = {
-        'Baptism Certificate': `
+        'Abasheshakanguhe': `
             <div class="form-row">
                 <div class="form-group">
-                    <label for="baptismDate">Baptism Date (if known)</label>
-                    <input type="date" id="baptismDate" name="baptismDate">
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
                 </div>
                 <div class="form-group">
-                    <label for="baptismParish">Parish of Baptism</label>
-                    <input type="text" id="baptismParish" name="baptismParish" placeholder="Enter parish name">
+                    <label for="membershipDate">Date of joining Abasheshakanguhe (if known)</label>
+                    <input type="date" id="membershipDate" name="membershipDate">
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fatherName">Father's Full Name *</label>
-                    <input type="text" id="fatherName" name="fatherName" required>
-                </div>
-                <div class="form-group">
-                    <label for="motherName">Mother's Full Name *</label>
-                    <input type="text" id="motherName" name="motherName" required>
-                </div>
+            <div class="form-group">
+                <label for="membershipPurpose">Purpose of Certificate *</label>
+                <select id="membershipPurpose" name="membershipPurpose" required>
+                    <option value="">Select purpose</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="transfer">Transfer to another parish</option>
+                    <option value="employment">Employment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="additionalInfo">Additional Information</label>
+                <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any additional information about your membership"></textarea>
             </div>
         `,
-        'Confirmation Certificate': `
+        'Ebenezer': `
             <div class="form-row">
                 <div class="form-group">
-                    <label for="confirmationDate">Confirmation Date (if known)</label>
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
+                </div>
+                <div class="form-group">
+                    <label for="membershipDate">Date of joining Ebenezer (if known)</label>
+                    <input type="date" id="membershipDate" name="membershipDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="membershipPurpose">Purpose of Certificate *</label>
+                <select id="membershipPurpose" name="membershipPurpose" required>
+                    <option value="">Select purpose</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="transfer">Transfer to another parish</option>
+                    <option value="employment">Employment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="additionalInfo">Additional Information</label>
+                <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any additional information about your membership"></textarea>
+            </div>
+        `,
+        'Father\'s Union': `
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
+                </div>
+                <div class="form-group">
+                    <label for="membershipDate">Date of joining Father's Union (if known)</label>
+                    <input type="date" id="membershipDate" name="membershipDate">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="spouseFirstName">Wife's First Name *</label>
+                    <input type="text" id="spouseFirstName" name="spouseFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="spouseLastName">Wife's Last Name *</label>
+                    <input type="text" id="spouseLastName" name="spouseLastName" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="marriageDate">Marriage Date *</label>
+                <input type="date" id="marriageDate" name="marriageDate" required>
+            </div>
+            <div class="form-group">
+                <label for="membershipPurpose">Purpose of Certificate *</label>
+                <select id="membershipPurpose" name="membershipPurpose" required>
+                    <option value="">Select purpose</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="transfer">Transfer to another parish</option>
+                    <option value="employment">Employment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        `,
+        'Icyemezo cyo gusura kwa korare': `
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="choirName">Choir Name *</label>
+                    <input type="text" id="choirName" name="choirName" required placeholder="Enter choir name">
+                </div>
+                <div class="form-group">
+                    <label for="currentParish">Home Parish *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your home parish">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="visitDate">Visit Date *</label>
+                    <input type="date" id="visitDate" name="visitDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="visitLocation">Visit Location *</label>
+                    <input type="text" id="visitLocation" name="visitLocation" required placeholder="Where the choir will visit">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="choirLeaderName">Choir Leader Name *</label>
+                <input type="text" id="choirLeaderName" name="choirLeaderName" required placeholder="Name of choir leader">
+            </div>
+            <div class="form-group">
+                <label for="visitPurpose">Purpose of Visit</label>
+                <textarea id="visitPurpose" name="visitPurpose" rows="3" placeholder="Describe the purpose of the choir visit"></textarea>
+            </div>
+        `,
+        'Icyemezo cyuko winjiye mumuryango wa GFS': `
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
+                </div>
+                <div class="form-group">
+                    <label for="membershipDate">Date of joining GFS *</label>
+                    <input type="date" id="membershipDate" name="membershipDate" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ceremonyLocation">Where the ceremony took place *</label>
+                    <input type="text" id="ceremonyLocation" name="ceremonyLocation" required placeholder="Location of GFS enrollment ceremony">
+                </div>
+                <div class="form-group">
+                    <label for="gfsLeaderName">GFS Leader Name *</label>
+                    <input type="text" id="gfsLeaderName" name="gfsLeaderName" required placeholder="Name of GFS leader who conducted ceremony">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="membershipPurpose">Purpose of Certificate *</label>
+                <select id="membershipPurpose" name="membershipPurpose" required>
+                    <option value="">Select purpose</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="transfer">Transfer to another parish</option>
+                    <option value="employment">Employment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        `,
+        'Icyemezo cyumukirisitu': `
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
+                </div>
+                <div class="form-group">
+                    <label for="baptismDate">Baptism Date *</label>
+                    <input type="date" id="baptismDate" name="baptismDate" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="baptismLocation">Where you were baptized *</label>
+                    <input type="text" id="baptismLocation" name="baptismLocation" required placeholder="Location of baptism">
+                </div>
+                <div class="form-group">
+                    <label for="confirmationDate">Confirmation Date (if confirmed)</label>
                     <input type="date" id="confirmationDate" name="confirmationDate">
                 </div>
-                <div class="form-group">
-                    <label for="confirmationParish">Parish of Confirmation</label>
-                    <input type="text" id="confirmationParish" name="confirmationParish" placeholder="Enter parish name">
-                </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="sponsorName">Sponsor's Full Name *</label>
-                    <input type="text" id="sponsorName" name="sponsorName" required>
+                    <label for="confirmationLocation">Where you were confirmed</label>
+                    <input type="text" id="confirmationLocation" name="confirmationLocation" placeholder="Location of confirmation">
                 </div>
                 <div class="form-group">
-                    <label for="confirmationName">Confirmation Name</label>
-                    <input type="text" id="confirmationName" name="confirmationName" placeholder="Saint name chosen">
+                    <label for="churchRole">Role in Church</label>
+                    <input type="text" id="churchRole" name="churchRole" placeholder="Your role/ministry in church">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="membershipPurpose">Purpose of Certificate *</label>
+                <select id="membershipPurpose" name="membershipPurpose" required>
+                    <option value="">Select purpose</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="employment">Employment</option>
+                    <option value="education">Education</option>
+                    <option value="travel">Travel/Visa</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
         `,
-        'Marriage Certificate': `
+        'Marriage': `
             <div class="form-row">
                 <div class="form-group">
                     <label for="marriageDate">Marriage Date *</label>
                     <input type="date" id="marriageDate" name="marriageDate" required>
                 </div>
                 <div class="form-group">
-                    <label for="marriageParish">Parish of Marriage *</label>
-                    <input type="text" id="marriageParish" name="marriageParish" required>
+                    <label for="marriageLocation">Where marriage took place *</label>
+                    <input type="text" id="marriageLocation" name="marriageLocation" required placeholder="Location of marriage ceremony">
                 </div>
             </div>
             <div class="form-row">
@@ -569,76 +768,116 @@ function getCertificateSpecificFields(certificateType) {
                     <input type="text" id="spouseLastName" name="spouseLastName" required>
                 </div>
             </div>
-        `,
-        'Ordination Certificate': `
             <div class="form-row">
                 <div class="form-group">
-                    <label for="ordinationDate">Ordination Date *</label>
-                    <input type="date" id="ordinationDate" name="ordinationDate" required>
+                    <label for="spouseDateOfBirth">Spouse's Date of Birth *</label>
+                    <input type="date" id="spouseDateOfBirth" name="spouseDateOfBirth" required>
                 </div>
                 <div class="form-group">
-                    <label for="ordinationType">Type of Ordination *</label>
-                    <select id="ordinationType" name="ordinationType" required>
-                        <option value="">Select ordination type</option>
-                        <option value="deacon">Deacon</option>
-                        <option value="priest">Priest</option>
-                        <option value="bishop">Bishop</option>
-                    </select>
+                    <label for="spouseParish">Spouse's Parish *</label>
+                    <input type="text" id="spouseParish" name="spouseParish" required placeholder="Spouse's parish">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="ordinationParish">Parish/Cathedral of Ordination *</label>
-                    <input type="text" id="ordinationParish" name="ordinationParish" required>
+                    <label for="spouseBaptismDate">Spouse's Baptism Date</label>
+                    <input type="date" id="spouseBaptismDate" name="spouseBaptismDate">
                 </div>
                 <div class="form-group">
-                    <label for="ordinationBishop">Ordaining Bishop *</label>
-                    <input type="text" id="ordinationBishop" name="ordinationBishop" required>
+                    <label for="spouseConfirmationDate">Spouse's Confirmation Date</label>
+                    <input type="date" id="spouseConfirmationDate" name="spouseConfirmationDate">
                 </div>
             </div>
-        `,
-        'Membership Certificate': `
             <div class="form-row">
                 <div class="form-group">
-                    <label for="membershipDate">Membership Start Date</label>
+                    <label for="fatherName">Father's Name</label>
+                    <input type="text" id="fatherName" name="fatherName" placeholder="Your father's full name">
+                </div>
+                <div class="form-group">
+                    <label for="motherName">Mother's Name</label>
+                    <input type="text" id="motherName" name="motherName" placeholder="Your mother's full name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="spouseFatherName">Spouse's Father's Name</label>
+                    <input type="text" id="spouseFatherName" name="spouseFatherName" placeholder="Spouse's father's full name">
+                </div>
+                <div class="form-group">
+                    <label for="spouseMotherName">Spouse's Mother's Name</label>
+                    <input type="text" id="spouseMotherName" name="spouseMotherName" placeholder="Spouse's mother's full name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="officiantName">Name of person who performed ceremony *</label>
+                <input type="text" id="officiantName" name="officiantName" required placeholder="Name of priest/bishop who performed marriage">
+            </div>
+        `,
+        'Mother\'s Union': `
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
+                </div>
+                <div class="form-group">
+                    <label for="membershipDate">Date of joining Mother's Union (if known)</label>
                     <input type="date" id="membershipDate" name="membershipDate">
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="currentParish">Current Parish *</label>
-                    <input type="text" id="currentParish" name="currentParish" required>
+                    <label for="spouseFirstName">Husband's First Name *</label>
+                    <input type="text" id="spouseFirstName" name="spouseFirstName" required>
                 </div>
+                <div class="form-group">
+                    <label for="spouseLastName">Husband's Last Name *</label>
+                    <input type="text" id="spouseLastName" name="spouseLastName" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="marriageDate">Marriage Date *</label>
+                <input type="date" id="marriageDate" name="marriageDate" required>
             </div>
             <div class="form-group">
                 <label for="membershipPurpose">Purpose of Certificate *</label>
                 <select id="membershipPurpose" name="membershipPurpose" required>
                     <option value="">Select purpose</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="transfer">Transfer to another parish</option>
                     <option value="employment">Employment</option>
-                    <option value="education">Education</option>
-                    <option value="travel">Travel/Visa</option>
                     <option value="other">Other</option>
                 </select>
             </div>
         `,
-        'Good Standing Certificate': `
+        'Youth Union': `
             <div class="form-row">
                 <div class="form-group">
-                    <label for="currentParish">Current Parish *</label>
-                    <input type="text" id="currentParish" name="currentParish" required>
+                    <label for="currentParish">Parish where you worship *</label>
+                    <input type="text" id="currentParish" name="currentParish" required placeholder="Enter your parish name">
                 </div>
                 <div class="form-group">
-                    <label for="membershipDuration">Years of Membership</label>
-                    <input type="number" id="membershipDuration" name="membershipDuration" min="0" placeholder="Number of years">
+                    <label for="membershipDate">Date of joining Youth Union (if known)</label>
+                    <input type="date" id="membershipDate" name="membershipDate">
                 </div>
             </div>
             <div class="form-group">
-                <label for="standingPurpose">Purpose of Certificate *</label>
-                <select id="standingPurpose" name="standingPurpose" required>
+                <label for="schoolName">School/Institution Name</label>
+                <input type="text" id="schoolName" name="schoolName" placeholder="Current school or institution">
+            </div>
+            <div class="form-group">
+                <label for="membershipPurpose">Purpose of Certificate *</label>
+                <select id="membershipPurpose" name="membershipPurpose" required>
                     <option value="">Select purpose</option>
-                    <option value="employment">Employment</option>
+                    <option value="official_record">Official Record</option>
+                    <option value="transfer">Transfer to another parish</option>
                     <option value="education">Education</option>
-                    <option value="travel">Travel/Visa</option>
+                    <option value="employment">Employment</option>
                     <option value="other">Other</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="additionalInfo">Additional Information</label>
+                <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any additional information about your membership"></textarea>
             </div>
         `
     };
@@ -649,115 +888,17 @@ function getCertificateSpecificFields(certificateType) {
 // Certificate-specific review fields
 function getCertificateSpecificReview(certificateType, formData) {
     const specificReviews = {
-        'Baptism Certificate': `
-            ${formData.get('baptismDate') ? `
-                <div class="review-item">
-                    <span>Baptism Date:</span>
-                    <span>${formData.get('baptismDate')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('baptismParish') ? `
-                <div class="review-item">
-                    <span>Parish of Baptism:</span>
-                    <span>${formData.get('baptismParish')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('fatherName') ? `
-                <div class="review-item">
-                    <span>Father's Name:</span>
-                    <span>${formData.get('fatherName')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('motherName') ? `
-                <div class="review-item">
-                    <span>Mother's Name:</span>
-                    <span>${formData.get('motherName')}</span>
-                </div>
-            ` : ''}
-        `,
-        'Confirmation Certificate': `
-            ${formData.get('confirmationDate') ? `
-                <div class="review-item">
-                    <span>Confirmation Date:</span>
-                    <span>${formData.get('confirmationDate')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('confirmationParish') ? `
-                <div class="review-item">
-                    <span>Parish of Confirmation:</span>
-                    <span>${formData.get('confirmationParish')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('sponsorName') ? `
-                <div class="review-item">
-                    <span>Sponsor's Name:</span>
-                    <span>${formData.get('sponsorName')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('confirmationName') ? `
-                <div class="review-item">
-                    <span>Confirmation Name:</span>
-                    <span>${formData.get('confirmationName')}</span>
-                </div>
-            ` : ''}
-        `,
-        'Marriage Certificate': `
-            ${formData.get('marriageDate') ? `
-                <div class="review-item">
-                    <span>Marriage Date:</span>
-                    <span>${formData.get('marriageDate')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('marriageParish') ? `
-                <div class="review-item">
-                    <span>Parish of Marriage:</span>
-                    <span>${formData.get('marriageParish')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('spouseFirstName') && formData.get('spouseLastName') ? `
-                <div class="review-item">
-                    <span>Spouse's Name:</span>
-                    <span>${formData.get('spouseFirstName')} ${formData.get('spouseLastName')}</span>
-                </div>
-            ` : ''}
-        `,
-        'Ordination Certificate': `
-            ${formData.get('ordinationDate') ? `
-                <div class="review-item">
-                    <span>Ordination Date:</span>
-                    <span>${formData.get('ordinationDate')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('ordinationType') ? `
-                <div class="review-item">
-                    <span>Type of Ordination:</span>
-                    <span>${formData.get('ordinationType').charAt(0).toUpperCase() + formData.get('ordinationType').slice(1)}</span>
-                </div>
-            ` : ''}
-            ${formData.get('ordinationParish') ? `
-                <div class="review-item">
-                    <span>Parish/Cathedral:</span>
-                    <span>${formData.get('ordinationParish')}</span>
-                </div>
-            ` : ''}
-            ${formData.get('ordinationBishop') ? `
-                <div class="review-item">
-                    <span>Ordaining Bishop:</span>
-                    <span>${formData.get('ordinationBishop')}</span>
-                </div>
-            ` : ''}
-        `,
-        'Membership Certificate': `
-            ${formData.get('membershipDate') ? `
-                <div class="review-item">
-                    <span>Membership Start Date:</span>
-                    <span>${formData.get('membershipDate')}</span>
-                </div>
-            ` : ''}
+        'Abasheshakanguhe': `
             ${formData.get('currentParish') ? `
                 <div class="review-item">
-                    <span>Current Parish:</span>
+                    <span>Parish:</span>
                     <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('membershipDate') ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${formData.get('membershipDate')}</span>
                 </div>
             ` : ''}
             ${formData.get('membershipPurpose') ? `
@@ -767,23 +908,229 @@ function getCertificateSpecificReview(certificateType, formData) {
                 </div>
             ` : ''}
         `,
-        'Good Standing Certificate': `
+        'Ebenezer': `
             ${formData.get('currentParish') ? `
                 <div class="review-item">
-                    <span>Current Parish:</span>
+                    <span>Parish:</span>
                     <span>${formData.get('currentParish')}</span>
                 </div>
             ` : ''}
-            ${formData.get('membershipDuration') ? `
+            ${formData.get('membershipDate') ? `
                 <div class="review-item">
-                    <span>Years of Membership:</span>
-                    <span>${formData.get('membershipDuration')} years</span>
+                    <span>Membership Date:</span>
+                    <span>${formData.get('membershipDate')}</span>
                 </div>
             ` : ''}
-            ${formData.get('standingPurpose') ? `
+            ${formData.get('membershipPurpose') ? `
                 <div class="review-item">
                     <span>Purpose:</span>
-                    <span>${formData.get('standingPurpose').charAt(0).toUpperCase() + formData.get('standingPurpose').slice(1)}</span>
+                    <span>${formData.get('membershipPurpose').charAt(0).toUpperCase() + formData.get('membershipPurpose').slice(1)}</span>
+                </div>
+            ` : ''}
+        `,
+        'Father\'s Union': `
+            ${formData.get('currentParish') ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('membershipDate') ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${formData.get('membershipDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('spouseFirstName') && formData.get('spouseLastName') ? `
+                <div class="review-item">
+                    <span>Wife's Name:</span>
+                    <span>${formData.get('spouseFirstName')} ${formData.get('spouseLastName')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('marriageDate') ? `
+                <div class="review-item">
+                    <span>Marriage Date:</span>
+                    <span>${formData.get('marriageDate')}</span>
+                </div>
+            ` : ''}
+        `,
+        'Icyemezo cyo gusura kwa korare': `
+            ${formData.get('choirName') ? `
+                <div class="review-item">
+                    <span>Choir Name:</span>
+                    <span>${formData.get('choirName')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('currentParish') ? `
+                <div class="review-item">
+                    <span>Home Parish:</span>
+                    <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('visitDate') ? `
+                <div class="review-item">
+                    <span>Visit Date:</span>
+                    <span>${formData.get('visitDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('visitLocation') ? `
+                <div class="review-item">
+                    <span>Visit Location:</span>
+                    <span>${formData.get('visitLocation')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('choirLeaderName') ? `
+                <div class="review-item">
+                    <span>Choir Leader:</span>
+                    <span>${formData.get('choirLeaderName')}</span>
+                </div>
+            ` : ''}
+        `,
+        'Icyemezo cyuko winjiye mumuryango wa GFS': `
+            ${formData.get('currentParish') ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('membershipDate') ? `
+                <div class="review-item">
+                    <span>GFS Membership Date:</span>
+                    <span>${formData.get('membershipDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('ceremonyLocation') ? `
+                <div class="review-item">
+                    <span>Ceremony Location:</span>
+                    <span>${formData.get('ceremonyLocation')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('gfsLeaderName') ? `
+                <div class="review-item">
+                    <span>GFS Leader:</span>
+                    <span>${formData.get('gfsLeaderName')}</span>
+                </div>
+            ` : ''}
+        `,
+        'Icyemezo cyumukirisitu': `
+            ${formData.get('currentParish') ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('baptismDate') ? `
+                <div class="review-item">
+                    <span>Baptism Date:</span>
+                    <span>${formData.get('baptismDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('baptismLocation') ? `
+                <div class="review-item">
+                    <span>Baptism Location:</span>
+                    <span>${formData.get('baptismLocation')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('confirmationDate') ? `
+                <div class="review-item">
+                    <span>Confirmation Date:</span>
+                    <span>${formData.get('confirmationDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('churchRole') ? `
+                <div class="review-item">
+                    <span>Church Role:</span>
+                    <span>${formData.get('churchRole')}</span>
+                </div>
+            ` : ''}
+        `,
+        'Marriage': `
+            ${formData.get('marriageDate') ? `
+                <div class="review-item">
+                    <span>Marriage Date:</span>
+                    <span>${formData.get('marriageDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('marriageLocation') ? `
+                <div class="review-item">
+                    <span>Marriage Location:</span>
+                    <span>${formData.get('marriageLocation')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('spouseFirstName') && formData.get('spouseLastName') ? `
+                <div class="review-item">
+                    <span>Spouse's Name:</span>
+                    <span>${formData.get('spouseFirstName')} ${formData.get('spouseLastName')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('spouseDateOfBirth') ? `
+                <div class="review-item">
+                    <span>Spouse's Date of Birth:</span>
+                    <span>${formData.get('spouseDateOfBirth')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('spouseParish') ? `
+                <div class="review-item">
+                    <span>Spouse's Parish:</span>
+                    <span>${formData.get('spouseParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('officiantName') ? `
+                <div class="review-item">
+                    <span>Officiant:</span>
+                    <span>${formData.get('officiantName')}</span>
+                </div>
+            ` : ''}
+        `,
+        'Mother\'s Union': `
+            ${formData.get('currentParish') ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('membershipDate') ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${formData.get('membershipDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('spouseFirstName') && formData.get('spouseLastName') ? `
+                <div class="review-item">
+                    <span>Husband's Name:</span>
+                    <span>${formData.get('spouseFirstName')} ${formData.get('spouseLastName')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('marriageDate') ? `
+                <div class="review-item">
+                    <span>Marriage Date:</span>
+                    <span>${formData.get('marriageDate')}</span>
+                </div>
+            ` : ''}
+        `,
+        'Youth Union': `
+            ${formData.get('currentParish') ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${formData.get('currentParish')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('membershipDate') ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${formData.get('membershipDate')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('schoolName') ? `
+                <div class="review-item">
+                    <span>School/Institution:</span>
+                    <span>${formData.get('schoolName')}</span>
+                </div>
+            ` : ''}
+            ${formData.get('membershipPurpose') ? `
+                <div class="review-item">
+                    <span>Purpose:</span>
+                    <span>${formData.get('membershipPurpose').charAt(0).toUpperCase() + formData.get('membershipPurpose').slice(1)}</span>
                 </div>
             ` : ''}
         `
