@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diocese of Byumba - Bishop Meeting</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Header -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                        </div>
+                        <div class="diocese-info">
+                            <h1 class="diocese-name" data-translate="site_name">Diocese of Byumba</h1>
+                            <p class="diocese-subtitle" data-translate="site_subtitle">Diyosezi ya Byumba</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+
+                    <div class="header-actions">
+                        <div class="language-toggle">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-user"></i>
+                            <span class="login-text" data-translate="login">Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="navigation" id="mainNavigation">
+            <div class="container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-certificate"></i>
+                            <span data-translate="certificates">Certificates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="jobs.html" class="nav-link">
+                            <i class="fas fa-briefcase"></i>
+                            <span data-translate="jobs">Jobs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="bishop-meeting.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span data-translate="bishop_meeting">Bishop Meeting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">
+                            <i class="fas fa-blog"></i>
+                            <span data-translate="blog">Blog</span>
+                        </a>
+                    </li>
+
+                    <!-- Mobile-only items -->
+                    <li class="nav-item mobile-only">
+                        <div class="mobile-language-toggle">
+                            <span class="mobile-lang-label">Language:</span>
+                            <div class="mobile-lang-buttons">
+                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="rw">RW</button>
+                                <button class="lang-btn" data-lang="fr">FR</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="login.html" class="nav-link mobile-login">
+                            <i class="fas fa-user"></i>
+                            <span data-translate="login">Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2 class="page-title" data-translate="schedule_meeting_title">Schedule a Meeting with the Bishop</h2>
+                <p class="page-description" data-translate="schedule_meeting_description">Request an appointment to meet with His Lordship Bishop of Byumba</p>
+            </div>
+
+            <!-- Bishop Information Section -->
+            <div class="bishop-info-section">
+                <div class="bishop-card">
+                    <div class="bishop-image">
+                        <img src="images/bishop/bishop-photo.jpg" alt="His Lordship Bishop Papias Musengamana" class="bishop-photo">
+                    </div>
+                    <div class="bishop-details">
+                        <h3 class="bishop-name" data-translate="bishop_name">His Lordship Bishop Papias Musengamana</h3>
+                        <p class="bishop-title" data-translate="bishop_title">Bishop of Byumba Diocese</p>
+                        <div class="bishop-bio">
+                            <p data-translate="bishop_bio">His Lordship welcomes members of the diocese for pastoral guidance, spiritual counseling, and administrative matters. Please schedule your appointment in advance.</p>
+                        </div>
+                        <div class="office-hours">
+                            <h4><i class="fas fa-clock"></i> <span data-translate="office_hours">Office Hours</span></h4>
+                            <div class="hours-grid">
+                                <div class="hour-item">
+                                    <span class="day" data-translate="monday_friday">Monday - Friday</span>
+                                    <span class="time" data-translate="weekday_hours">9:00 AM - 5:00 PM</span>
+                                </div>
+                                <div class="hour-item">
+                                    <span class="day" data-translate="saturday">Saturday</span>
+                                    <span class="time" data-translate="saturday_hours">9:00 AM - 12:00 PM</span>
+                                </div>
+                                <div class="hour-item">
+                                    <span class="day" data-translate="sunday">Sunday</span>
+                                    <span class="time" data-translate="appointment_only">By Appointment Only</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meeting Request Form -->
+            <div class="meeting-form-section">
+                <div class="form-container">
+                    <h3 class="form-title" data-translate="request_appointment">Request an Appointment</h3>
+                    <form class="meeting-form" id="meetingForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName" data-translate="first_name">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" data-translate="last_name">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email" data-translate="email_address">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" data-translate="phone_number">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="parish" data-translate="parish_church">Parish/Church</label>
+                            <select id="parish" name="parish">
+                                <option value="" data-translate="select_parish">Select your parish</option>
+                                <option value="st-mary" data-translate="st_mary_parish">St. Mary's Parish</option>
+                                <option value="st-joseph" data-translate="st_joseph_parish">St. Joseph's Parish</option>
+                                <option value="st-peter" data-translate="st_peter_parish">St. Peter's Parish</option>
+                                <option value="holy-family" data-translate="holy_family_parish">Holy Family Parish</option>
+                                <option value="st-paul" data-translate="st_paul_parish">St. Paul's Parish</option>
+                                <option value="other" data-translate="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="meetingType" data-translate="meeting_type">Type of Meeting *</label>
+                            <select id="meetingType" name="meetingType" required>
+                                <option value="" data-translate="select_meeting_type">Select meeting type</option>
+                                <option value="spiritual-guidance" data-translate="spiritual_guidance">Spiritual Guidance</option>
+                                <option value="pastoral-care" data-translate="pastoral_care">Pastoral Care</option>
+                                <option value="marriage-counseling" data-translate="marriage_counseling">Marriage Counseling</option>
+                                <option value="confession" data-translate="confession">Confession</option>
+                                <option value="administrative" data-translate="administrative_matter">Administrative Matter</option>
+                                <option value="community-issue" data-translate="community_issue">Community Issue</option>
+                                <option value="other" data-translate="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="preferredDate" data-translate="preferred_date">Preferred Date *</label>
+                                <input type="date" id="preferredDate" name="preferredDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="preferredTime" data-translate="preferred_time">Preferred Time *</label>
+                                <select id="preferredTime" name="preferredTime" required>
+                                    <option value="" data-translate="select_time">Select time</option>
+                                    <option value="09:00" data-translate="time_9am">9:00 AM</option>
+                                    <option value="10:00" data-translate="time_10am">10:00 AM</option>
+                                    <option value="11:00" data-translate="time_11am">11:00 AM</option>
+                                    <option value="14:00" data-translate="time_2pm">2:00 PM</option>
+                                    <option value="15:00" data-translate="time_3pm">3:00 PM</option>
+                                    <option value="16:00" data-translate="time_4pm">4:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alternativeDate" data-translate="alternative_date">Alternative Date</label>
+                            <input type="date" id="alternativeDate" name="alternativeDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="urgency" data-translate="urgency_level">Urgency Level</label>
+                            <select id="urgency" name="urgency">
+                                <option value="normal" data-translate="normal">Normal</option>
+                                <option value="urgent" data-translate="urgent">Urgent</option>
+                                <option value="emergency" data-translate="emergency">Emergency</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="purpose" data-translate="purpose_meeting">Purpose of Meeting *</label>
+                            <textarea id="purpose" name="purpose" rows="4" data-translate-placeholder="purpose_placeholder" placeholder="Please briefly describe the purpose of your meeting..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additionalInfo" data-translate="additional_info">Additional Information</label>
+                            <textarea id="additionalInfo" name="additionalInfo" rows="3" data-translate-placeholder="additional_info_placeholder" placeholder="Any additional information you'd like to share..."></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <span class="checkmark"></span>
+                                <span data-translate="terms_agreement">I understand that this is a request and confirmation will be provided via email or phone *</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="newsletter" name="newsletter">
+                                <span class="checkmark"></span>
+                                <span data-translate="newsletter_signup">I would like to receive updates about diocese events and activities</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-meeting-btn">
+                            <i class="fas fa-calendar-check"></i>
+                            <span data-translate="submit_meeting_request">Submit Meeting Request</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Meeting Guidelines -->
+                <div class="guidelines-section">
+                    <h3 class="guidelines-title" data-translate="meeting_guidelines">Meeting Guidelines</h3>
+                    <div class="guidelines-content">
+                        <div class="guideline-item">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <h4 data-translate="advance_notice">Advance Notice</h4>
+                                <p data-translate="advance_notice_desc">Please submit your request at least 3-5 business days in advance.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4 data-translate="meeting_duration">Meeting Duration</h4>
+                                <p data-translate="meeting_duration_desc">Standard meetings are scheduled for 30 minutes. Longer sessions may be arranged if needed.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4 data-translate="confirmation">Confirmation</h4>
+                                <p data-translate="confirmation_desc">You will receive confirmation within 24-48 hours via email or phone.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <h4 data-translate="emergency_situations">Emergency Situations</h4>
+                                <p data-translate="emergency_situations_desc">For urgent pastoral care, please call the diocese office directly at +250 788 123 456.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <i class="fas fa-calendar-times"></i>
+                            <div>
+                                <h4 data-translate="cancellations">Cancellations</h4>
+                                <p data-translate="cancellations_desc">Please notify us at least 24 hours in advance if you need to cancel or reschedule.</p>
+                            </div>
+                        </div>
+                        <div class="guideline-item">
+                            <i class="fas fa-user-friends"></i>
+                            <div>
+                                <h4 data-translate="accompaniment">Accompaniment</h4>
+                                <p data-translate="accompaniment_desc">You may bring a family member or friend if needed. Please mention this in your request.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-section">
+                <h3 class="contact-title" data-translate="alternative_contact">Alternative Contact Methods</h3>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 data-translate="phone">Phone</h4>
+                            <p>+250 788 123 456</p>
+                            <span data-translate="phone_hours">Monday - Friday: 8:00 AM - 6:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 data-translate="email">Email</h4>
+                            <p>bishop@diocesebyumba.rw</p>
+                            <span data-translate="email_response">Response within 24 hours</span>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 data-translate="office_visit">Office Visit</h4>
+                            <p data-translate="diocese_office">Diocese of Byumba Office</p>
+                            <span data-translate="office_location">Byumba, Northern Province</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title" data-translate="contact_information">Contact Information</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Byumba, Northern Province, Rwanda</p>
+                        <p><i class="fas fa-phone"></i> +250 788 123 456</p>
+                        <p><i class="fas fa-envelope"></i> info@diocesebyumba.rw</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" data-translate="quick_links">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html" data-translate="certificates">Certificates</a></li>
+                        <li><a href="jobs.html" data-translate="job_opportunities">Job Opportunities</a></li>
+                        <li><a href="bishop-meeting.html" data-translate="bishop_meeting">Bishop Meeting</a></li>
+                        <li><a href="blog.html" data-translate="blog">Blog</a></li>
+                        <li><a href="register.html" data-translate="register">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" data-translate="follow_us">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-translate="copyright">&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/language.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/bishop-meeting.js"></script>
+</body>
+</html>

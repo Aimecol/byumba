@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diocese of Byumba - Blog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        p {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Header -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                        </div>
+                        <div class="diocese-info">
+                            <h1 class="diocese-name">Diocese of Byumba</h1>
+                            <p class="diocese-subtitle">Diyosezi ya Byumba</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+
+                    <div class="header-actions">
+                        <div class="language-toggle">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-user"></i>
+                            <span class="login-text">Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navigation" id="mainNavigation">
+            <div class="container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-certificate"></i>
+                            <span>Certificates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="jobs.html" class="nav-link">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Jobs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="bishop-meeting.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Bishop Meeting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="blog.html" class="nav-link">
+                            <i class="fas fa-blog"></i>
+                            <span>Blog</span>
+                        </a>
+                    </li>
+
+                    <!-- Mobile-only items -->
+                    <li class="nav-item mobile-only">
+                        <div class="mobile-language-toggle">
+                            <span class="mobile-lang-label">Language:</span>
+                            <div class="mobile-lang-buttons">
+                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="rw">RW</button>
+                                <button class="lang-btn" data-lang="fr">FR</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="login.html" class="nav-link mobile-login">
+                            <i class="fas fa-user"></i>
+                            <span>Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2 class="page-title" data-translate="diocese_blog">Diocese Blog</h2>
+                <p class="page-description" data-translate="stay_updated">Stay updated with the latest news, events, and spiritual reflections from the Diocese of Byumba</p>
+            </div>
+
+            <!-- Blog Search and Filter -->
+            <div class="blog-controls">
+                <div class="search-section">
+                    <div class="search-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="blogSearch" data-translate-placeholder="search_blog_posts" placeholder="Search blog posts...">
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="categoryFilter">
+                                <option value="" data-translate="all_categories">All Categories</option>
+                                <option value="news">Diocese News</option>
+                                <option value="spiritual">Spiritual Reflections</option>
+                                <option value="events">Events</option>
+                                <option value="announcements">Announcements</option>
+                                <option value="youth">Youth Ministry</option>
+                                <option value="community">Community</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Post -->
+            <div class="featured-post">
+                <div class="featured-content">
+                    <div class="featured-image">
+                        <img src="images/blog/christmas-celebration.jpg" alt="Christmas Celebrations 2024" class="featured-img">
+                        <div class="featured-badge" data-translate="featured">Featured</div>
+                    </div>
+                    <div class="featured-text">
+                        <div class="post-meta">
+                            <span class="category news">Diocese News</span>
+                            <span class="date">December 20, 2024</span>
+                        </div>
+                        <h2 class="featured-title">Christmas Celebrations 2024: A Message of Hope and Unity</h2>
+                        <p class="featured-excerpt">
+                            As we approach the blessed season of Christmas, His Lordship Bishop Jean Baptiste Gahamanyi extends warm greetings to all faithful of the Diocese of Byumba. This year's celebrations will focus on the theme "Christ, Our Light in Times of Challenge"...
+                        </p>
+                        <a href="#" class="read-more-btn">
+                            <i class="fas fa-arrow-right"></i>
+                            <span data-translate="read_full_article">Read Full Article</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Posts Grid -->
+            <div class="blog-posts-grid" id="blogPostsGrid">
+                <!-- Post 1 -->
+                <article class="blog-post" data-category="spiritual">
+                    <div class="post-image">
+                        <img src="images/blog/advent-reflection.jpg" alt="Advent Reflection" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category spiritual">Spiritual Reflections</span>
+                            <span class="date">December 18, 2024</span>
+                        </div>
+                        <h3 class="post-title">Advent: A Time of Preparation and Reflection</h3>
+                        <p class="post-excerpt">
+                            During this holy season of Advent, we are called to prepare our hearts for the coming of Christ. Let us reflect on the virtues of patience, hope, and love...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Fr. Emmanuel Nzeyimana</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 2 -->
+                <article class="blog-post" data-category="events">
+                    <div class="post-image">
+                        <img src="images/blog/youth-concert.jpg" alt="Youth Christmas Concert" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category events">Events</span>
+                            <span class="date">December 15, 2024</span>
+                        </div>
+                        <h3 class="post-title">Youth Christmas Concert: December 23rd</h3>
+                        <p class="post-excerpt">
+                            Join us for a spectacular Christmas concert featuring the talented youth choirs from across our diocese. The event will take place at the Cathedral...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Youth Ministry Team</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 3 -->
+                <article class="blog-post" data-category="community">
+                    <div class="post-image">
+                        <img src="images/blog/community-outreach.jpg" alt="Community Outreach" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category community">Community</span>
+                            <span class="date">December 12, 2024</span>
+                        </div>
+                        <h3 class="post-title">Community Outreach: Supporting Local Families</h3>
+                        <p class="post-excerpt">
+                            Our recent community outreach program has successfully provided assistance to over 200 families in need. Thanks to the generous donations from parishioners...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Sr. Marie Claire Uwimana</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 4 -->
+                <article class="blog-post" data-category="announcements">
+                    <div class="post-image">
+                        <img src="images/blog/mass-schedule.jpg" alt="New Mass Schedule" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category announcements">Announcements</span>
+                            <span class="date">December 10, 2024</span>
+                        </div>
+                        <h3 class="post-title">New Mass Schedule Effective January 2025</h3>
+                        <p class="post-excerpt">
+                            Please note the updated Mass schedule that will take effect from January 1st, 2025. The changes are designed to better serve our growing community...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Diocese Administration</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 5 -->
+                <article class="blog-post" data-category="youth">
+                    <div class="post-image">
+                        <img src="images/blog/youth-leadership.jpg" alt="Youth Leadership Training" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category youth">Youth Ministry</span>
+                            <span class="date">December 8, 2024</span>
+                        </div>
+                        <h3 class="post-title">Youth Leadership Training Program Launch</h3>
+                        <p class="post-excerpt">
+                            We are excited to announce the launch of our Youth Leadership Training Program, designed to empower young Catholics to become leaders in their communities...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Fr. Jean Paul Habimana</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 6 -->
+                <article class="blog-post" data-category="spiritual">
+                    <div class="post-image">
+                        <img src="images/blog/prayer-life.jpg" alt="Power of Prayer" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category spiritual">Spiritual Reflections</span>
+                            <span class="date">December 5, 2024</span>
+                        </div>
+                        <h3 class="post-title">The Power of Prayer in Daily Life</h3>
+                        <p class="post-excerpt">
+                            Prayer is not just a ritual but a conversation with God. In our busy lives, finding time for meaningful prayer can transform our relationship with the Divine...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Sr. Immaculée Mukamana</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 7 -->
+                <article class="blog-post" data-category="news">
+                    <div class="post-image">
+                        <img src="images/blog/seminary-graduation.jpg" alt="Seminary Graduation" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category news">Diocese News</span>
+                            <span class="date">December 3, 2024</span>
+                        </div>
+                        <h3 class="post-title">Seminary Graduation Ceremony 2024</h3>
+                        <p class="post-excerpt">
+                            We celebrate the ordination of five new priests who completed their seminary training. The ceremony was presided over by Bishop Gahamanyi at the Cathedral...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Seminary Communications</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Post 8 -->
+                <article class="blog-post" data-category="events">
+                    <div class="post-image">
+                        <img src="images/blog/marriage-preparation.jpg" alt="Marriage Preparation Course" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category events">Events</span>
+                            <span class="date">December 1, 2024</span>
+                        </div>
+                        <h3 class="post-title">Marriage Preparation Course: January 2025</h3>
+                        <p class="post-excerpt">
+                            Couples planning to marry in 2025 are invited to attend our comprehensive marriage preparation course. The program covers communication, finances, and spiritual growth...
+                        </p>
+                        <div class="post-footer">
+                            <div class="author">
+                                <i class="fas fa-user"></i>
+                                <span>Family Ministry</span>
+                            </div>
+                            <a href="#" class="read-more" data-translate="read_more">Read More</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more-section">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <i class="fas fa-plus"></i>
+                    <span data-translate="load_more_posts">Load More Posts</span>
+                </button>
+            </div>
+
+            <!-- Newsletter Subscription -->
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="newsletter-text">
+                        <h3 data-translate="stay_updated">Stay Updated</h3>
+                        <p data-translate="stay_updated">Subscribe to our newsletter to receive the latest news and updates from the Diocese of Byumba</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <form id="newsletterForm">
+                            <div class="input-group">
+                                <input type="email" data-translate-placeholder="enter_email" placeholder="Enter your email address" required>
+                                <button type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                    <span data-translate="subscribe">Subscribe</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+               <div class="footer-section">
+                    <h4 class="footer-title" data-translate="contact_information">Contact Information</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Byumba, Northern Province, Rwanda</p>
+                        <p><i class="fas fa-phone"></i> +250 788 123 456</p>
+                        <p><i class="fas fa-envelope"></i> info@diocesebyumba.rw</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Certificates</a></li>
+                        <li><a href="jobs.html">Job Opportunities</a></li>
+                        <li><a href="bishop-meeting.html">Bishop Meeting</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-translate="copyright">&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/blog.js"></script>
+</body>
+</html>

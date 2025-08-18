@@ -1,0 +1,359 @@
+/* Additional Admin Styles */
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Status badges */
+.status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+}
+
+/* Activity timeline */
+.activity-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.activity-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 0.25rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #3498db;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #e9ecef;
+}
+
+/* File upload area */
+.file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: #3498db;
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.file-upload-area.dragover {
+    border-color: #27ae60;
+    background-color: rgba(39, 174, 96, 0.05);
+}
+
+/* Statistics cards animations */
+.stats-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Data table customizations */
+.dataTables_wrapper .dataTables_length select {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    margin-left: 0.5rem;
+}
+
+/* Form enhancements */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    opacity: 0.65;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+/* Button loading state */
+.btn.loading {
+    pointer-events: none;
+    opacity: 0.65;
+}
+
+.btn.loading .btn-text {
+    opacity: 0;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Modal enhancements */
+.modal-content {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    border-radius: 0 0 0.75rem 0.75rem;
+}
+
+/* Alert enhancements */
+.alert {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: #27ae60;
+}
+
+.alert-danger {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}
+
+.alert-warning {
+    background-color: rgba(243, 156, 18, 0.1);
+    color: #f39c12;
+}
+
+.alert-info {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+}
+
+/* Progress bars */
+.progress {
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    border-radius: 0.25rem;
+}
+
+/* Tooltip customizations */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+.tooltip-inner {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+/* Dropdown menu enhancements */
+.dropdown-menu {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+}
+
+/* Card hover effects */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn-group-vertical .btn {
+        margin-bottom: 0.25rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .modal-dialog {
+        margin: 1rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .top-nav,
+    .btn,
+    .pagination,
+    .modal {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+    }
+    
+    .card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+    }
+    
+    .table {
+        font-size: 0.75rem;
+    }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bs-body-bg: #1a1a1a;
+        --bs-body-color: #ffffff;
+    }
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Custom checkbox/radio styles */
+.form-check-input:checked {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.form-check-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+/* File input styling */
+.form-control[type="file"] {
+    padding: 0.375rem 0.75rem;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button {
+    padding: 0.375rem 0.75rem;
+    margin: -0.375rem -0.75rem;
+    margin-inline-end: 0.75rem;
+    background-color: #f8f9fa;
+    border: none;
+    border-inline-end: 1px solid #ced4da;
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+/* Success/Error states */
+.is-valid {
+    border-color: #27ae60;
+}
+
+.is-invalid {
+    border-color: #e74c3c;
+}
+
+.valid-feedback {
+    color: #27ae60;
+}
+
+.invalid-feedback {
+    color: #e74c3c;
+}

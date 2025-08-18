@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Jobs Translations</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { border: 1px solid #ddd; margin: 10px 0; padding: 15px; }
+        .language-btn { margin: 5px; padding: 10px 15px; cursor: pointer; border: 1px solid #ddd; }
+        .active { background: #1e753f; color: white; }
+        .job { border: 1px solid #ddd; margin: 10px 0; padding: 15px; background: #f9f9f9; }
+        .job-title { font-weight: bold; color: #1e753f; font-size: 1.2em; }
+        .job-description { margin: 10px 0; }
+        .job-requirements { font-size: 0.9em; color: #666; }
+        .job-meta { margin-top: 10px; font-size: 0.8em; color: #999; }
+        .error { color: red; }
+        .success { color: green; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Debug Jobs Translations</h1>
+    
+    <div class="debug-section">
+        <h3>Language Controls</h3>
+        <button class="language-btn active" onclick="testLanguage('en')">English</button>
+        <button class="language-btn" onclick="testLanguage('fr')">Français</button>
+        <button class="language-btn" onclick="testLanguage('rw')">Kinyarwanda</button>
+        <div id="language-status"></div>
+    </div>
+
+    <div class="debug-section">
+        <h3>API Response Debug</h3>
+        <div id="api-debug"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Jobs Display</h3>
+        <div id="jobs-container">
+            <p>Click a language button to load jobs...</p>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+
+        async function testLanguage(language) {
+            currentLanguage = language;
+            
+            // Update active button
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const statusDiv = document.getElementById('language-status');
+            const debugDiv = document.getElementById('api-debug');
+            const jobsDiv = document.getElementById('jobs-container');
+            
+            statusDiv.innerHTML = `<p>Setting language to: ${language}</p>`;
+            
+            try {
+                // First set the language
+                statusDiv.innerHTML += `<p>Sending language change request...</p>`;
+                const langResponse = await fetch('api/index.php?endpoint=language', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ language: language })
+                });
+
+                const langData = await langResponse.json();
+                statusDiv.innerHTML += `<p class="${langData.success ? 'success' : 'error'}">Language API: ${langData.message}</p>`;
+
+                // Then load jobs
+                statusDiv.innerHTML += `<p>Loading jobs...</p>`;
+                const jobsResponse = await fetch('api/index.php?endpoint=jobs');
+                const jobsData = await jobsResponse.json();
+                
+                // Show raw API response
+                debugDiv.innerHTML = `
+                    <h4>Raw API Response:</h4>
+                    <pre>${JSON.stringify(jobsData, null, 2)}</pre>
+                `;
+                
+                if (jobsData.success) {
+                    statusDiv.innerHTML += `<p class="success">Jobs loaded: ${jobsData.data.jobs.length} jobs found</p>`;
+                    displayJobs(jobsData.data.jobs);
+                } else {
+                    statusDiv.innerHTML += `<p class="error">Jobs API error: ${jobsData.message}</p>`;
+                    jobsDiv.innerHTML = '<p class="error">Failed to load jobs</p>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML += `<p class="error">Network error: ${error.message}</p>`;
+                jobsDiv.innerHTML = '<p class="error">Network error occurred</p>';
+            }
+        }
+
+        function displayJobs(jobs) {
+            const container = document.getElementById('jobs-container');
+            
+            if (jobs.length === 0) {
+                container.innerHTML = '<p>No jobs found.</p>';
+                return;
+            }
+            
+            let html = `<h3>Jobs in ${currentLanguage.toUpperCase()} (${jobs.length} jobs)</h3>`;
+            
+            jobs.forEach(job => {
+                html += `
+                    <div class="job">
+                        <div class="job-title">${job.title}</div>
+                        <div class="job-description">${job.description}</div>
+                        <div class="job-requirements">
+                            <strong>Requirements:</strong><br>
+                            ${Array.isArray(job.requirements) ? 
+                                job.requirements.map(req => `• ${req}`).join('<br>') : 
+                                job.requirements || 'Not specified'}
+                        </div>
+                        <div class="job-meta">
+                            <strong>Job #:</strong> ${job.job_number} | 
+                            <strong>Category:</strong> ${job.category_name} | 
+                            <strong>Location:</strong> ${job.location} |
+                            <strong>Type:</strong> ${job.employment_type_display} |
+                            <strong>Salary:</strong> ${job.salary_range || 'Not specified'} |
+                            <strong>Deadline:</strong> ${job.deadline_formatted || 'Ongoing'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Load English jobs by default
+        window.addEventListener('load', () => {
+            testLanguage('en');
+        });
+    </script>
+</body>
+</html>

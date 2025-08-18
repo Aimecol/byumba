@@ -1,0 +1,50 @@
+RewriteEngine On
+
+# Payment API routing
+RewriteRule ^api/payment/?$ api/payment-request.php [L,QSA]
+RewriteRule ^api/payment/status/?$ api/payment-request.php?status=1 [L,QSA]
+RewriteRule ^payment-callback/?$ payment-callback.php [L,QSA]
+
+# API routing - redirect all other api/* requests to api/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+# Optional: Redirect to HTTPS (uncomment if needed)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Optional: Remove .html extension from URLs
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # CORS headers for payment API
+    <FilesMatch "\.(php)$">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    </FilesMatch>
+</IfModule>
+
+# Prevent access to sensitive files
+<Files "*.sql">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.log">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ".htaccess">
+    Order allow,deny
+    Deny from all
+</Files>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#1e753f"/>
+  
+  <!-- Stage -->
+  <rect x="50" y="250" width="500" height="100" fill="#8B4513"/>
+  <rect x="50" y="240" width="500" height="10" fill="#654321"/>
+  
+  <!-- Choir Members (simplified figures) -->
+  <circle cx="150" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="140" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <circle cx="200" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="190" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <circle cx="250" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="240" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <circle cx="300" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="290" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <circle cx="350" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="340" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <circle cx="400" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="390" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <circle cx="450" cy="220" r="15" fill="#f2c97e"/>
+  <rect x="440" y="235" width="20" height="30" fill="#0f0f0f"/>
+  
+  <!-- Musical Notes -->
+  <circle cx="120" cy="180" r="8" fill="#f2c97e"/>
+  <rect x="128" y="160" width="2" height="20" fill="#f2c97e"/>
+  
+  <circle cx="480" cy="170" r="8" fill="#f2c97e"/>
+  <rect x="488" y="150" width="2" height="20" fill="#f2c97e"/>
+  
+  <circle cx="320" cy="160" r="8" fill="#f2c97e"/>
+  <rect x="328" y="140" width="2" height="20" fill="#f2c97e"/>
+  
+  <!-- Spotlights -->
+  <polygon points="100,50 150,200 50,200" fill="yellow" opacity="0.3"/>
+  <polygon points="500,50 550,200 450,200" fill="yellow" opacity="0.3"/>
+  
+  <!-- Title Text -->
+  <text x="300" y="380" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="22" font-weight="bold">Youth Christmas Concert</text>
+</svg>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#2a1810"/>
+  
+  <!-- Advent Wreath Base -->
+  <ellipse cx="300" cy="250" rx="150" ry="30" fill="#8B4513"/>
+  
+  <!-- Advent Candles -->
+  <rect x="220" y="180" width="12" height="80" fill="#f2c97e"/>
+  <rect x="260" y="180" width="12" height="80" fill="#f2c97e"/>
+  <rect x="340" y="180" width="12" height="80" fill="#f2c97e"/>
+  <rect x="380" y="180" width="12" height="80" fill="#f2c97e"/>
+  
+  <!-- Candle Flames -->
+  <ellipse cx="226" cy="175" rx="6" ry="12" fill="#ff6b35"/>
+  <ellipse cx="266" cy="175" rx="6" ry="12" fill="#ff6b35"/>
+  <ellipse cx="346" cy="175" rx="6" ry="12" fill="#ff6b35"/>
+  
+  <!-- Greenery -->
+  <ellipse cx="300" cy="240" rx="140" ry="25" fill="#0f5f2f"/>
+  <ellipse cx="280" cy="235" rx="30" ry="8" fill="#0f5f2f"/>
+  <ellipse cx="320" cy="235" rx="30" ry="8" fill="#0f5f2f"/>
+  <ellipse cx="250" cy="245" rx="25" ry="6" fill="#0f5f2f"/>
+  <ellipse cx="350" cy="245" rx="25" ry="6" fill="#0f5f2f"/>
+  
+  <!-- Cross in Background -->
+  <rect x="480" y="80" width="8" height="40" fill="#dcdcdc" opacity="0.6"/>
+  <rect x="468" y="92" width="32" height="8" fill="#dcdcdc" opacity="0.6"/>
+  
+  <!-- Title Text -->
+  <text x="300" y="350" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Advent: A Time of Preparation</text>
+</svg>

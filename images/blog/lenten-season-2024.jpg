@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#2c1810"/>
+  
+  <!-- Rays of light from above -->
+  <polygon points="300,0 280,150 320,150" fill="yellow" opacity="0.3"/>
+  <polygon points="300,0 250,180 350,180" fill="yellow" opacity="0.2"/>
+  <polygon points="300,0 200,220 400,220" fill="yellow" opacity="0.1"/>
+  
+  <!-- Praying figure (simplified) -->
+  <circle cx="300" cy="220" r="20" fill="#f2c97e"/>
+  <rect x="285" y="240" width="30" height="40" fill="#1e753f"/>
+  
+  <!-- Praying hands -->
+  <ellipse cx="290" cy="250" rx="8" ry="15" fill="#f2c97e" transform="rotate(-20 290 250)"/>
+  <ellipse cx="310" cy="250" rx="8" ry="15" fill="#f2c97e" transform="rotate(20 310 250)"/>
+  
+  <!-- Kneeling position -->
+  <rect x="290" y="280" width="8" height="20" fill="#0f0f0f"/>
+  <rect x="302" y="280" width="8" height="20" fill="#0f0f0f"/>
+  
+  <!-- Bible/Prayer book -->
+  <rect x="270" y="290" width="20" height="15" fill="#8B4513"/>
+  <rect x="272" y="288" width="16" height="2" fill="#f2c97e"/>
+  
+  <!-- Candles -->
+  <rect x="200" y="280" width="6" height="25" fill="#f2c97e"/>
+  <ellipse cx="203" cy="275" rx="3" ry="8" fill="#ff6b35"/>
+  
+  <rect x="400" y="280" width="6" height="25" fill="#f2c97e"/>
+  <ellipse cx="403" cy="275" rx="3" ry="8" fill="#ff6b35"/>
+  
+  <!-- Cross on wall -->
+  <rect x="295" y="120" width="10" height="50" fill="#8B4513"/>
+  <rect x="275" y="135" width="50" height="10" fill="#8B4513"/>
+  
+  <!-- Peaceful dove -->
+  <ellipse cx="350" cy="180" rx="15" ry="8" fill="white"/>
+  <ellipse cx="360" cy="178" rx="8" ry="4" fill="white"/>
+  <polygon points="375,178 380,175 380,181" fill="orange"/>
+  
+  <!-- Prayer text/words floating -->
+  <text x="150" y="150" fill="white" font-family="Arial, sans-serif" font-size="12" opacity="0.7">Peace</text>
+  <text x="450" y="160" fill="white" font-family="Arial, sans-serif" font-size="12" opacity="0.7">Hope</text>
+  <text x="100" y="200" fill="white" font-family="Arial, sans-serif" font-size="12" opacity="0.7">Faith</text>
+  <text x="500" y="210" fill="white" font-family="Arial, sans-serif" font-size="12" opacity="0.7">Love</text>
+  
+  <!-- Title Text -->
+  <text x="300" y="380" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="22" font-weight="bold">The Power of Prayer</text>
+</svg>

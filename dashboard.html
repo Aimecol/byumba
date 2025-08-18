@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlElement">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Diocese of Byumba</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Header -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                        </div>
+                        <div class="diocese-info">
+                            <h1 class="diocese-name">Diocese of Byumba</h1>
+                            <p class="diocese-subtitle">Diyosezi ya Byumba</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                    
+                    <div class="header-actions">
+                        <div class="language-toggle">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-toggle" id="userMenuToggle">
+                                <div class="user-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="user-name">John Doe</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="dashboard.html" class="dropdown-item active">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    Dashboard
+                                </a>
+                                <a href="#profile" class="dropdown-item">
+                                    <i class="fas fa-user-edit"></i>
+                                    Edit Profile
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+                                <a href="index.html" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="navigation" id="mainNavigation">
+            <div class="container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-certificate"></i>
+                            <span>Certificates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="jobs.html" class="nav-link">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Jobs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="bishop-meeting.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Bishop Meeting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">
+                            <i class="fas fa-blog"></i>
+                            <span>Blog</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Mobile-only items -->
+                    <li class="nav-item mobile-only">
+                        <div class="mobile-language-toggle">
+                            <span class="mobile-lang-label">Language:</span>
+                            <div class="mobile-lang-buttons">
+                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="rw">RW</button>
+                                <button class="lang-btn" data-lang="fr">FR</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="index.html" class="nav-link mobile-login">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content dashboard-content">
+        <div class="container">
+            <!-- Dashboard Navigation -->
+            <div class="dashboard-nav">
+                <div class="dashboard-nav-content">
+                    <a href="dashboard.html" class="dashboard-nav-item active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="profile.html" class="dashboard-nav-item">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="my-applications.html" class="dashboard-nav-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>My Applications</span>
+                    </a>
+                    <a href="my-meetings.html" class="dashboard-nav-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>My Meetings</span>
+                    </a>
+                    <a href="notifications.html" class="dashboard-nav-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                        <span class="notification-badge">3</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="welcome-section">
+                    <h1 class="dashboard-title">Welcome back, John!</h1>
+                    <p class="dashboard-subtitle">Here's what's happening with your Diocese activities</p>
+                </div>
+                <div class="quick-actions">
+                    <button class="quick-action-btn" data-action="new-application">
+                        <i class="fas fa-plus"></i>
+                        New Application
+                    </button>
+                    <button class="quick-action-btn" data-action="schedule-meeting">
+                        <i class="fas fa-calendar-plus"></i>
+                        Schedule Meeting
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Stats -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">5</h3>
+                        <p class="stat-label">Certificate Applications</p>
+                        <span class="stat-change positive">+2 this month</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">3</h3>
+                        <p class="stat-label">Job Applications</p>
+                        <span class="stat-change neutral">No change</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">2</h3>
+                        <p class="stat-label">Scheduled Meetings</p>
+                        <span class="stat-change positive">+1 upcoming</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">7</h3>
+                        <p class="stat-label">Notifications</p>
+                        <span class="stat-change attention">3 unread</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content Grid -->
+            <div class="dashboard-grid">
+                <!-- Recent Applications -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-file-alt"></i>
+                            Recent Applications
+                        </h2>
+                        <a href="#all-applications" class="section-link">View All</a>
+                    </div>
+                    <div class="applications-list" id="recentApplications">
+                        <!-- Applications will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Meetings -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            Upcoming Meetings
+                        </h2>
+                        <a href="bishop-meeting.html" class="section-link">Schedule New</a>
+                    </div>
+                    <div class="meetings-list" id="upcomingMeetings">
+                        <!-- Meetings will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Recent Notifications -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-bell"></i>
+                            Recent Notifications
+                        </h2>
+                        <button class="section-link" id="markAllRead">Mark All Read</button>
+                    </div>
+                    <div class="notifications-list" id="recentNotifications">
+                        <!-- Notifications will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-link"></i>
+                            Quick Links
+                        </h2>
+                    </div>
+                    <div class="quick-links-grid">
+                        <a href="application.html" class="quick-link-card">
+                            <i class="fas fa-certificate"></i>
+                            <span>Apply for Certificate</span>
+                        </a>
+                        <a href="jobs.html" class="quick-link-card">
+                            <i class="fas fa-search"></i>
+                            <span>Browse Jobs</span>
+                        </a>
+                        <a href="bishop-meeting.html" class="quick-link-card">
+                            <i class="fas fa-handshake"></i>
+                            <span>Meet Bishop</span>
+                        </a>
+                        <a href="blog.html" class="quick-link-card">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Read News</span>
+                        </a>
+                        <a href="#profile" class="quick-link-card">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Edit Profile</span>
+                        </a>
+                        <a href="#support" class="quick-link-card">
+                            <i class="fas fa-life-ring"></i>
+                            <span>Get Support</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="dashboard-section full-width">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-history"></i>
+                            Recent Activity
+                        </h2>
+                        <div class="timeline-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="applications">Applications</button>
+                            <button class="filter-btn" data-filter="meetings">Meetings</button>
+                            <button class="filter-btn" data-filter="jobs">Jobs</button>
+                        </div>
+                    </div>
+                    <div class="activity-timeline" id="activityTimeline">
+                        <!-- Timeline will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Diocese of Byumba</h3>
+                    <p>Serving the Catholic community in Northern Rwanda with faith, hope, and love.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Certificates</a></li>
+                        <li><a href="jobs.html">Job Opportunities</a></li>
+                        <li><a href="bishop-meeting.html">Bishop Meeting</a></li>
+                        <li><a href="blog.html">News & Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Byumba, Northern Province, Rwanda</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+250 788 123 456</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@diocesebyumba.rw</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth-guard.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

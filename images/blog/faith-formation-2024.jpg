@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#87CEEB"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="320" width="600" height="80" fill="#90EE90"/>
+  
+  <!-- Training Room/Building -->
+  <rect x="150" y="180" width="300" height="140" fill="#8B4513"/>
+  <polygon points="140,180 300,120 460,180" fill="#d14438"/>
+  <rect x="200" y="250" width="20" height="40" fill="#654321"/>
+  <rect x="250" y="220" width="25" height="25" fill="#87CEEB"/>
+  <rect x="325" y="220" width="25" height="25" fill="#87CEEB"/>
+  <rect x="375" y="220" width="25" height="25" fill="#87CEEB"/>
+  
+  <!-- Young Leaders (simplified figures) -->
+  <circle cx="120" cy="280" r="15" fill="#f2c97e"/>
+  <rect x="110" y="295" width="20" height="25" fill="#1e753f"/>
+  
+  <circle cx="480" cy="280" r="15" fill="#f2c97e"/>
+  <rect x="470" y="295" width="20" height="25" fill="#1e753f"/>
+  
+  <circle cx="300" cy="260" r="15" fill="#f2c97e"/>
+  <rect x="290" y="275" width="20" height="25" fill="#1e753f"/>
+  
+  <!-- Leadership symbols -->
+  <!-- Star (leadership) -->
+  <polygon points="300,150 305,165 320,165 308,175 313,190 300,180 287,190 292,175 280,165 295,165" fill="#f2c97e"/>
+  
+  <!-- Books/Learning -->
+  <rect x="80" y="300" width="15" height="10" fill="#d14438"/>
+  <rect x="82" y="298" width="15" height="10" fill="#1e753f"/>
+  <rect x="84" y="296" width="15" height="10" fill="#f2c97e"/>
+  
+  <rect x="500" y="300" width="15" height="10" fill="#d14438"/>
+  <rect x="502" y="298" width="15" height="10" fill="#1e753f"/>
+  <rect x="504" y="296" width="15" height="10" fill="#f2c97e"/>
+  
+  <!-- Cross in background -->
+  <rect x="50" y="80" width="6" height="30" fill="#dcdcdc" opacity="0.7"/>
+  <rect x="41" y="89" width="24" height="6" fill="#dcdcdc" opacity="0.7"/>
+  
+  <!-- Arrows pointing up (growth/leadership) -->
+  <polygon points="120,250 115,260 125,260" fill="#1e753f"/>
+  <line x1="120" y1="250" x2="120" y2="270" stroke="#1e753f" stroke-width="3"/>
+  
+  <polygon points="480,250 475,260 485,260" fill="#1e753f"/>
+  <line x1="480" y1="250" x2="480" y2="270" stroke="#1e753f" stroke-width="3"/>
+  
+  <!-- Title Text -->
+  <text x="300" y="50" text-anchor="middle" fill="#1e753f" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Youth Leadership Training</text>
+  <text x="300" y="380" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="18">Empowering Tomorrow's Leaders</text>
+</svg>

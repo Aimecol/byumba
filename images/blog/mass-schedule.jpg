@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#f0f0f0"/>
+  
+  <!-- Calendar/Schedule Board -->
+  <rect x="100" y="80" width="400" height="280" fill="white" stroke="#1e753f" stroke-width="4"/>
+  
+  <!-- Calendar Header -->
+  <rect x="100" y="80" width="400" height="50" fill="#1e753f"/>
+  <text x="300" y="110" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">MASS SCHEDULE</text>
+  
+  <!-- Calendar Grid -->
+  <line x1="100" y1="160" x2="500" y2="160" stroke="#dcdcdc" stroke-width="2"/>
+  <line x1="100" y1="200" x2="500" y2="200" stroke="#dcdcdc" stroke-width="2"/>
+  <line x1="100" y1="240" x2="500" y2="240" stroke="#dcdcdc" stroke-width="2"/>
+  <line x1="100" y1="280" x2="500" y2="280" stroke="#dcdcdc" stroke-width="2"/>
+  <line x1="100" y1="320" x2="500" y2="320" stroke="#dcdcdc" stroke-width="2"/>
+  
+  <line x1="200" y1="130" x2="200" y2="360" stroke="#dcdcdc" stroke-width="2"/>
+  <line x1="400" y1="130" x2="400" y2="360" stroke="#dcdcdc" stroke-width="2"/>
+  
+  <!-- Day Labels -->
+  <text x="150" y="150" text-anchor="middle" fill="#1e753f" font-family="Arial, sans-serif" font-size="14" font-weight="bold">DAY</text>
+  <text x="300" y="150" text-anchor="middle" fill="#1e753f" font-family="Arial, sans-serif" font-size="14" font-weight="bold">TIME</text>
+  <text x="450" y="150" text-anchor="middle" fill="#1e753f" font-family="Arial, sans-serif" font-size="14" font-weight="bold">LANGUAGE</text>
+  
+  <!-- Schedule Entries -->
+  <text x="150" y="180" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Sunday</text>
+  <text x="300" y="180" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">7:00 AM</text>
+  <text x="450" y="180" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Kinyarwanda</text>
+  
+  <text x="150" y="220" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Sunday</text>
+  <text x="300" y="220" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">9:00 AM</text>
+  <text x="450" y="220" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">English</text>
+  
+  <text x="150" y="260" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Sunday</text>
+  <text x="300" y="260" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">11:00 AM</text>
+  <text x="450" y="260" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">French</text>
+  
+  <text x="150" y="300" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Weekdays</text>
+  <text x="300" y="300" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">6:30 AM</text>
+  <text x="450" y="300" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Kinyarwanda</text>
+  
+  <text x="150" y="340" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">Saturday</text>
+  <text x="300" y="340" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">6:00 PM</text>
+  <text x="450" y="340" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="12">English</text>
+  
+  <!-- Clock Icon -->
+  <circle cx="550" cy="150" r="25" fill="#f2c97e" stroke="#1e753f" stroke-width="3"/>
+  <line x1="550" y1="135" x2="550" y2="150" stroke="#0f0f0f" stroke-width="2"/>
+  <line x1="550" y1="150" x2="560" y2="160" stroke="#0f0f0f" stroke-width="2"/>
+  
+  <!-- Title Text -->
+  <text x="300" y="30" text-anchor="middle" fill="#1e753f" font-family="Arial, sans-serif" font-size="26" font-weight="bold">New Mass Schedule 2025</text>
+</svg>

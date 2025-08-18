@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#87CEEB"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="300" width="600" height="100" fill="#90EE90"/>
+  
+  <!-- Houses -->
+  <rect x="100" y="200" width="80" height="100" fill="#8B4513"/>
+  <polygon points="90,200 140,150 190,200" fill="#d14438"/>
+  <rect x="120" y="250" width="15" height="25" fill="#654321"/>
+  <rect x="150" y="220" width="12" height="12" fill="#87CEEB"/>
+  
+  <rect x="300" y="220" width="70" height="80" fill="#8B4513"/>
+  <polygon points="290,220 335,180 380,220" fill="#d14438"/>
+  <rect x="315" y="260" width="12" height="20" fill="#654321"/>
+  <rect x="340" y="240" width="10" height="10" fill="#87CEEB"/>
+  
+  <!-- People helping (simplified figures) -->
+  <circle cx="200" cy="260" r="12" fill="#f2c97e"/>
+  <rect x="192" y="272" width="16" height="25" fill="#1e753f"/>
+  <rect x="188" y="280" width="8" height="15" fill="#0f0f0f"/>
+  <rect x="204" y="280" width="8" height="15" fill="#0f0f0f"/>
+  
+  <circle cx="250" cy="260" r="12" fill="#f2c97e"/>
+  <rect x="242" y="272" width="16" height="25" fill="#1e753f"/>
+  <rect x="238" y="280" width="8" height="15" fill="#0f0f0f"/>
+  <rect x="254" y="280" width="8" height="15" fill="#0f0f0f"/>
+  
+  <!-- Donation boxes -->
+  <rect x="220" y="285" width="20" height="15" fill="#8B4513"/>
+  <text x="230" y="295" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8">FOOD</text>
+  
+  <!-- Hearts (showing love/care) -->
+  <path d="M 180 240 C 175 235, 165 235, 165 245 C 165 235, 155 235, 150 240 C 150 250, 165 260, 180 240 Z" fill="#d14438"/>
+  <path d="M 280 240 C 275 235, 265 235, 265 245 C 265 235, 255 235, 250 240 C 250 250, 265 260, 280 240 Z" fill="#d14438"/>
+  
+  <!-- Church in background -->
+  <rect x="450" y="180" width="60" height="80" fill="#1e753f"/>
+  <polygon points="440,180 480,140 520,180" fill="#0f0f0f"/>
+  <rect x="478" y="130" width="4" height="20" fill="#d14438"/>
+  <rect x="472" y="136" width="16" height="4" fill="#d14438"/>
+  
+  <!-- Title Text -->
+  <text x="300" y="380" text-anchor="middle" fill="#0f0f0f" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Community Outreach Program</text>
+</svg>

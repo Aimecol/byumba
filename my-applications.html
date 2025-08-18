@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - Diocese of Byumba</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Header -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                        </div>
+                        <div class="diocese-info">
+                            <h1 class="diocese-name">Diocese of Byumba</h1>
+                            <p class="diocese-subtitle">Diyosezi ya Byumba</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                    
+                    <div class="header-actions">
+                        <div class="language-toggle">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-toggle" id="userMenuToggle">
+                                <div class="user-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="user-name">John Doe</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="dashboard.html" class="dropdown-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    Dashboard
+                                </a>
+                                <a href="profile.html" class="dropdown-item">
+                                    <i class="fas fa-user-edit"></i>
+                                    Edit Profile
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+                                <a href="index.html" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="navigation" id="mainNavigation">
+            <div class="container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-certificate"></i>
+                            <span>Certificates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="jobs.html" class="nav-link">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Jobs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="bishop-meeting.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Bishop Meeting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">
+                            <i class="fas fa-blog"></i>
+                            <span>Blog</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Mobile-only items -->
+                    <li class="nav-item mobile-only">
+                        <div class="mobile-language-toggle">
+                            <span class="mobile-lang-label">Language:</span>
+                            <div class="mobile-lang-buttons">
+                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="rw">RW</button>
+                                <button class="lang-btn" data-lang="fr">FR</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="index.html" class="nav-link mobile-login">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content dashboard-content">
+        <div class="container">
+            <!-- Dashboard Navigation -->
+            <div class="dashboard-nav">
+                <div class="dashboard-nav-content">
+                    <a href="dashboard.html" class="dashboard-nav-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="profile.html" class="dashboard-nav-item">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="my-applications.html" class="dashboard-nav-item active">
+                        <i class="fas fa-file-alt"></i>
+                        <span>My Applications</span>
+                    </a>
+                    <a href="my-meetings.html" class="dashboard-nav-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>My Meetings</span>
+                    </a>
+                    <a href="notifications.html" class="dashboard-nav-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                        <span class="notification-badge">3</span>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header-dashboard">
+                <div class="page-header-content">
+                    <h1 class="page-title">My Applications</h1>
+                    <p class="page-description">Track and manage all your certificate applications</p>
+                </div>
+                <div class="page-actions">
+                    <a href="application.html" class="action-btn primary">
+                        <i class="fas fa-plus"></i>
+                        New Application
+                    </a>
+                </div>
+            </div>
+
+            <!-- Applications Filter -->
+            <div class="applications-filter">
+                <div class="filter-section">
+                    <div class="filter-group">
+                        <label for="statusFilter">Filter by Status:</label>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">All Applications</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="approved">Approved</option>
+                            <option value="completed">Completed</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="typeFilter">Filter by Type:</label>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="all">All Types</option>
+                            <option value="baptism">Baptism Certificate</option>
+                            <option value="confirmation">Confirmation Certificate</option>
+                            <option value="marriage">Marriage Certificate</option>
+                            <option value="ordination">Ordination Certificate</option>
+                            <option value="membership">Membership Certificate</option>
+                            <option value="good-standing">Good Standing Certificate</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dateFilter">Filter by Date:</label>
+                        <select id="dateFilter" class="filter-select">
+                            <option value="all">All Time</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">Last 3 Months</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button class="filter-btn clear" id="clearFilters">
+                            <i class="fas fa-times"></i>
+                            Clear
+                        </button>
+                        <button class="filter-btn search" id="applyFilters">
+                            <i class="fas fa-search"></i>
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications Summary -->
+            <div class="applications-summary">
+                <div class="summary-card">
+                    <div class="summary-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>2</h3>
+                        <p>Pending Applications</p>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-icon processing">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>1</h3>
+                        <p>Processing</p>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-icon approved">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>1</h3>
+                        <p>Approved</p>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-icon completed">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>3</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications List -->
+            <div class="applications-container">
+                <div class="applications-header">
+                    <h2>All Applications</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="list">
+                            <i class="fas fa-list"></i>
+                            List
+                        </button>
+                        <button class="view-btn" data-view="grid">
+                            <i class="fas fa-th-large"></i>
+                            Grid
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="applications-list-view" id="applicationsListView">
+                    <!-- Applications will be loaded here -->
+                </div>
+                
+                <div class="applications-grid-view" id="applicationsGridView" style="display: none;">
+                    <!-- Applications will be loaded here -->
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div class="pagination-info">
+                        <span>Page <span id="currentPage">1</span> of <span id="totalPages">3</span></span>
+                    </div>
+                    <button class="pagination-btn" id="nextPage">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Application Details Modal -->
+    <div class="modal-overlay" id="applicationModal">
+        <div class="modal-content application-modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Application Details</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Application details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn secondary" id="closeModalBtn">Close</button>
+                <button class="action-btn primary" id="downloadBtn" style="display: none;">
+                    <i class="fas fa-download"></i>
+                    Download Certificate
+                </button>
+                <button class="action-btn primary" id="payBtn" style="display: none;">
+                    <i class="fas fa-credit-card"></i>
+                    Make Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Diocese of Byumba</h3>
+                    <p>Serving the Catholic community in Northern Rwanda with faith, hope, and love.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Certificates</a></li>
+                        <li><a href="jobs.html">Job Opportunities</a></li>
+                        <li><a href="bishop-meeting.html">Bishop Meeting</a></li>
+                        <li><a href="blog.html">News & Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Byumba, Northern Province, Rwanda</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+250 788 123 456</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@diocesebyumba.rw</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/my-applications.js"></script>
+</body>
+</html>

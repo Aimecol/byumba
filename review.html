@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Application - Diocese of Byumba</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/payment-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Header -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                        </div>
+                        <div class="diocese-info">
+                            <h1 class="diocese-name">Diocese of Byumba</h1>
+                            <p class="diocese-subtitle">Diyosezi ya Byumba</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                    
+                    <div class="header-actions">
+                        <div class="language-toggle">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-user"></i>
+                            <span class="login-text">Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="navigation" id="mainNavigation">
+            <div class="container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-certificate"></i>
+                            <span>Certificates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="jobs.html" class="nav-link">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Jobs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="bishop-meeting.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Bishop Meeting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">
+                            <i class="fas fa-blog"></i>
+                            <span>Blog</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Mobile-only items -->
+                    <li class="nav-item mobile-only">
+                        <div class="mobile-language-toggle">
+                            <span class="mobile-lang-label">Language:</span>
+                            <div class="mobile-lang-buttons">
+                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="rw">RW</button>
+                                <button class="lang-btn" data-lang="fr">FR</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="login.html" class="nav-link mobile-login">
+                            <i class="fas fa-user"></i>
+                            <span>Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="breadcrumb">
+                    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <a href="application.html"><i class="fas fa-form"></i> Application</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span>Review & Submit</span>
+                </div>
+                <h1 class="page-title">Review & Submit Application</h1>
+                <p class="page-description">Please review your application details before submitting</p>
+            </div>
+
+            <!-- Review Container -->
+            <div class="review-container" id="reviewContainer">
+                <!-- Content will be dynamically loaded here -->
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading application review...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact Information</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Byumba, Northern Province, Rwanda</p>
+                        <p><i class="fas fa-phone"></i> +250 788 123 456</p>
+                        <p><i class="fas fa-envelope"></i> info@diocesebyumba.rw</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Certificates</a></li>
+                        <li><a href="jobs.html">Job Opportunities</a></li>
+                        <li><a href="bishop-meeting.html">Bishop Meeting</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/payment-config.js"></script>
+    <script src="js/payment-api.js"></script>
+    <script src="js/review.js"></script>
+</body>
+</html>

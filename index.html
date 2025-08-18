@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diocese of Byumba - Certificates</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Header -->
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                        </div>
+                        <div class="diocese-info">
+                            <h1 class="diocese-name" data-translate="site_name">Diocese of Byumba</h1>
+                            <p class="diocese-subtitle" data-translate="site_subtitle">Diyosezi ya Byumba</p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+
+                    <div class="header-actions">
+                        <div class="language-toggle">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-user"></i>
+                            <span class="login-text" data-translate="login">Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navigation" id="mainNavigation">
+            <div class="container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item active">
+                        <a href="index.html" class="nav-link">
+                            <i class="fas fa-certificate"></i>
+                            <span data-translate="certificates">Certificates</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="jobs.html" class="nav-link">
+                            <i class="fas fa-briefcase"></i>
+                            <span data-translate="jobs">Jobs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="bishop-meeting.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span data-translate="bishop_meeting">Bishop Meeting</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">
+                            <i class="fas fa-blog"></i>
+                            <span data-translate="blog">Blog</span>
+                        </a>
+                    </li>
+
+                    <!-- Mobile-only items -->
+                    <li class="nav-item mobile-only">
+                        <div class="mobile-language-toggle">
+                            <span class="mobile-lang-label">Language:</span>
+                            <div class="mobile-lang-buttons">
+                                <button class="lang-btn active" data-lang="en">EN</button>
+                                <button class="lang-btn" data-lang="rw">RW</button>
+                                <button class="lang-btn" data-lang="fr">FR</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mobile-only">
+                        <a href="login.html" class="nav-link mobile-login">
+                            <i class="fas fa-user"></i>
+                            <span data-translate="login">Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2 class="page-title" data-translate="certificate_services">Certificate Services</h2>
+                <p class="page-description" data-translate="certificate_services_description">Apply for various certificates issued by the Diocese of Byumba</p>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="certificateSearch" placeholder="Search certificates..." data-translate-placeholder="search_certificates">
+                    </div>
+                    <div class="filter-dropdown">
+                        <select id="categoryFilter">
+                            <option value="" data-translate="all_categories">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate Categories -->
+            <div class="certificates-grid" id="certificatesGrid">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <p data-translate="loading_certificates">Loading certificates...</p>
+                </div>
+
+                <!-- Error State -->
+                <div class="error-state" id="errorState" style="display: none;">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <p data-translate="error_loading_certificates">Failed to load certificates. Please try again.</p>
+                    <button class="retry-btn" id="retryBtn" data-translate="retry">Retry</button>
+                </div>
+
+                <!-- Certificates will be loaded dynamically here -->
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title" data-translate="contact_information">Contact Information</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Byumba, Northern Province, Rwanda</p>
+                        <p><i class="fas fa-phone"></i> +250 788 123 456</p>
+                        <p><i class="fas fa-envelope"></i> info@diocesebyumba.rw</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" data-translate="quick_links">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html" data-translate="certificates">Certificates</a></li>
+                        <li><a href="jobs.html" data-translate="job_opportunities">Job Opportunities</a></li>
+                        <li><a href="bishop-meeting.html" data-translate="bishop_meeting">Bishop Meeting</a></li>
+                        <li><a href="blog.html" data-translate="blog">Blog</a></li>
+                        <li><a href="register.html" data-translate="register">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" data-translate="follow_us">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-translate="copyright">&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/language.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
