@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2025 at 06:58 AM
+-- Generation Time: Aug 19, 2025 at 10:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,6 +40,7 @@ CREATE TABLE `applications` (
   `payment_status` enum('pending','paid','confirmed') DEFAULT 'pending',
   `payment_date` timestamp NULL DEFAULT NULL,
   `notes` text DEFAULT NULL,
+  `notification_methods` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Preferred notification methods (email, sms, phone)' CHECK (json_valid(`notification_methods`)),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -48,14 +49,14 @@ CREATE TABLE `applications` (
 -- Dumping data for table `applications`
 --
 
-INSERT INTO `applications` (`id`, `user_id`, `certificate_type_id`, `application_number`, `status`, `submitted_date`, `approved_date`, `completed_date`, `payment_code`, `payment_status`, `payment_date`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'APP001', 'completed', '2024-01-10 07:00:00', '2024-01-12 12:30:00', '2024-01-15 08:00:00', 'BC2024001', 'confirmed', '2024-01-13 14:20:00', 'Certificate ready for pickup', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(2, 1, 3, 'APP002', 'approved', '2024-01-08 09:30:00', '2024-01-12 13:45:00', NULL, 'MC2024002', 'pending', NULL, 'Payment required to proceed', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(3, 1, 2, 'APP003', 'processing', '2024-01-05 12:15:00', NULL, NULL, NULL, 'pending', NULL, 'Under review by parish priest', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(4, 1, 5, 'APP004', 'completed', '2024-01-01 08:20:00', '2024-01-03 07:15:00', '2024-01-05 09:30:00', 'MC2024004', 'confirmed', '2024-01-04 12:45:00', 'Certificate issued', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(5, 2, 1, 'APP005', 'pending', '2024-01-18 14:30:00', NULL, NULL, NULL, 'pending', NULL, 'Waiting for document verification', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(6, 3, 6, 'APP006', 'completed', '2023-12-15 06:45:00', '2023-12-18 11:20:00', '2023-12-20 07:10:00', 'GS2023006', 'confirmed', '2023-12-19 08:30:00', 'Certificate delivered', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(7, 4, 4, 'APP007', 'pending', '2024-01-03 10:00:00', NULL, NULL, NULL, 'pending', NULL, 'Seminary verification in progress', '2025-06-04 04:00:02', '2025-06-04 04:00:02');
+INSERT INTO `applications` (`id`, `user_id`, `certificate_type_id`, `application_number`, `status`, `submitted_date`, `approved_date`, `completed_date`, `payment_code`, `payment_status`, `payment_date`, `notes`, `notification_methods`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'APP001', 'completed', '2024-01-10 07:00:00', '2024-01-12 12:30:00', '2024-01-15 08:00:00', 'BC2024001', 'confirmed', '2024-01-13 14:20:00', 'Certificate ready for pickup', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(2, 1, 3, 'APP002', 'approved', '2024-01-08 09:30:00', '2024-01-12 13:45:00', NULL, 'MC2024002', 'pending', NULL, 'Payment required to proceed', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(3, 1, 2, 'APP003', 'processing', '2024-01-05 12:15:00', NULL, NULL, NULL, 'pending', NULL, 'Under review by parish priest', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(4, 1, 5, 'APP004', 'completed', '2024-01-01 08:20:00', '2024-01-03 07:15:00', '2024-01-05 09:30:00', 'MC2024004', 'confirmed', '2024-01-04 12:45:00', 'Certificate issued', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(5, 2, 1, 'APP005', 'pending', '2024-01-18 14:30:00', NULL, NULL, NULL, 'pending', NULL, 'Waiting for document verification', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(6, 3, 6, 'APP006', 'completed', '2023-12-15 06:45:00', '2023-12-18 11:20:00', '2023-12-20 07:10:00', 'GS2023006', 'confirmed', '2023-12-19 08:30:00', 'Certificate delivered', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(7, 4, 4, 'APP007', 'pending', '2024-01-03 10:00:00', NULL, NULL, NULL, 'pending', NULL, 'Seminary verification in progress', NULL, '2025-06-04 04:00:02', '2025-06-04 04:00:02');
 
 -- --------------------------------------------------------
 
@@ -126,21 +127,21 @@ INSERT INTO `application_documents` (`id`, `application_id`, `document_name`, `f
 (46, 2, 'National ID Copy (Groom)', '/uploads/documents/app002_groom_id.pdf', 251904, 'application/pdf', '2025-06-04 11:37:05'),
 (47, 2, 'National ID Copy (Bride)', '/uploads/documents/app002_bride_id.pdf', 248832, 'application/pdf', '2025-06-04 11:37:05'),
 (48, 2, 'Birth Certificate (Groom)', '/uploads/documents/app002_groom_birth.pdf', 195584, 'application/pdf', '2025-06-04 11:37:05'),
-(49, 2, 'Birth Certificate (Bride)', '/uploads/documents/app002_bride_birth.pdf', 198656, 'application/pdf', '2025-06-04 11:37:05'),
-(50, 1, 'National ID Copy', '/uploads/documents/app001_national_id.pdf', 245760, 'application/pdf', '2025-06-25 03:49:32'),
-(51, 1, 'Birth Certificate', '/uploads/documents/app001_birth_cert.pdf', 189440, 'application/pdf', '2025-06-25 03:49:32'),
-(52, 1, 'Passport Photo', '/uploads/documents/app001_photo.jpg', 156672, 'image/jpeg', '2025-06-25 03:49:32'),
-(53, 2, 'National ID Copy (Groom)', '/uploads/documents/app002_groom_id.pdf', 251904, 'application/pdf', '2025-06-25 03:49:32'),
-(54, 2, 'National ID Copy (Bride)', '/uploads/documents/app002_bride_id.pdf', 248832, 'application/pdf', '2025-06-25 03:49:32'),
-(55, 2, 'Birth Certificate (Groom)', '/uploads/documents/app002_groom_birth.pdf', 195584, 'application/pdf', '2025-06-25 03:49:32'),
-(56, 2, 'Birth Certificate (Bride)', '/uploads/documents/app002_bride_birth.pdf', 198656, 'application/pdf', '2025-06-25 03:49:32'),
-(57, 1, 'National ID Copy', '/uploads/documents/app001_national_id.pdf', 245760, 'application/pdf', '2025-06-25 03:58:53'),
-(58, 1, 'Birth Certificate', '/uploads/documents/app001_birth_cert.pdf', 189440, 'application/pdf', '2025-06-25 03:58:53'),
-(59, 1, 'Passport Photo', '/uploads/documents/app001_photo.jpg', 156672, 'image/jpeg', '2025-06-25 03:58:53'),
-(60, 2, 'National ID Copy (Groom)', '/uploads/documents/app002_groom_id.pdf', 251904, 'application/pdf', '2025-06-25 03:58:53'),
-(61, 2, 'National ID Copy (Bride)', '/uploads/documents/app002_bride_id.pdf', 248832, 'application/pdf', '2025-06-25 03:58:53'),
-(62, 2, 'Birth Certificate (Groom)', '/uploads/documents/app002_groom_birth.pdf', 195584, 'application/pdf', '2025-06-25 03:58:53'),
-(63, 2, 'Birth Certificate (Bride)', '/uploads/documents/app002_bride_birth.pdf', 198656, 'application/pdf', '2025-06-25 03:58:53');
+(49, 2, 'Birth Certificate (Bride)', '/uploads/documents/app002_bride_birth.pdf', 198656, 'application/pdf', '2025-06-04 11:37:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `application_form_data`
+--
+
+CREATE TABLE `application_form_data` (
+  `id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `field_name` varchar(100) NOT NULL,
+  `field_value` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -244,21 +245,6 @@ INSERT INTO `blog_posts` (`id`, `blog_category_id`, `author_id`, `post_number`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `blog_post_translations`
---
-
-CREATE TABLE `blog_post_translations` (
-  `id` int(11) NOT NULL,
-  `blog_post_id` int(11) NOT NULL,
-  `language_code` varchar(5) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `excerpt` text DEFAULT NULL,
-  `content` longtext DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `certificate_types`
 --
 
@@ -277,12 +263,15 @@ CREATE TABLE `certificate_types` (
 --
 
 INSERT INTO `certificate_types` (`id`, `type_key`, `fee`, `processing_days`, `icon`, `is_active`, `created_at`) VALUES
-(1, 'baptism', 2000.00, 5, 'fa-cross', 1, '2025-06-04 03:59:27'),
-(2, 'confirmation', 2500.00, 5, 'fa-hands-praying', 1, '2025-06-04 03:59:27'),
-(3, 'marriage', 5000.00, 7, 'fa-ring', 1, '2025-06-04 03:59:27'),
-(4, 'ordination', 10000.00, 14, 'fa-church', 1, '2025-06-04 03:59:27'),
-(5, 'membership', 1500.00, 3, 'fa-users', 1, '2025-06-04 03:59:27'),
-(6, 'good_standing', 1500.00, 3, 'fa-certificate', 1, '2025-06-04 03:59:27');
+(1, 'abasheshakanguhe', 2000.00, 7, 'fa-certificate', 1, '2025-08-18 17:36:07'),
+(2, 'ebenezer', 2000.00, 7, 'fa-star', 1, '2025-08-18 17:36:07'),
+(3, 'fathers_union', 2500.00, 5, 'fa-users', 1, '2025-08-18 17:36:07'),
+(4, 'icyemezo_gusura_korare', 1500.00, 3, 'fa-home', 1, '2025-08-18 17:36:07'),
+(5, 'icyemezo_gfs', 2000.00, 5, 'fa-female', 1, '2025-08-18 17:36:07'),
+(6, 'icyemezo_umukirisitu', 1500.00, 3, 'fa-cross', 1, '2025-08-18 17:36:07'),
+(7, 'marriage', 5000.00, 7, 'fa-ring', 1, '2025-08-18 17:36:07'),
+(8, 'mothers_union', 2500.00, 5, 'fa-heart', 1, '2025-08-18 17:36:07'),
+(9, 'youth_union', 1500.00, 3, 'fa-graduation-cap', 1, '2025-08-18 17:36:07');
 
 -- --------------------------------------------------------
 
@@ -304,24 +293,33 @@ CREATE TABLE `certificate_type_translations` (
 --
 
 INSERT INTO `certificate_type_translations` (`id`, `certificate_type_id`, `language_code`, `name`, `description`, `required_documents`) VALUES
-(1, 1, 'en', 'Baptism Certificate', 'Official record of baptism ceremony', '[\"National ID Copy\", \"Birth Certificate\", \"Passport Photo\"]'),
-(2, 1, 'rw', 'Icyemezo cy\'Ubwiyunge', 'Inyandiko y\'ibanze y\'umuhango w\'ubwiyunge', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'amavuko\", \"Ifoto y\'pasiporo\"]'),
-(3, 1, 'fr', 'Certificat de Baptême', 'Enregistrement officiel de la cérémonie de baptême', '[\"Copie de la carte d\'identité\", \"Certificat de naissance\", \"Photo de passeport\"]'),
-(4, 2, 'en', 'Confirmation Certificate', 'Official record of confirmation ceremony', '[\"National ID Copy\", \"Baptism Certificate\", \"Passport Photo\"]'),
-(5, 2, 'rw', 'Icyemezo cy\'Iyemeza', 'Inyandiko y\'ibanze y\'umuhango w\'iyemeza', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ubwiyunge\", \"Ifoto y\'pasiporo\"]'),
-(6, 2, 'fr', 'Certificat de Confirmation', 'Enregistrement officiel de la cérémonie de confirmation', '[\"Copie de la carte d\'identité\", \"Certificat de baptême\", \"Photo de passeport\"]'),
-(7, 3, 'en', 'Marriage Certificate', 'Official record of marriage ceremony', '[\"National ID Copy (Both)\", \"Birth Certificates (Both)\", \"Passport Photos (Both)\", \"Marriage Banns\"]'),
-(8, 3, 'rw', 'Icyemezo cy\'Ubukwe', 'Inyandiko y\'ibanze y\'umuhango w\'ubukwe', '[\"Kopi z\'indangamuntu (bombi)\", \"Ibyemezo by\'amavuko (bombi)\", \"Amafoto y\'pasiporo (bombi)\", \"Itangazo ry\'ubukwe\"]'),
-(9, 3, 'fr', 'Certificat de Mariage', 'Enregistrement officiel de la cérémonie de mariage', '[\"Copie de la carte d\'identité (les deux)\", \"Certificats de naissance (les deux)\", \"Photos de passeport (les deux)\", \"Bans de mariage\"]'),
-(10, 4, 'en', 'Ordination Certificate', 'Official record of ordination ceremony', '[\"National ID Copy\", \"Seminary Certificate\", \"Passport Photo\", \"Recommendation Letters\"]'),
-(11, 4, 'rw', 'Icyemezo cy\'Ubwiyunge bw\'Abapadiri', 'Inyandiko y\'ibanze y\'umuhango w\'ubwiyunge bw\'abapadiri', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'amashuri makuru\", \"Ifoto y\'pasiporo\", \"Ibaruwa z\'ubwiyunge\"]'),
-(12, 4, 'fr', 'Certificat d\'Ordination', 'Enregistrement officiel de la cérémonie d\'ordination', '[\"Copie de la carte d\'identité\", \"Certificat du séminaire\", \"Photo de passeport\", \"Lettres de recommandation\"]'),
-(13, 5, 'en', 'Membership Certificate', 'Parish membership record', '[\"National ID Copy\", \"Passport Photo\"]'),
-(14, 5, 'rw', 'Icyemezo cy\'Ubwiyunge mu Paruwasi', 'Inyandiko y\'ubwiyunge mu paruwasi', '[\"Kopi y\'indangamuntu\", \"Ifoto y\'pasiporo\"]'),
-(15, 5, 'fr', 'Certificat d\'Adhésion', 'Enregistrement d\'adhésion paroissiale', '[\"Copie de la carte d\'identité\", \"Photo de passeport\"]'),
-(16, 6, 'en', 'Good Standing Certificate', 'Certificate of good standing in the parish', '[\"National ID Copy\", \"Passport Photo\"]'),
-(17, 6, 'rw', 'Icyemezo cy\'Imyitwarire Myiza', 'Icyemezo cy\'imyitwarire myiza mu paruwasi', '[\"Kopi y\'indangamuntu\", \"Ifoto y\'pasiporo\"]'),
-(18, 6, 'fr', 'Certificat de Bonne Conduite', 'Certificat de bonne conduite dans la paroisse', '[\"Copie de la carte d\'identité\", \"Photo de passeport\"]');
+(1, 1, 'en', 'Abasheshakanguhe', 'Certificate for Abasheshakanguhe members', '[\"National ID Copy\", \"Membership Proof\", \"Passport Photo\"]'),
+(2, 1, 'rw', 'Abasheshakanguhe', 'Icyemezo cy\'abanyamuryango ba Abasheshakanguhe', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ubwiyunge\", \"Ifoto y\'pasiporo\"]'),
+(3, 1, 'fr', 'Abasheshakanguhe', 'Certificat pour les membres Abasheshakanguhe', '[\"Copie de la carte d\'identité\", \"Preuve d\'adhésion\", \"Photo de passeport\"]'),
+(4, 2, 'en', 'Ebenezer', 'Certificate for Ebenezer group members', '[\"National ID Copy\", \"Group Membership Proof\", \"Passport Photo\"]'),
+(5, 2, 'rw', 'Ebenezer', 'Icyemezo cy\'abanyamuryango ba Ebenezer', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ubwiyunge mu itsinda\", \"Ifoto y\'pasiporo\"]'),
+(6, 2, 'fr', 'Ebenezer', 'Certificat pour les membres du groupe Ebenezer', '[\"Copie de la carte d\'identité\", \"Preuve d\'adhésion au groupe\", \"Photo de passeport\"]'),
+(7, 3, 'en', 'Father\'s Union', 'Certificate for Father\'s Union members', '[\"National ID Copy\", \"Marriage Certificate\", \"Passport Photo\"]'),
+(8, 3, 'rw', 'Umuryango w\'Ababyeyi', 'Icyemezo cy\'abanyamuryango b\'umuryango w\'ababyeyi', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ubukwe\", \"Ifoto y\'pasiporo\"]'),
+(9, 3, 'fr', 'Union des Pères', 'Certificat pour les membres de l\'Union des Pères', '[\"Copie de la carte d\'identité\", \"Certificat de mariage\", \"Photo de passeport\"]'),
+(10, 4, 'en', 'Icyemezo cyo gusura kwa korare', 'Certificate for visiting korare', '[\"National ID Copy\", \"Request Letter\", \"Passport Photo\"]'),
+(11, 4, 'rw', 'Icyemezo cyo gusura kwa korare', 'Icyemezo cyo gusura kwa korare', '[\"Kopi y\'indangamuntu\", \"Ibaruwa y\'ubusabe\", \"Ifoto y\'pasiporo\"]'),
+(12, 4, 'fr', 'Certificat de visite korare', 'Certificat pour visiter korare', '[\"Copie de la carte d\'identité\", \"Lettre de demande\", \"Photo de passeport\"]'),
+(13, 5, 'en', 'Icyemezo cyuko winjiye mumuryango wa GFS', 'Certificate for joining GFS organization', '[\"National ID Copy\", \"Application Form\", \"Passport Photo\"]'),
+(14, 5, 'rw', 'Icyemezo cyuko winjiye mumuryango wa GFS', 'Icyemezo cyuko winjiye mumuryango wa GFS', '[\"Kopi y\'indangamuntu\", \"Ifishi y\'ubusabe\", \"Ifoto y\'pasiporo\"]'),
+(15, 5, 'fr', 'Certificat d\'adhésion à l\'organisation GFS', 'Certificat pour rejoindre l\'organisation GFS', '[\"Copie de la carte d\'identité\", \"Formulaire de demande\", \"Photo de passeport\"]'),
+(16, 6, 'en', 'Icyemezo cyumukirisitu', 'Christian certificate', '[\"National ID Copy\", \"Baptism Certificate\", \"Passport Photo\"]'),
+(17, 6, 'rw', 'Icyemezo cyumukirisitu', 'Icyemezo cyumukirisitu', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ubwiyunge\", \"Ifoto y\'pasiporo\"]'),
+(18, 6, 'fr', 'Certificat de chrétien', 'Certificat chrétien', '[\"Copie de la carte d\'identité\", \"Certificat de baptême\", \"Photo de passeport\"]'),
+(19, 7, 'en', 'Marriage', 'Marriage certificate', '[\"National ID Copy\", \"Birth Certificate\", \"Passport Photo\", \"Medical Certificate\"]'),
+(20, 7, 'rw', 'Ubukwe', 'Icyemezo cy\'ubukwe', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'amavuko\", \"Ifoto y\'pasiporo\", \"Icyemezo cy\'ubuzima\"]'),
+(21, 7, 'fr', 'Mariage', 'Certificat de mariage', '[\"Copie de la carte d\'identité\", \"Certificat de naissance\", \"Photo de passeport\", \"Certificat médical\"]'),
+(22, 8, 'en', 'Mother\'s Union', 'Certificate for Mother\'s Union members', '[\"National ID Copy\", \"Marriage Certificate\", \"Passport Photo\"]'),
+(23, 8, 'rw', 'Umuryango w\'Ababyeyi b\'abagore', 'Icyemezo cy\'abanyamuryango b\'umuryango w\'ababyeyi b\'abagore', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ubukwe\", \"Ifoto y\'pasiporo\"]'),
+(24, 8, 'fr', 'Union des Mères', 'Certificat pour les membres de l\'Union des Mères', '[\"Copie de la carte d\'identité\", \"Certificat de mariage\", \"Photo de passeport\"]'),
+(25, 9, 'en', 'Youth Union', 'Certificate for Youth Union members', '[\"National ID Copy\", \"School Certificate\", \"Passport Photo\"]'),
+(26, 9, 'rw', 'Umuryango w\'Urubyiruko', 'Icyemezo cy\'abanyamuryango b\'umuryango w\'urubyiruko', '[\"Kopi y\'indangamuntu\", \"Icyemezo cy\'ishuri\", \"Ifoto y\'pasiporo\"]'),
+(27, 9, 'fr', 'Union de la Jeunesse', 'Certificat pour les membres de l\'Union de la Jeunesse', '[\"Copie de la carte d\'identité\", \"Certificat scolaire\", \"Photo de passeport\"]');
 
 -- --------------------------------------------------------
 
@@ -674,34 +672,14 @@ INSERT INTO `notifications` (`id`, `user_id`, `notification_type_id`, `title`, `
 (60, 4, 5, 'Profile Update Required', 'Please update your profile information to ensure you receive important notifications. Some fields are missing or outdated.', 1, 'Update Profile', 'profile.html', 1, NULL, '2025-06-04 10:11:33'),
 (61, 1, 1, 'Application Approved', 'Your Baptism Certificate application has been approved. Payment code: BC2024001. Please proceed with payment to complete the process.', 1, 'Make Payment', 'my-applications.html', 0, NULL, '2025-06-04 11:37:05'),
 (62, 1, 2, 'Meeting Reminder', 'Your marriage counseling session is scheduled for tomorrow (January 20, 2024) at 10:00 AM in the Bishop\'s Office. Please arrive 15 minutes early.', 1, 'View Meeting', 'my-meetings.html', 0, NULL, '2025-06-04 11:37:05'),
-(63, 1, 1, 'Document Required', 'Additional documentation is needed for your Marriage Certificate application (APP002). Please upload the missing birth certificate within 7 days.', 1, 'Upload Document', 'my-applications.html', 0, NULL, '2025-06-04 11:37:05'),
+(63, 1, 1, 'Document Required', 'Additional documentation is needed for your Marriage Certificate application (APP002). Please upload the missing birth certificate within 7 days.', 1, 'Upload Document', 'my-applications.html', 1, '2025-08-18 17:37:21', '2025-06-04 11:37:05'),
 (64, 1, 3, 'Payment Received', 'Payment confirmed for Membership Certificate (APP004). Your certificate will be ready for pickup in 2-3 business days. You will receive another notification when ready.', 0, NULL, NULL, 1, NULL, '2025-06-04 11:37:05'),
 (65, 1, 4, 'New Job Posting', 'A new position matching your profile has been posted: Parish Coordinator at St. Mary\'s Parish. Application deadline: January 30, 2024.', 1, 'View Job', 'jobs.html', 1, NULL, '2025-06-04 11:37:05'),
 (66, 1, 5, 'System Maintenance', 'Scheduled system maintenance will occur on January 21, 2024, from 2:00 AM to 4:00 AM. Some services may be temporarily unavailable.', 0, NULL, NULL, 1, NULL, '2025-06-04 11:37:05'),
 (67, 2, 1, 'Certificate Ready', 'Your Good Standing Certificate is ready for pickup. Please visit the Diocese office during business hours (8:00 AM - 5:00 PM) with your ID.', 1, 'Download Certificate', 'my-applications.html', 1, NULL, '2025-06-04 11:37:05'),
 (68, 2, 2, 'Meeting Cancelled', 'Your scheduled meeting on January 12, 2024, has been cancelled due to an emergency. Please reschedule at your convenience.', 1, 'Reschedule', 'bishop-meeting.html', 1, NULL, '2025-06-04 11:37:05'),
 (69, 3, 4, 'Welcome to Diocese Portal', 'Welcome to the Diocese of Byumba online portal! You can now apply for certificates, schedule meetings, and stay updated with announcements.', 0, NULL, NULL, 1, NULL, '2025-06-04 11:37:05'),
-(70, 4, 5, 'Profile Update Required', 'Please update your profile information to ensure you receive important notifications. Some fields are missing or outdated.', 1, 'Update Profile', 'profile.html', 1, NULL, '2025-06-04 11:37:05'),
-(71, 1, 1, 'Application Approved', 'Your Baptism Certificate application has been approved. Payment code: BC2024001. Please proceed with payment to complete the process.', 1, 'Make Payment', 'my-applications.html', 0, NULL, '2025-06-25 03:49:32'),
-(72, 1, 2, 'Meeting Reminder', 'Your marriage counseling session is scheduled for tomorrow (January 20, 2024) at 10:00 AM in the Bishop\'s Office. Please arrive 15 minutes early.', 1, 'View Meeting', 'my-meetings.html', 0, NULL, '2025-06-25 03:49:32'),
-(73, 1, 1, 'Document Required', 'Additional documentation is needed for your Marriage Certificate application (APP002). Please upload the missing birth certificate within 7 days.', 1, 'Upload Document', 'my-applications.html', 0, NULL, '2025-06-25 03:49:32'),
-(74, 1, 3, 'Payment Received', 'Payment confirmed for Membership Certificate (APP004). Your certificate will be ready for pickup in 2-3 business days. You will receive another notification when ready.', 0, NULL, NULL, 1, NULL, '2025-06-25 03:49:32'),
-(75, 1, 4, 'New Job Posting', 'A new position matching your profile has been posted: Parish Coordinator at St. Mary\'s Parish. Application deadline: January 30, 2024.', 1, 'View Job', 'jobs.html', 1, NULL, '2025-06-25 03:49:32'),
-(76, 1, 5, 'System Maintenance', 'Scheduled system maintenance will occur on January 21, 2024, from 2:00 AM to 4:00 AM. Some services may be temporarily unavailable.', 0, NULL, NULL, 1, NULL, '2025-06-25 03:49:32'),
-(77, 2, 1, 'Certificate Ready', 'Your Good Standing Certificate is ready for pickup. Please visit the Diocese office during business hours (8:00 AM - 5:00 PM) with your ID.', 1, 'Download Certificate', 'my-applications.html', 1, NULL, '2025-06-25 03:49:32'),
-(78, 2, 2, 'Meeting Cancelled', 'Your scheduled meeting on January 12, 2024, has been cancelled due to an emergency. Please reschedule at your convenience.', 1, 'Reschedule', 'bishop-meeting.html', 1, NULL, '2025-06-25 03:49:32'),
-(79, 3, 4, 'Welcome to Diocese Portal', 'Welcome to the Diocese of Byumba online portal! You can now apply for certificates, schedule meetings, and stay updated with announcements.', 0, NULL, NULL, 1, NULL, '2025-06-25 03:49:32'),
-(80, 4, 5, 'Profile Update Required', 'Please update your profile information to ensure you receive important notifications. Some fields are missing or outdated.', 1, 'Update Profile', 'profile.html', 1, NULL, '2025-06-25 03:49:32'),
-(81, 1, 1, 'Application Approved', 'Your Baptism Certificate application has been approved. Payment code: BC2024001. Please proceed with payment to complete the process.', 1, 'Make Payment', 'my-applications.html', 0, NULL, '2025-06-25 03:58:53'),
-(82, 1, 2, 'Meeting Reminder', 'Your marriage counseling session is scheduled for tomorrow (January 20, 2024) at 10:00 AM in the Bishop\'s Office. Please arrive 15 minutes early.', 1, 'View Meeting', 'my-meetings.html', 0, NULL, '2025-06-25 03:58:53'),
-(83, 1, 1, 'Document Required', 'Additional documentation is needed for your Marriage Certificate application (APP002). Please upload the missing birth certificate within 7 days.', 1, 'Upload Document', 'my-applications.html', 0, NULL, '2025-06-25 03:58:53'),
-(84, 1, 3, 'Payment Received', 'Payment confirmed for Membership Certificate (APP004). Your certificate will be ready for pickup in 2-3 business days. You will receive another notification when ready.', 0, NULL, NULL, 1, NULL, '2025-06-25 03:58:53'),
-(85, 1, 4, 'New Job Posting', 'A new position matching your profile has been posted: Parish Coordinator at St. Mary\'s Parish. Application deadline: January 30, 2024.', 1, 'View Job', 'jobs.html', 1, NULL, '2025-06-25 03:58:53'),
-(86, 1, 5, 'System Maintenance', 'Scheduled system maintenance will occur on January 21, 2024, from 2:00 AM to 4:00 AM. Some services may be temporarily unavailable.', 0, NULL, NULL, 1, NULL, '2025-06-25 03:58:53'),
-(87, 2, 1, 'Certificate Ready', 'Your Good Standing Certificate is ready for pickup. Please visit the Diocese office during business hours (8:00 AM - 5:00 PM) with your ID.', 1, 'Download Certificate', 'my-applications.html', 1, NULL, '2025-06-25 03:58:53'),
-(88, 2, 2, 'Meeting Cancelled', 'Your scheduled meeting on January 12, 2024, has been cancelled due to an emergency. Please reschedule at your convenience.', 1, 'Reschedule', 'bishop-meeting.html', 1, NULL, '2025-06-25 03:58:53'),
-(89, 3, 4, 'Welcome to Diocese Portal', 'Welcome to the Diocese of Byumba online portal! You can now apply for certificates, schedule meetings, and stay updated with announcements.', 0, NULL, NULL, 1, NULL, '2025-06-25 03:58:53'),
-(90, 4, 5, 'Profile Update Required', 'Please update your profile information to ensure you receive important notifications. Some fields are missing or outdated.', 1, 'Update Profile', 'profile.html', 1, NULL, '2025-06-25 03:58:53');
+(70, 4, 5, 'Profile Update Required', 'Please update your profile information to ensure you receive important notifications. Some fields are missing or outdated.', 1, 'Update Profile', 'profile.html', 1, NULL, '2025-06-04 11:37:05');
 
 -- --------------------------------------------------------
 
@@ -907,18 +885,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `national_id`, `date_of_birth`, `place_of_birth`, `gender`, `address`, `profile_picture`, `preferred_language`, `email_verified`, `phone_verified`, `password_hash`, `created_at`, `updated_at`) VALUES
-(1, 'John', 'Doe', 'john.doe@email.com', '+250788123456', '1234567890123456', '1990-05-15', 'Byumba, Rwanda', 'male', 'Northern Province, Gicumbi District, Byumba Sector, Gitoki Cell, Nyarutovu Village', NULL, 'en', 1, 1, '$2y$10$hiQjJwmHaj7/2MB7eHw0Ve8ptPtk9cn66aNX05EpLcPCVh8Zn.Ha.', '2025-06-04 04:00:02', '2025-06-25 04:02:18'),
+(1, 'John', 'Doe', 'john.doe@email.com', '+250788123456', '1234567890123456', '1990-05-15', 'Byumba, Rwanda', 'male', 'Northern Province, Gicumbi District, Byumba Sector, Gitoki Cell, Nyarutovu Village', NULL, 'en', 1, 1, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
 (2, 'Marie', 'Uwimana', 'marie.uwimana@email.com', '+250788234567', '1234567890123457', '1992-08-22', 'Gicumbi, Rwanda', 'female', 'Northern Province, Gicumbi District, Rukomo Sector, Nyamiyaga Cell', NULL, 'rw', 1, 1, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
 (3, 'Pierre', 'Nzeyimana', 'pierre.nzeyimana@email.com', '+250788345678', '1234567890123458', '1988-12-10', 'Rulindo, Rwanda', 'male', 'Northern Province, Rulindo District, Buyoga Sector, Cyungo Cell', NULL, 'fr', 1, 0, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(4, 'Grace', 'Mukamana', 'grace.mukamana@email.com', '+250788456789', '1234567890123459', '1995-03-18', 'Gakenke, Rwanda', 'female', 'Northern Province, Gakenke District, Gakenke Sector, Nemba Cell', NULL, 'en', 0, 1, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
+(4, 'Grace', 'Mukamana', 'grace.mukamana@email.com', '+250788456789', '1234567890123459', '1995-03-18', 'Gakenke, Rwanda', 'female', 'Northern Province, Gakenke District, Gakenke Sector, Nemba Cell', NULL, 'en', 0, 1, '$2y$10$ZJyjSNCJ0dlSJaDPHe/hrOuXxkwRK2tOZxeoEaYoqqobO4AHWAnkG', '2025-06-04 04:00:02', '2025-08-10 14:56:30'),
 (5, 'Emmanuel', 'Habimana', 'emmanuel.habimana@email.com', '+250788567890', '1234567890123460', '1985-11-25', 'Burera, Rwanda', 'male', 'Northern Province, Burera District, Cyanika Sector, Kidaho Cell', NULL, 'rw', 1, 1, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '2025-06-04 04:00:02', '2025-06-04 04:00:02'),
-(34, 'Admin', 'Admin', 'admin@diocesebyumba.rw', '0789375245', '1200567890123457', '1990-01-01', 'Rwanda', 'male', 'Musanze', NULL, 'en', 0, 0, '$2y$10$vIT1fEMDWcPtberrdtm/eeRD0KKMLAGJZMYVRXn9/TcCTZLfbyEta', '2025-06-25 00:06:09', '2025-06-25 00:06:09'),
-(40, 'Test', 'User', 'test1750825652@example.com', '+250788123456', NULL, NULL, NULL, NULL, NULL, NULL, 'en', 0, 0, '$2y$10$uLOINs5FRbaVTP55H4XPxuNa1jZPz10JN7JuM7HgzRsh0JVR9tQUK', '2025-06-25 04:27:32', '2025-06-25 04:27:32'),
-(41, 'Aimecol', 'Mazimpaka', 'admin@anrs.com', '+250783705408', '1234567890123', '2025-06-11', NULL, 'male', 'Musanze', NULL, 'en', 0, 0, '$2y$10$9J8Whpm48ZLihzQX4z246u0/a0yJMzABttQHDHUxA5rN8OAtOpkme', '2025-06-25 04:28:27', '2025-06-25 04:28:27'),
-(42, 'Test', 'User', 'test.user.1750825728551@example.com', '+250788123456', NULL, NULL, NULL, NULL, NULL, NULL, 'en', 0, 0, '$2y$10$KDJXe.yPK.ZHXioC1ri7YOkZRGvNIxK26JzSeQeRLq7Qe2EtZVbwm', '2025-06-25 04:28:54', '2025-06-25 04:28:54'),
-(43, 'Test', 'User', 'test.user.1750825738761@example.com', '+250788123456', NULL, NULL, NULL, NULL, NULL, NULL, 'en', 0, 0, '$2y$10$pFimEBNJ2Hba2I6IDyhCDumtdCvu/bmP7zswyJIrKMvw9Q4TdB8Xq', '2025-06-25 04:29:00', '2025-06-25 04:29:00'),
-(44, 'Test', 'User', 'test1750825780@example.com', '+250788123456', NULL, NULL, NULL, NULL, NULL, NULL, 'en', 0, 0, '$2y$10$5qitbNF13U5i4G3uw4rLnOv.filk46c3/NJUcTECFzvWMtilNcpxi', '2025-06-25 04:29:41', '2025-06-25 04:29:41'),
-(45, 'Test', 'User', 'test.user.1750825912137@example.com', '+250788123456', NULL, NULL, NULL, NULL, NULL, NULL, 'en', 0, 0, '$2y$10$aQWnRLXh66fTKGWEypSL2ORahJ9Qp8Xz.BFGoI0C4byaLMLx8iTjC', '2025-06-25 04:31:55', '2025-06-25 04:31:55');
+(33, 'System', 'Administrator', 'admin@diocesebyumba.rw', '+250788456789', '1234567890623459', '1995-03-18', 'Musanze', 'male', 'Rwanda', NULL, 'en', 1, 1, '$2y$10$QLoXQg1wOVyS5EPcnS1vHuS8EwMF49rnpDRFwKp42FikbtwOgazrK', '2025-08-11 14:47:17', '2025-08-11 14:47:17');
 
 -- --------------------------------------------------------
 
@@ -1015,23 +987,7 @@ INSERT INTO `user_parish_membership` (`id`, `user_id`, `parish_id`, `membership_
 (32, 2, 2, '2018-03-20', '1992-09-15', '2007-08-12', 'choir', 1, '2025-06-04 11:37:05'),
 (33, 3, 3, '2019-07-10', '1988-12-25', '2003-11-30', 'catechist', 1, '2025-06-04 11:37:05'),
 (34, 4, 4, '2021-05-05', '1995-04-08', '2010-06-15', 'youth_leader', 1, '2025-06-04 11:37:05'),
-(35, 5, 5, '2017-09-12', '1985-12-20', '2000-10-25', 'committee', 1, '2025-06-04 11:37:05'),
-(36, 1, 1, '2020-01-15', '1990-06-10', '2005-05-20', 'member', 1, '2025-06-25 03:49:32'),
-(37, 2, 2, '2018-03-20', '1992-09-15', '2007-08-12', 'choir', 1, '2025-06-25 03:49:32'),
-(38, 3, 3, '2019-07-10', '1988-12-25', '2003-11-30', 'catechist', 1, '2025-06-25 03:49:32'),
-(39, 4, 4, '2021-05-05', '1995-04-08', '2010-06-15', 'youth_leader', 1, '2025-06-25 03:49:32'),
-(40, 5, 5, '2017-09-12', '1985-12-20', '2000-10-25', 'committee', 1, '2025-06-25 03:49:32'),
-(41, 1, 1, '2020-01-15', '1990-06-10', '2005-05-20', 'member', 1, '2025-06-25 03:58:53'),
-(42, 2, 2, '2018-03-20', '1992-09-15', '2007-08-12', 'choir', 1, '2025-06-25 03:58:53'),
-(43, 3, 3, '2019-07-10', '1988-12-25', '2003-11-30', 'catechist', 1, '2025-06-25 03:58:53'),
-(44, 4, 4, '2021-05-05', '1995-04-08', '2010-06-15', 'youth_leader', 1, '2025-06-25 03:58:53'),
-(45, 5, 5, '2017-09-12', '1985-12-20', '2000-10-25', 'committee', 1, '2025-06-25 03:58:53'),
-(46, 40, 1, '2025-06-25', NULL, NULL, 'member', 1, '2025-06-25 04:27:32'),
-(47, 41, 1, '2025-06-25', '2025-06-10', NULL, 'member', 1, '2025-06-25 04:28:27'),
-(48, 42, 1, '2025-06-25', NULL, NULL, 'member', 1, '2025-06-25 04:28:54'),
-(49, 43, 1, '2025-06-25', NULL, NULL, 'member', 1, '2025-06-25 04:29:00'),
-(50, 44, 1, '2025-06-25', NULL, NULL, 'member', 1, '2025-06-25 04:29:41'),
-(51, 45, 1, '2025-06-25', NULL, NULL, 'member', 1, '2025-06-25 04:31:55');
+(35, 5, 5, '2017-09-12', '1985-12-20', '2000-10-25', 'committee', 1, '2025-06-04 11:37:05');
 
 --
 -- Indexes for dumped tables
@@ -1045,7 +1001,9 @@ ALTER TABLE `applications`
   ADD UNIQUE KEY `application_number` (`application_number`),
   ADD KEY `certificate_type_id` (`certificate_type_id`),
   ADD KEY `idx_applications_user_id` (`user_id`),
-  ADD KEY `idx_applications_status` (`status`);
+  ADD KEY `idx_applications_status` (`status`),
+  ADD KEY `idx_applications_user_status` (`user_id`,`status`),
+  ADD KEY `idx_applications_certificate_type` (`certificate_type_id`);
 
 --
 -- Indexes for table `application_documents`
@@ -1053,6 +1011,14 @@ ALTER TABLE `applications`
 ALTER TABLE `application_documents`
   ADD PRIMARY KEY (`id`),
   ADD KEY `application_id` (`application_id`);
+
+--
+-- Indexes for table `application_form_data`
+--
+ALTER TABLE `application_form_data`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_application_id` (`application_id`),
+  ADD KEY `idx_field_name` (`field_name`);
 
 --
 -- Indexes for table `blog_categories`
@@ -1080,14 +1046,6 @@ ALTER TABLE `blog_posts`
   ADD KEY `author_id` (`author_id`),
   ADD KEY `idx_blog_posts_published` (`is_published`),
   ADD KEY `idx_blog_posts_featured` (`is_featured`);
-
---
--- Indexes for table `blog_post_translations`
---
-ALTER TABLE `blog_post_translations`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_translation` (`blog_post_id`,`language_code`),
-  ADD KEY `language_code` (`language_code`);
 
 --
 -- Indexes for table `certificate_types`
@@ -1248,13 +1206,19 @@ ALTER TABLE `user_parish_membership`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `application_documents`
 --
 ALTER TABLE `application_documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `application_form_data`
+--
+ALTER TABLE `application_form_data`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `blog_categories`
@@ -1272,31 +1236,25 @@ ALTER TABLE `blog_category_translations`
 -- AUTO_INCREMENT for table `blog_posts`
 --
 ALTER TABLE `blog_posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
---
--- AUTO_INCREMENT for table `blog_post_translations`
---
-ALTER TABLE `blog_post_translations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `certificate_types`
 --
 ALTER TABLE `certificate_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `certificate_type_translations`
 --
 ALTER TABLE `certificate_type_translations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `job_categories`
@@ -1326,7 +1284,7 @@ ALTER TABLE `languages`
 -- AUTO_INCREMENT for table `meetings`
 --
 ALTER TABLE `meetings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `meeting_types`
@@ -1344,7 +1302,7 @@ ALTER TABLE `meeting_type_translations`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `notification_types`
@@ -1380,19 +1338,19 @@ ALTER TABLE `system_setting_translations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `user_notification_preferences`
 --
 ALTER TABLE `user_notification_preferences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `user_parish_membership`
 --
 ALTER TABLE `user_parish_membership`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Constraints for dumped tables
@@ -1412,6 +1370,12 @@ ALTER TABLE `application_documents`
   ADD CONSTRAINT `application_documents_ibfk_1` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `application_form_data`
+--
+ALTER TABLE `application_form_data`
+  ADD CONSTRAINT `fk_application_form_data_application` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `blog_category_translations`
 --
 ALTER TABLE `blog_category_translations`
@@ -1424,13 +1388,6 @@ ALTER TABLE `blog_category_translations`
 ALTER TABLE `blog_posts`
   ADD CONSTRAINT `blog_posts_ibfk_1` FOREIGN KEY (`blog_category_id`) REFERENCES `blog_categories` (`id`),
   ADD CONSTRAINT `blog_posts_ibfk_2` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `blog_post_translations`
---
-ALTER TABLE `blog_post_translations`
-  ADD CONSTRAINT `blog_post_translations_ibfk_1` FOREIGN KEY (`blog_post_id`) REFERENCES `blog_posts` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `blog_post_translations_ibfk_2` FOREIGN KEY (`language_code`) REFERENCES `languages` (`code`);
 
 --
 -- Constraints for table `certificate_type_translations`

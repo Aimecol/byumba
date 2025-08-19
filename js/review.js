@@ -3,72 +3,95 @@
 // Certificate Information Data (same as in application.js)
 function getCertificateInfo(certificateType) {
     const certificateData = {
-        'Baptism Certificate': {
-            icon: 'fas fa-cross',
-            processingTime: '3-5 business days',
+        'Abasheshakanguhe': {
+            icon: 'fas fa-certificate',
+            processingTime: '7 business days',
             fee: 'RWF 2,000',
             documents: [
-                'National ID or Passport copy',
-                'Birth Certificate',
-                'Parent\'s Marriage Certificate (if applicable)',
-                'Baptism Request Letter'
+                'National ID Copy',
+                'Membership Proof',
+                'Passport Photo'
             ]
         },
-        'Confirmation Certificate': {
-            icon: 'fas fa-hands-praying',
-            processingTime: '3-5 business days',
+        'Ebenezer': {
+            icon: 'fas fa-star',
+            processingTime: '7 business days',
+            fee: 'RWF 2,000',
+            documents: [
+                'National ID Copy',
+                'Group Membership Proof',
+                'Passport Photo'
+            ]
+        },
+        'Father\'s Union': {
+            icon: 'fas fa-users',
+            processingTime: '5 business days',
             fee: 'RWF 2,500',
             documents: [
-                'National ID or Passport copy',
-                'Baptism Certificate',
-                'Confirmation Request Letter',
-                'Sponsor Information'
+                'National ID Copy',
+                'Marriage Certificate',
+                'Passport Photo'
             ]
         },
-        'Marriage Certificate': {
+        'Icyemezo cyo gusura kwa korare': {
+            icon: 'fas fa-home',
+            processingTime: '3 business days',
+            fee: 'RWF 1,500',
+            documents: [
+                'National ID Copy',
+                'Request Letter',
+                'Passport Photo'
+            ]
+        },
+        'Icyemezo cyuko winjiye mumuryango wa GFS': {
+            icon: 'fas fa-female',
+            processingTime: '5 business days',
+            fee: 'RWF 2,000',
+            documents: [
+                'National ID Copy',
+                'Application Form',
+                'Passport Photo'
+            ]
+        },
+        'Icyemezo cyumukirisitu': {
+            icon: 'fas fa-cross',
+            processingTime: '3 business days',
+            fee: 'RWF 1,500',
+            documents: [
+                'National ID Copy',
+                'Baptism Certificate',
+                'Passport Photo'
+            ]
+        },
+        'Marriage': {
             icon: 'fas fa-ring',
-            processingTime: '5-7 business days',
+            processingTime: '7 business days',
             fee: 'RWF 5,000',
             documents: [
-                'National ID or Passport copy (Both spouses)',
-                'Birth Certificate (Both spouses)',
-                'Baptism Certificate (Both spouses)',
-                'Marriage Request Letter',
-                'Witness Information'
+                'National ID Copy',
+                'Birth Certificate',
+                'Passport Photo',
+                'Medical Certificate'
             ]
         },
-        'Ordination Certificate': {
-            icon: 'fas fa-church',
-            processingTime: '7-10 business days',
-            fee: 'RWF 1,000',
+        'Mother\'s Union': {
+            icon: 'fas fa-heart',
+            processingTime: '5 business days',
+            fee: 'RWF 2,500',
             documents: [
-                'National ID or Passport copy',
-                'Seminary Graduation Certificate',
-                'Baptism Certificate',
-                'Confirmation Certificate',
-                'Ordination Request Letter'
+                'National ID Copy',
+                'Marriage Certificate',
+                'Passport Photo'
             ]
         },
-        'Membership Certificate': {
-            icon: 'fas fa-users',
-            processingTime: '2-3 business days',
-            fee: 'RWF 1,000',
+        'Youth Union': {
+            icon: 'fas fa-graduation-cap',
+            processingTime: '3 business days',
+            fee: 'RWF 1,500',
             documents: [
-                'National ID or Passport copy',
-                'Baptism Certificate',
-                'Parish Registration Form',
-                'Membership Request Letter'
-            ]
-        },
-        'Good Standing Certificate': {
-            icon: 'fas fa-certificate',
-            processingTime: '2-3 business days',
-            fee: 'RWF 1,000',
-            documents: [
-                'National ID or Passport copy',
-                'Baptism Certificate',
-                'Good Standing Request Letter',
-                'Purpose Statement'
+                'National ID Copy',
+                'School Certificate',
+                'Passport Photo'
             ]
         }
     };
@@ -459,115 +482,17 @@ function generateNotificationReview(certificateInfo, applicationData) {
 // Certificate-specific review fields
 function getCertificateSpecificReview(certificateType, applicationData) {
     const specificReviews = {
-        'Baptism Certificate': `
-            ${applicationData.baptismDate ? `
-                <div class="review-item">
-                    <span>Baptism Date:</span>
-                    <span>${applicationData.baptismDate}</span>
-                </div>
-            ` : ''}
-            ${applicationData.baptismParish ? `
-                <div class="review-item">
-                    <span>Parish of Baptism:</span>
-                    <span>${applicationData.baptismParish}</span>
-                </div>
-            ` : ''}
-            ${applicationData.fatherName ? `
-                <div class="review-item">
-                    <span>Father's Name:</span>
-                    <span>${applicationData.fatherName}</span>
-                </div>
-            ` : ''}
-            ${applicationData.motherName ? `
-                <div class="review-item">
-                    <span>Mother's Name:</span>
-                    <span>${applicationData.motherName}</span>
-                </div>
-            ` : ''}
-        `,
-        'Confirmation Certificate': `
-            ${applicationData.confirmationDate ? `
-                <div class="review-item">
-                    <span>Confirmation Date:</span>
-                    <span>${applicationData.confirmationDate}</span>
-                </div>
-            ` : ''}
-            ${applicationData.confirmationParish ? `
-                <div class="review-item">
-                    <span>Parish of Confirmation:</span>
-                    <span>${applicationData.confirmationParish}</span>
-                </div>
-            ` : ''}
-            ${applicationData.sponsorName ? `
-                <div class="review-item">
-                    <span>Sponsor's Name:</span>
-                    <span>${applicationData.sponsorName}</span>
-                </div>
-            ` : ''}
-            ${applicationData.confirmationName ? `
-                <div class="review-item">
-                    <span>Confirmation Name:</span>
-                    <span>${applicationData.confirmationName}</span>
-                </div>
-            ` : ''}
-        `,
-        'Marriage Certificate': `
-            ${applicationData.marriageDate ? `
-                <div class="review-item">
-                    <span>Marriage Date:</span>
-                    <span>${applicationData.marriageDate}</span>
-                </div>
-            ` : ''}
-            ${applicationData.marriageParish ? `
-                <div class="review-item">
-                    <span>Parish of Marriage:</span>
-                    <span>${applicationData.marriageParish}</span>
-                </div>
-            ` : ''}
-            ${applicationData.spouseFirstName && applicationData.spouseLastName ? `
-                <div class="review-item">
-                    <span>Spouse's Name:</span>
-                    <span>${applicationData.spouseFirstName} ${applicationData.spouseLastName}</span>
-                </div>
-            ` : ''}
-        `,
-        'Ordination Certificate': `
-            ${applicationData.ordinationDate ? `
-                <div class="review-item">
-                    <span>Ordination Date:</span>
-                    <span>${applicationData.ordinationDate}</span>
-                </div>
-            ` : ''}
-            ${applicationData.ordinationType ? `
-                <div class="review-item">
-                    <span>Type of Ordination:</span>
-                    <span>${applicationData.ordinationType.charAt(0).toUpperCase() + applicationData.ordinationType.slice(1)}</span>
-                </div>
-            ` : ''}
-            ${applicationData.ordinationParish ? `
-                <div class="review-item">
-                    <span>Parish/Cathedral:</span>
-                    <span>${applicationData.ordinationParish}</span>
-                </div>
-            ` : ''}
-            ${applicationData.ordinationBishop ? `
-                <div class="review-item">
-                    <span>Ordaining Bishop:</span>
-                    <span>${applicationData.ordinationBishop}</span>
-                </div>
-            ` : ''}
-        `,
-        'Membership Certificate': `
-            ${applicationData.membershipDate ? `
-                <div class="review-item">
-                    <span>Membership Start Date:</span>
-                    <span>${applicationData.membershipDate}</span>
-                </div>
-            ` : ''}
+        'Abasheshakanguhe': `
             ${applicationData.currentParish ? `
                 <div class="review-item">
-                    <span>Current Parish:</span>
+                    <span>Parish:</span>
                     <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.membershipDate ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${applicationData.membershipDate}</span>
                 </div>
             ` : ''}
             ${applicationData.membershipPurpose ? `
@@ -577,23 +502,229 @@ function getCertificateSpecificReview(certificateType, applicationData) {
                 </div>
             ` : ''}
         `,
-        'Good Standing Certificate': `
+        'Ebenezer': `
             ${applicationData.currentParish ? `
                 <div class="review-item">
-                    <span>Current Parish:</span>
+                    <span>Parish:</span>
                     <span>${applicationData.currentParish}</span>
                 </div>
             ` : ''}
-            ${applicationData.membershipDuration ? `
+            ${applicationData.membershipDate ? `
                 <div class="review-item">
-                    <span>Years of Membership:</span>
-                    <span>${applicationData.membershipDuration} years</span>
+                    <span>Membership Date:</span>
+                    <span>${applicationData.membershipDate}</span>
                 </div>
             ` : ''}
-            ${applicationData.standingPurpose ? `
+            ${applicationData.membershipPurpose ? `
                 <div class="review-item">
                     <span>Purpose:</span>
-                    <span>${applicationData.standingPurpose.charAt(0).toUpperCase() + applicationData.standingPurpose.slice(1)}</span>
+                    <span>${applicationData.membershipPurpose.charAt(0).toUpperCase() + applicationData.membershipPurpose.slice(1)}</span>
+                </div>
+            ` : ''}
+        `,
+        'Father\'s Union': `
+            ${applicationData.currentParish ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.membershipDate ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${applicationData.membershipDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.spouseFirstName && applicationData.spouseLastName ? `
+                <div class="review-item">
+                    <span>Wife's Name:</span>
+                    <span>${applicationData.spouseFirstName} ${applicationData.spouseLastName}</span>
+                </div>
+            ` : ''}
+            ${applicationData.marriageDate ? `
+                <div class="review-item">
+                    <span>Marriage Date:</span>
+                    <span>${applicationData.marriageDate}</span>
+                </div>
+            ` : ''}
+        `,
+        'Icyemezo cyo gusura kwa korare': `
+            ${applicationData.choirName ? `
+                <div class="review-item">
+                    <span>Choir Name:</span>
+                    <span>${applicationData.choirName}</span>
+                </div>
+            ` : ''}
+            ${applicationData.currentParish ? `
+                <div class="review-item">
+                    <span>Home Parish:</span>
+                    <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.visitDate ? `
+                <div class="review-item">
+                    <span>Visit Date:</span>
+                    <span>${applicationData.visitDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.visitLocation ? `
+                <div class="review-item">
+                    <span>Visit Location:</span>
+                    <span>${applicationData.visitLocation}</span>
+                </div>
+            ` : ''}
+            ${applicationData.choirLeaderName ? `
+                <div class="review-item">
+                    <span>Choir Leader:</span>
+                    <span>${applicationData.choirLeaderName}</span>
+                </div>
+            ` : ''}
+        `,
+        'Icyemezo cyuko winjiye mumuryango wa GFS': `
+            ${applicationData.currentParish ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.membershipDate ? `
+                <div class="review-item">
+                    <span>GFS Membership Date:</span>
+                    <span>${applicationData.membershipDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.ceremonyLocation ? `
+                <div class="review-item">
+                    <span>Ceremony Location:</span>
+                    <span>${applicationData.ceremonyLocation}</span>
+                </div>
+            ` : ''}
+            ${applicationData.gfsLeaderName ? `
+                <div class="review-item">
+                    <span>GFS Leader:</span>
+                    <span>${applicationData.gfsLeaderName}</span>
+                </div>
+            ` : ''}
+        `,
+        'Icyemezo cyumukirisitu': `
+            ${applicationData.currentParish ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.baptismDate ? `
+                <div class="review-item">
+                    <span>Baptism Date:</span>
+                    <span>${applicationData.baptismDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.baptismLocation ? `
+                <div class="review-item">
+                    <span>Baptism Location:</span>
+                    <span>${applicationData.baptismLocation}</span>
+                </div>
+            ` : ''}
+            ${applicationData.confirmationDate ? `
+                <div class="review-item">
+                    <span>Confirmation Date:</span>
+                    <span>${applicationData.confirmationDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.churchRole ? `
+                <div class="review-item">
+                    <span>Church Role:</span>
+                    <span>${applicationData.churchRole}</span>
+                </div>
+            ` : ''}
+        `,
+        'Marriage': `
+            ${applicationData.marriageDate ? `
+                <div class="review-item">
+                    <span>Marriage Date:</span>
+                    <span>${applicationData.marriageDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.marriageLocation ? `
+                <div class="review-item">
+                    <span>Marriage Location:</span>
+                    <span>${applicationData.marriageLocation}</span>
+                </div>
+            ` : ''}
+            ${applicationData.spouseFirstName && applicationData.spouseLastName ? `
+                <div class="review-item">
+                    <span>Spouse's Name:</span>
+                    <span>${applicationData.spouseFirstName} ${applicationData.spouseLastName}</span>
+                </div>
+            ` : ''}
+            ${applicationData.spouseDateOfBirth ? `
+                <div class="review-item">
+                    <span>Spouse's Date of Birth:</span>
+                    <span>${applicationData.spouseDateOfBirth}</span>
+                </div>
+            ` : ''}
+            ${applicationData.spouseParish ? `
+                <div class="review-item">
+                    <span>Spouse's Parish:</span>
+                    <span>${applicationData.spouseParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.officiantName ? `
+                <div class="review-item">
+                    <span>Officiant:</span>
+                    <span>${applicationData.officiantName}</span>
+                </div>
+            ` : ''}
+        `,
+        'Mother\'s Union': `
+            ${applicationData.currentParish ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.membershipDate ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${applicationData.membershipDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.spouseFirstName && applicationData.spouseLastName ? `
+                <div class="review-item">
+                    <span>Husband's Name:</span>
+                    <span>${applicationData.spouseFirstName} ${applicationData.spouseLastName}</span>
+                </div>
+            ` : ''}
+            ${applicationData.marriageDate ? `
+                <div class="review-item">
+                    <span>Marriage Date:</span>
+                    <span>${applicationData.marriageDate}</span>
+                </div>
+            ` : ''}
+        `,
+        'Youth Union': `
+            ${applicationData.currentParish ? `
+                <div class="review-item">
+                    <span>Parish:</span>
+                    <span>${applicationData.currentParish}</span>
+                </div>
+            ` : ''}
+            ${applicationData.membershipDate ? `
+                <div class="review-item">
+                    <span>Membership Date:</span>
+                    <span>${applicationData.membershipDate}</span>
+                </div>
+            ` : ''}
+            ${applicationData.schoolName ? `
+                <div class="review-item">
+                    <span>School/Institution:</span>
+                    <span>${applicationData.schoolName}</span>
+                </div>
+            ` : ''}
+            ${applicationData.membershipPurpose ? `
+                <div class="review-item">
+                    <span>Purpose:</span>
+                    <span>${applicationData.membershipPurpose.charAt(0).toUpperCase() + applicationData.membershipPurpose.slice(1)}</span>
                 </div>
             ` : ''}
         `
@@ -943,26 +1074,100 @@ function initializeReviewForm(certificateType, applicationData) {
         showNotification(message, 'error');
     }
 
-    function completeApplicationSubmission() {
-        // Store application and payment data
-        const applicationSubmission = {
-            certificateType: certificateType,
-            applicationData: applicationData,
-            paymentTransaction: currentPaymentTransaction,
-            submittedAt: new Date().toISOString()
-        };
+    async function completeApplicationSubmission() {
+        try {
+            // Get certificate type ID from API
+            let certificate_type_id = 1; // Default fallback
 
-        // Store in local storage for reference
-        localStorage.setItem('lastApplicationSubmission', JSON.stringify(applicationSubmission));
+            try {
+                const certTypesResponse = await fetch('/api/certificate_types.php');
+                const certTypesResult = await certTypesResponse.json();
 
-        // Clear session storage
-        sessionStorage.removeItem('certificateType');
-        sessionStorage.removeItem('applicationData');
+                if (certTypesResult.success) {
+                    const certType = certTypesResult.data.certificate_types.find(ct =>
+                        ct.name === certificateType || ct.type_key === certificateType.toLowerCase().replace(/[^a-z0-9]/g, '_')
+                    );
 
-        // Redirect to success page after delay
-        setTimeout(() => {
-            window.location.href = 'index.html?success=true&payment=completed';
-        }, 3000);
+                    if (certType) {
+                        certificate_type_id = certType.id;
+                    }
+                }
+            } catch (certError) {
+                console.warn('Could not fetch certificate types, using fallback mapping');
+
+                // Fallback mapping if API fails
+                const certificateTypeMap = {
+                    'Abasheshakanguhe': 1,
+                    'Ebenezer': 2,
+                    'Father\'s Union': 3,
+                    'Icyemezo cyo gusura kwa korare': 4,
+                    'Icyemezo cyuko winjiye mumuryango wa GFS': 5,
+                    'Icyemezo cyumukirisitu': 6,
+                    'Marriage': 7,
+                    'Mother\'s Union': 8,
+                    'Youth Union': 9
+                };
+
+                certificate_type_id = certificateTypeMap[certificateType] || 1;
+            }
+
+            // Prepare application submission data
+            const submissionData = {
+                certificate_type_id: certificate_type_id,
+                form_data: applicationData,
+                notification_methods: applicationData.notificationMethods || ['email'],
+                notes: `Application for ${certificateType} certificate`,
+                documents: [] // Documents would be uploaded separately
+            };
+
+            // Submit application to API
+            const response = await fetch('/api/applications.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submissionData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Store application and payment data
+                const applicationSubmission = {
+                    applicationNumber: result.data.application_number,
+                    applicationId: result.data.application_id,
+                    certificateType: certificateType,
+                    applicationData: applicationData,
+                    paymentTransaction: currentPaymentTransaction,
+                    submittedAt: new Date().toISOString()
+                };
+
+                // Store in local storage for reference
+                localStorage.setItem('lastApplicationSubmission', JSON.stringify(applicationSubmission));
+
+                // Clear session storage
+                sessionStorage.removeItem('certificateType');
+                sessionStorage.removeItem('applicationData');
+                sessionStorage.removeItem('applicationFiles');
+
+                showNotification('Application submitted successfully! Application number: ' + result.data.application_number, 'success');
+
+                // Redirect to success page after delay
+                setTimeout(() => {
+                    window.location.href = 'index.html?success=true&payment=completed&app=' + result.data.application_number;
+                }, 3000);
+            } else {
+                throw new Error(result.message || 'Application submission failed');
+            }
+
+        } catch (error) {
+            console.error('Application submission error:', error);
+            showNotification('Failed to submit application: ' + error.message, 'error');
+
+            // Reset payment button to allow retry
+            paymentBtn.innerHTML = '<i class="fas fa-credit-card"></i> Try Again';
+            paymentBtn.disabled = false;
+        }
     }
 }
 

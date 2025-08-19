@@ -490,11 +490,14 @@ function initializeApplicationForm(certificateType) {
         // Store form data in sessionStorage
         const formData = new FormData(form);
         const applicationData = {};
+        const notificationMethods = [];
 
         // Convert FormData to object
         for (let [key, value] of formData.entries()) {
-            if (applicationData[key]) {
-                // Handle multiple values (like notification methods)
+            if (key === 'notificationMethod') {
+                notificationMethods.push(value);
+            } else if (applicationData[key]) {
+                // Handle multiple values
                 if (Array.isArray(applicationData[key])) {
                     applicationData[key].push(value);
                 } else {
@@ -505,9 +508,41 @@ function initializeApplicationForm(certificateType) {
             }
         }
 
+        // Add notification methods to application data
+        applicationData.notificationMethods = notificationMethods;
+
+        // Collect uploaded files information
+        const uploadedFiles = [];
+        const fileInputs = form.querySelectorAll('input[type="file"]');
+        fileInputs.forEach((input, index) => {
+            if (input.files.length > 0) {
+                const file = input.files[0];
+                uploadedFiles.push({
+                    name: input.previousElementSibling ? input.previousElementSibling.textContent : `Document ${index + 1}`,
+                    file: file,
+                    size: file.size,
+                    type: file.type
+                });
+            }
+        });
+
+        // Store uploaded files information
+        applicationData.uploadedFiles = uploadedFiles;
+
         // Store certificate type and application data
         sessionStorage.setItem('certificateType', certificateType);
-        sessionStorage.setItem('applicationData', JSON.stringify(applicationData));
+        sessionStorage.setItem('applicationData', JSON.stringify(applicationData, (key, value) => {
+            // Skip the actual file objects when stringifying
+            if (key === 'file') return null;
+            return value;
+        }));
+
+        // Store files separately for upload
+        sessionStorage.setItem('applicationFiles', JSON.stringify(uploadedFiles.map(f => ({
+            name: f.name,
+            size: f.size,
+            type: f.type
+        }))));
 
         // Redirect to review page
         window.location.href = 'review.html';
@@ -1330,3 +1365,67 @@ function getNotificationIcon(type) {
     };
     return icons[type] || 'fa-info-circle';
 }
+
+// Load certificate types from API
+async function loadCertificateTypesFromAPI() {
+    try {
+        const response = await fetch('/api/certificate_types.php');
+        const result = await response.json();
+
+        if (result.success) {
+            const certificateTypesGrid = document.querySelector('.certificate-types-grid');
+            if (certificateTypesGrid) {
+                certificateTypesGrid.innerHTML = '';
+
+                result.data.certificate_types.forEach(certType => {
+                    const card = document.createElement('div');
+                    card.className = 'certificate-type-card';
+                    card.setAttribute('data-type', certType.name);
+
+                    card.innerHTML = `
+                        <div class="certificate-icon">
+                            <i class="${certType.icon}"></i>
+                        </div>
+                        <h4>${certType.name}</h4>
+                        <p>${certType.description}</p>
+                        <span class="fee">RWF ${certType.fee.toLocaleString()}</span>
+                    `;
+
+                    certificateTypesGrid.appendChild(card);
+                });
+
+                // Re-setup event listeners for the new cards
+                setupCertificateCardListeners();
+            }
+            return true;
+        }
+    } catch (error) {
+        console.warn('Could not load certificate types from API, using static data:', error);
+    }
+    return false;
+}
+
+// Setup event listeners for certificate type cards
+function setupCertificateCardListeners() {
+    const certificateCards = document.querySelectorAll('.certificate-type-card');
+
+    certificateCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const certificateType = this.getAttribute('data-type');
+            if (certificateType) {
+                loadApplicationForm(certificateType);
+            }
+        });
+    });
+}
+
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', async function() {
+    const apiLoaded = await loadCertificateTypesFromAPI();
+    if (!apiLoaded) {
+        // Fallback to static certificate types if API fails
+        console.log('Using static certificate types as fallback');
+        // Setup listeners for static cards
+        setupCertificateCardListeners();
+    }
+});

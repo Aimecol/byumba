@@ -116,32 +116,87 @@ if ($method === 'GET') {
 if ($method === 'POST') {
     try {
         $input = json_decode(file_get_contents('php://input'), true);
-        
+
         // Validate required fields
         if (!isset($input['certificate_type_id'])) {
             ResponseHelper::error('Certificate type is required', 400);
         }
-        
+
+        if (!isset($input['form_data'])) {
+            ResponseHelper::error('Form data is required', 400);
+        }
+
+        // Start transaction
+        $db->beginTransaction();
+
         // Generate application number
         $application_number = generateUniqueNumber('APP');
-        
+
+        // Prepare notification methods JSON
+        $notification_methods = isset($input['notification_methods']) ?
+            json_encode($input['notification_methods']) : json_encode(['email']);
+
         // Insert application
-        $query = "INSERT INTO applications (user_id, certificate_type_id, application_number, notes) 
-                  VALUES (:user_id, :certificate_type_id, :application_number, :notes)";
-        
+        $query = "INSERT INTO applications (user_id, certificate_type_id, application_number, notes, notification_methods)
+                  VALUES (:user_id, :certificate_type_id, :application_number, :notes, :notification_methods)";
+
         $stmt = $db->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindParam(':certificate_type_id', $input['certificate_type_id']);
         $stmt->bindParam(':application_number', $application_number);
         $stmt->bindParam(':notes', $input['notes'] ?? '');
+        $stmt->bindParam(':notification_methods', $notification_methods);
         $stmt->execute();
-        
+
+        $application_id = $db->lastInsertId();
+
+        // Insert form data
+        $form_data_query = "INSERT INTO application_form_data (application_id, field_name, field_value)
+                           VALUES (:application_id, :field_name, :field_value)";
+        $form_data_stmt = $db->prepare($form_data_query);
+
+        foreach ($input['form_data'] as $field_name => $field_value) {
+            // Skip empty values and files (files are handled separately)
+            if ($field_value !== '' && $field_value !== null && !is_array($field_value)) {
+                $form_data_stmt->bindParam(':application_id', $application_id);
+                $form_data_stmt->bindParam(':field_name', $field_name);
+                $form_data_stmt->bindParam(':field_value', $field_value);
+                $form_data_stmt->execute();
+            }
+        }
+
+        // Handle document uploads if provided
+        if (isset($input['documents']) && is_array($input['documents'])) {
+            $doc_query = "INSERT INTO application_documents (application_id, document_name, file_path, file_size, mime_type)
+                         VALUES (:application_id, :document_name, :file_path, :file_size, :mime_type)";
+            $doc_stmt = $db->prepare($doc_query);
+
+            foreach ($input['documents'] as $document) {
+                if (isset($document['name']) && isset($document['path'])) {
+                    $doc_stmt->bindParam(':application_id', $application_id);
+                    $doc_stmt->bindParam(':document_name', $document['name']);
+                    $doc_stmt->bindParam(':file_path', $document['path']);
+                    $doc_stmt->bindParam(':file_size', $document['size'] ?? null);
+                    $doc_stmt->bindParam(':mime_type', $document['type'] ?? null);
+                    $doc_stmt->execute();
+                }
+            }
+        }
+
+        // Commit transaction
+        $db->commit();
+
         ResponseHelper::success([
             'application_number' => $application_number,
+            'application_id' => $application_id,
             'message' => 'Application submitted successfully'
         ]);
-        
+
     } catch (Exception $e) {
+        // Rollback transaction on error
+        if ($db->inTransaction()) {
+            $db->rollback();
+        }
         ResponseHelper::error('Failed to submit application: ' . $e->getMessage(), 500);
     }
 }
