@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h2><i class="fa-solid fa-piggy-bank"></i> Ikimina</h2>
+    <ul>
+      <li><a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fa-solid fa-users"></i> Manage Members</a></li>
+      <li><a href="#"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a></li>
+      <li><a href="#"><i class="fa-solid fa-sack-dollar"></i> Contributions</a></li>
+      <li><a href="#"><i class="fa-solid fa-file-alt"></i> Reports</a></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <h1>Admin Dashboard</h1>
+      <button class="toggle-btn"><i class="fa-solid fa-bars"></i></button>
+    </header>
+
+    <section class="cards">
+      <div class="card"><i class="fa-solid fa-users"></i><h3>Members</h3><p>120</p></div>
+      <div class="card"><i class="fa-solid fa-piggy-bank"></i><h3>Total Savings</h3><p>12,000,000 RWF</p></div>
+      <div class="card"><i class="fa-solid fa-hand-holding-dollar"></i><h3>Loans Issued</h3><p>35</p></div>
+    </section>
+
+    <section class="table-section">
+      <h2>Recent Contributions</h2>
+      <table>
+        <thead>
+          <tr><th>Member</th><th>Amount</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>John Doe</td><td>5,000 RWF</td><td>Aug 26, 2025</td></tr>
+          <tr><td>Alice Uwimana</td><td>10,000 RWF</td><td>Aug 26, 2025</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

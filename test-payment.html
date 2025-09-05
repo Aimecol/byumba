@@ -1,262 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Integration Test - Diocese of Byumba</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/payment-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .test-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .test-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-        }
-        .test-result {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 6px;
-            font-family: monospace;
-            white-space: pre-wrap;
-        }
-        .test-result.success {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        .test-result.error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        .test-button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-right: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .test-button:hover {
-            background: #0056b3;
-        }
-        .test-button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ikimina Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+  --primary: #0066cc;
+  --secondary: #00b894;
+  --light: #f9f9f9;
+  --dark: #333;
+  --radius: 12px;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--light);
+  color: var(--dark);
+}
+
+.navbar {
+  background: var(--primary);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+  </style>
 </head>
 <body>
-    <div class="test-container">
-        <h1><i class="fas fa-credit-card"></i> Payment Integration Test</h1>
-        <p>This page tests the IntouchPay payment integration for the Diocese of Byumba certificate application system.</p>
-        
-        <!-- Configuration Test -->
-        <div class="test-section">
-            <h3><i class="fas fa-cog"></i> Configuration Test</h3>
-            <p>Test if payment configuration is loaded correctly.</p>
-            <button class="test-button" onclick="testConfiguration()">Test Configuration</button>
-            <div id="configResult" class="test-result" style="display: none;"></div>
-        </div>
-        
-        <!-- Phone Number Validation Test -->
-        <div class="test-section">
-            <h3><i class="fas fa-phone"></i> Phone Number Validation Test</h3>
-            <p>Test phone number validation and provider detection.</p>
-            <input type="tel" id="testPhone" placeholder="Enter phone number (e.g., 0788123456)" style="padding: 0.5rem; margin-right: 1rem; border: 1px solid #ccc; border-radius: 4px;">
-            <button class="test-button" onclick="testPhoneValidation()">Test Phone</button>
-            <div id="phoneResult" class="test-result" style="display: none;"></div>
-        </div>
-        
-        <!-- Payment Request Test -->
-        <div class="test-section">
-            <h3><i class="fas fa-money-bill-wave"></i> Payment Request Test</h3>
-            <p>Test payment request functionality (uses test credentials).</p>
-            <div style="margin-bottom: 1rem;">
-                <input type="tel" id="paymentPhone" placeholder="Phone number" style="padding: 0.5rem; margin-right: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
-                <input type="number" id="paymentAmount" placeholder="Amount (RWF)" value="2000" style="padding: 0.5rem; margin-right: 0.5rem; border: 1px solid #ccc; border-radius: 4px; width: 120px;">
-                <button class="test-button" onclick="testPaymentRequest()" id="paymentTestBtn">Test Payment</button>
-            </div>
-            <div id="paymentResult" class="test-result" style="display: none;"></div>
-        </div>
-        
-        <!-- Status Check Test -->
-        <div class="test-section">
-            <h3><i class="fas fa-search"></i> Payment Status Test</h3>
-            <p>Test payment status checking functionality.</p>
-            <input type="text" id="statusTransactionId" placeholder="Transaction ID" style="padding: 0.5rem; margin-right: 1rem; border: 1px solid #ccc; border-radius: 4px;">
-            <button class="test-button" onclick="testStatusCheck()">Check Status</button>
-            <div id="statusResult" class="test-result" style="display: none;"></div>
-        </div>
-        
-        <!-- API Connectivity Test -->
-        <div class="test-section">
-            <h3><i class="fas fa-network-wired"></i> API Connectivity Test</h3>
-            <p>Test connectivity to backend payment API.</p>
-            <button class="test-button" onclick="testAPIConnectivity()">Test API</button>
-            <div id="apiResult" class="test-result" style="display: none;"></div>
-        </div>
-    </div>
+  <header>
+    <nav class="navbar">
+      <h1>Ikimina</h1>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+        <li><a href="#"><i class="fa-solid fa-chart-line"></i> Reports</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <script src="js/payment-config.js"></script>
-    <script src="js/payment-api.js"></script>
-    <script>
-        let paymentAPI;
-        let paymentService;
-        
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                paymentAPI = new PaymentAPI();
-                paymentService = new PaymentService();
-                console.log('Payment services initialized successfully');
-            } catch (error) {
-                console.error('Failed to initialize payment services:', error);
-            }
-        });
-        
-        function testConfiguration() {
-            const resultDiv = document.getElementById('configResult');
-            resultDiv.style.display = 'block';
-            
-            try {
-                const config = PaymentConfig;
-                const result = {
-                    username: config.intouchpay.username,
-                    accountid: config.intouchpay.accountid,
-                    baseUrl: config.intouchpay.baseUrl,
-                    providers: Object.keys(config.providers),
-                    minAmount: config.settings.minAmount,
-                    maxAmount: config.settings.maxAmount
-                };
-                
-                resultDiv.className = 'test-result success';
-                resultDiv.textContent = 'Configuration loaded successfully:\n' + JSON.stringify(result, null, 2);
-            } catch (error) {
-                resultDiv.className = 'test-result error';
-                resultDiv.textContent = 'Configuration test failed:\n' + error.message;
-            }
-        }
-        
-        function testPhoneValidation() {
-            const resultDiv = document.getElementById('phoneResult');
-            const phoneNumber = document.getElementById('testPhone').value;
-            resultDiv.style.display = 'block';
-            
-            try {
-                const isValid = paymentService.validatePhoneNumber(phoneNumber);
-                const formatted = paymentService.formatPhoneNumber(phoneNumber);
-                const provider = paymentService.detectProvider(phoneNumber);
-                
-                const result = {
-                    phoneNumber: phoneNumber,
-                    isValid: isValid,
-                    formatted: formatted,
-                    provider: provider
-                };
-                
-                resultDiv.className = 'test-result ' + (isValid ? 'success' : 'error');
-                resultDiv.textContent = 'Phone validation result:\n' + JSON.stringify(result, null, 2);
-            } catch (error) {
-                resultDiv.className = 'test-result error';
-                resultDiv.textContent = 'Phone validation test failed:\n' + error.message;
-            }
-        }
-        
-        async function testPaymentRequest() {
-            const resultDiv = document.getElementById('paymentResult');
-            const phoneNumber = document.getElementById('paymentPhone').value;
-            const amount = document.getElementById('paymentAmount').value;
-            const button = document.getElementById('paymentTestBtn');
-            
-            resultDiv.style.display = 'block';
-            button.disabled = true;
-            button.textContent = 'Testing...';
-            
-            try {
-                const result = await paymentAPI.requestPayment(phoneNumber, amount, 'Test Payment');
-                
-                resultDiv.className = 'test-result ' + (result.success ? 'success' : 'error');
-                resultDiv.textContent = 'Payment request result:\n' + JSON.stringify(result, null, 2);
-                
-                // Store transaction ID for status testing
-                if (result.success && result.transactionId) {
-                    document.getElementById('statusTransactionId').value = result.transactionId;
-                }
-                
-            } catch (error) {
-                resultDiv.className = 'test-result error';
-                resultDiv.textContent = 'Payment request test failed:\n' + error.message;
-            } finally {
-                button.disabled = false;
-                button.textContent = 'Test Payment';
-            }
-        }
-        
-        async function testStatusCheck() {
-            const resultDiv = document.getElementById('statusResult');
-            const transactionId = document.getElementById('statusTransactionId').value;
-            resultDiv.style.display = 'block';
-            
-            if (!transactionId) {
-                resultDiv.className = 'test-result error';
-                resultDiv.textContent = 'Please enter a transaction ID';
-                return;
-            }
-            
-            try {
-                const result = await paymentAPI.getTransactionStatus(transactionId, 'dummy_intouchpay_id');
-                
-                resultDiv.className = 'test-result ' + (result.success ? 'success' : 'error');
-                resultDiv.textContent = 'Status check result:\n' + JSON.stringify(result, null, 2);
-                
-            } catch (error) {
-                resultDiv.className = 'test-result error';
-                resultDiv.textContent = 'Status check test failed:\n' + error.message;
-            }
-        }
-        
-        async function testAPIConnectivity() {
-            const resultDiv = document.getElementById('apiResult');
-            resultDiv.style.display = 'block';
-            
-            try {
-                const response = await fetch('api/payment-request.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        phoneNumber: '250788123456',
-                        amount: 100,
-                        description: 'API Test'
-                    })
-                });
-                
-                const result = await response.json();
-                
-                resultDiv.className = 'test-result ' + (response.ok ? 'success' : 'error');
-                resultDiv.textContent = 'API connectivity result:\n' + 
-                    'Status: ' + response.status + '\n' +
-                    'Response: ' + JSON.stringify(result, null, 2);
-                
-            } catch (error) {
-                resultDiv.className = 'test-result error';
-                resultDiv.textContent = 'API connectivity test failed:\n' + error.message;
-            }
-        }
-    </script>
+  <main>
+    <section class="dashboard">
+      <h2>Dashboard</h2>
+      <div class="cards">
+        <div class="card"><i class="fa-solid fa-piggy-bank"></i><p>Savings</p></div>
+        <div class="card"><i class="fa-solid fa-hand-holding-dollar"></i><p>Loans</p></div>
+        <div class="card"><i class="fa-solid fa-users"></i><p>Members</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Ikimina Digital Platform</footer>
 </body>
 </html>

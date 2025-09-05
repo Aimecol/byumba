@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h2><i class="fa-solid fa-user"></i> Member</h2>
+    <ul>
+      <li><a href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fa-solid fa-piggy-bank"></i> My Savings</a></li>
+      <li><a href="#"><i class="fa-solid fa-hand-holding-dollar"></i> My Loans</a></li>
+      <li><a href="#"><i class="fa-solid fa-calendar"></i> Meetings</a></li>
+      <li><a href="#"><i class="fa-solid fa-bell"></i> Notifications</a></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <h1>Welcome, Aime</h1>
+      <button class="toggle-btn"><i class="fa-solid fa-bars"></i></button>
+    </header>
+
+    <section class="cards">
+      <div class="card"><i class="fa-solid fa-piggy-bank"></i><h3>My Savings</h3><p>150,000 RWF</p></div>
+      <div class="card"><i class="fa-solid fa-hand-holding-dollar"></i><h3>My Loans</h3><p>50,000 RWF</p></div>
+      <div class="card"><i class="fa-solid fa-bell"></i><h3>Notifications</h3><p>3 New</p></div>
+    </section>
+
+    <section class="table-section">
+      <h2>Contribution History</h2>
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Amount</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Aug 20, 2025</td><td>5,000 RWF</td><td>✔ Paid</td></tr>
+          <tr><td>Aug 13, 2025</td><td>5,000 RWF</td><td>✔ Paid</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
