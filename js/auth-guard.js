@@ -62,10 +62,17 @@ class AuthGuard {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
+                // Clear current user data
+                this.currentUser = null;
+
+                // Dispatch logout event for header manager
+                const logoutEvent = new CustomEvent('userLoggedOut');
+                document.dispatchEvent(logoutEvent);
+
                 this.showNotification('Logged out successfully', 'success');
                 setTimeout(() => {
                     this.redirectToLogin();

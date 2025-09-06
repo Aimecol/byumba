@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Test - Diocese of Byumba</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Dynamic Header System -->
+    <script src="js/header-manager.js"></script>
+    <script src="js/header-loader.js"></script>
+    
+    <style>
+        .test-controls {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .test-controls h3 {
+            margin-bottom: 15px;
+            color: #1e753f;
+        }
+        
+        .test-btn {
+            background: #1e753f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .test-btn:hover {
+            background: #2a8f4f;
+        }
+        
+        .test-btn.secondary {
+            background: #6c757d;
+        }
+        
+        .test-btn.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .status-display {
+            background: #e9ecef;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        
+        .status-display.authenticated {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .status-display.unauthenticated {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dynamic Header - Will be loaded by header-manager.js -->
+    <header class="header" id="dynamicHeader">
+        <!-- Header content will be dynamically updated based on authentication status -->
+        <div class="header-loading" style="padding: 20px; text-align: center; background: linear-gradient(135deg, #1e753f 0%, #2a8f4f 100%); color: white;">
+            <i class="fas fa-spinner fa-spin"></i> Loading header...
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>Dynamic Header Test Page</h1>
+            <p>This page is designed to test the dynamic header functionality based on authentication status.</p>
+            
+            <!-- Test Controls -->
+            <div class="test-controls">
+                <h3><i class="fas fa-cogs"></i> Test Controls</h3>
+                <p>Use these buttons to simulate different authentication states:</p>
+                
+                <button class="test-btn" onclick="simulateLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Simulate Login
+                </button>
+                
+                <button class="test-btn" onclick="simulateLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Simulate Logout
+                </button>
+                
+                <button class="test-btn secondary" onclick="refreshHeader()">
+                    <i class="fas fa-sync-alt"></i> Refresh Header
+                </button>
+                
+                <button class="test-btn secondary" onclick="checkAuthStatus()">
+                    <i class="fas fa-question-circle"></i> Check Auth Status
+                </button>
+            </div>
+            
+            <!-- Status Display -->
+            <div class="test-controls">
+                <h3><i class="fas fa-info-circle"></i> Current Status</h3>
+                <div id="statusDisplay" class="status-display">
+                    Checking authentication status...
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="test-controls">
+                <h3><i class="fas fa-book"></i> Test Instructions</h3>
+                <ol>
+                    <li><strong>Initial Load:</strong> The header should load in unauthenticated state (showing Login button)</li>
+                    <li><strong>Simulate Login:</strong> Click "Simulate Login" to see the header change to authenticated state (showing user menu)</li>
+                    <li><strong>Simulate Logout:</strong> Click "Simulate Logout" to see the header revert to unauthenticated state</li>
+                    <li><strong>Real Authentication:</strong> Try logging in through the actual login page and return to this page</li>
+                    <li><strong>Session Persistence:</strong> Refresh the page to see if the authentication state persists</li>
+                </ol>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Header Test Page</h3>
+                    <p>Testing dynamic header functionality for the Diocese of Byumba system.</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Diocese of Byumba. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Test functions
+        function simulateLogin() {
+            const userData = {
+                user_id: 1,
+                name: 'Test User',
+                email: 'test@diocesebyumba.rw',
+                logged_in: true
+            };
+            
+            // Dispatch login event
+            const loginEvent = new CustomEvent('userLoggedIn', {
+                detail: userData
+            });
+            document.dispatchEvent(loginEvent);
+            
+            updateStatusDisplay('Simulated login successful', 'authenticated');
+        }
+        
+        function simulateLogout() {
+            // Dispatch logout event
+            const logoutEvent = new CustomEvent('userLoggedOut');
+            document.dispatchEvent(logoutEvent);
+            
+            updateStatusDisplay('Simulated logout successful', 'unauthenticated');
+        }
+        
+        function refreshHeader() {
+            if (window.headerManager) {
+                window.headerManager.refreshAuthStatus();
+                updateStatusDisplay('Header refreshed', 'neutral');
+            } else {
+                updateStatusDisplay('Header manager not available', 'error');
+            }
+        }
+        
+        async function checkAuthStatus() {
+            if (window.headerManager) {
+                await window.headerManager.checkAuthenticationStatus();
+                const status = window.headerManager.isAuthenticated ? 'authenticated' : 'unauthenticated';
+                const user = window.headerManager.currentUser;
+                
+                let message = `Authentication Status: ${status}`;
+                if (user) {
+                    message += `\nUser: ${user.name} (${user.email})`;
+                }
+                
+                updateStatusDisplay(message, status);
+            } else {
+                updateStatusDisplay('Header manager not available', 'error');
+            }
+        }
+        
+        function updateStatusDisplay(message, type) {
+            const display = document.getElementById('statusDisplay');
+            display.textContent = message;
+            display.className = 'status-display';
+            
+            if (type === 'authenticated') {
+                display.classList.add('authenticated');
+            } else if (type === 'unauthenticated') {
+                display.classList.add('unauthenticated');
+            }
+        }
+        
+        // Initialize status check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(checkAuthStatus, 1000); // Wait for header manager to initialize
+        });
+        
+        // Listen for header updates
+        document.addEventListener('headerUpdated', function(event) {
+            const detail = event.detail;
+            const status = detail.isAuthenticated ? 'authenticated' : 'unauthenticated';
+            let message = `Header updated - Status: ${status}`;
+            
+            if (detail.user) {
+                message += `\nUser: ${detail.user.name} (${detail.user.email})`;
+            }
+            
+            updateStatusDisplay(message, status);
+        });
+    </script>
+</body>
+</html>

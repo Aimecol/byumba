@@ -104,11 +104,6 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Page Header -->
-            <div class="page-header">
-                <h2 class="page-title" data-translate="schedule_meeting_title">Schedule a Meeting with the Bishop</h2>
-                <p class="page-description" data-translate="schedule_meeting_description">Request an appointment to meet with His Lordship Bishop of Byumba</p>
-            </div>
 
             <!-- Bishop Information Section -->
             <div class="bishop-info-section">
@@ -197,47 +192,9 @@
                             </select>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="preferredDate" data-translate="preferred_date">Preferred Date *</label>
-                                <input type="date" id="preferredDate" name="preferredDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="preferredTime" data-translate="preferred_time">Preferred Time *</label>
-                                <select id="preferredTime" name="preferredTime" required>
-                                    <option value="" data-translate="select_time">Select time</option>
-                                    <option value="09:00" data-translate="time_9am">9:00 AM</option>
-                                    <option value="10:00" data-translate="time_10am">10:00 AM</option>
-                                    <option value="11:00" data-translate="time_11am">11:00 AM</option>
-                                    <option value="14:00" data-translate="time_2pm">2:00 PM</option>
-                                    <option value="15:00" data-translate="time_3pm">3:00 PM</option>
-                                    <option value="16:00" data-translate="time_4pm">4:00 PM</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="alternativeDate" data-translate="alternative_date">Alternative Date</label>
-                            <input type="date" id="alternativeDate" name="alternativeDate">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="urgency" data-translate="urgency_level">Urgency Level</label>
-                            <select id="urgency" name="urgency">
-                                <option value="normal" data-translate="normal">Normal</option>
-                                <option value="urgent" data-translate="urgent">Urgent</option>
-                                <option value="emergency" data-translate="emergency">Emergency</option>
-                            </select>
-                        </div>
-
                         <div class="form-group">
                             <label for="purpose" data-translate="purpose_meeting">Purpose of Meeting *</label>
                             <textarea id="purpose" name="purpose" rows="4" data-translate-placeholder="purpose_placeholder" placeholder="Please briefly describe the purpose of your meeting..." required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="additionalInfo" data-translate="additional_info">Additional Information</label>
-                            <textarea id="additionalInfo" name="additionalInfo" rows="3" data-translate-placeholder="additional_info_placeholder" placeholder="Any additional information you'd like to share..."></textarea>
                         </div>
 
                         <div class="form-group checkbox-group">
@@ -248,17 +205,9 @@
                             </label>
                         </div>
 
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="newsletter" name="newsletter">
-                                <span class="checkmark"></span>
-                                <span data-translate="newsletter_signup">I would like to receive updates about diocese events and activities</span>
-                            </label>
-                        </div>
-
                         <button type="submit" class="submit-meeting-btn">
                             <i class="fas fa-calendar-check"></i>
-                            <span data-translate="submit_meeting_request">Submit Meeting Request</span>
+                            <span data-translate="submit_meeting_request">Submit</span>
                         </button>
                     </form>
                 </div>

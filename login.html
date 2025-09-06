@@ -341,6 +341,17 @@
                         if (data.data) {
                             sessionStorage.setItem('user_name', data.data.name);
                             sessionStorage.setItem('user_email', data.data.email);
+
+                            // Dispatch login event for header manager
+                            const loginEvent = new CustomEvent('userLoggedIn', {
+                                detail: {
+                                    user_id: data.data.user_id,
+                                    name: data.data.name,
+                                    email: data.data.email,
+                                    logged_in: true
+                                }
+                            });
+                            document.dispatchEvent(loginEvent);
                         }
 
                         setTimeout(() => {

@@ -1,0 +1,119 @@
+<!-- Dynamic Header Template -->
+<!-- This header will be dynamically updated based on authentication status -->
+<header class="header" id="dynamicHeader">
+    <!-- Header content will be dynamically loaded by header-manager.js -->
+    <!-- Default to unauthenticated state -->
+    
+    <!-- Top Header -->
+    <div class="header-top">
+        <div class="container">
+            <div class="header-top-content">
+                <div class="logo-section">
+                    <div class="logo-container">
+                        <img src="images/logo/logo.png" alt="Diocese of Byumba Logo" class="diocese-logo">
+                    </div>
+                    <div class="diocese-info">
+                        <h1 class="diocese-name" data-translate="site_name">EAR Diocese of Byumba</h1>
+                        <p class="diocese-subtitle" data-translate="site_subtitle">EAR Diyosezi ya Byumba</p>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+
+                <div class="header-actions">
+                    <div class="language-toggle">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="rw">RW</button>
+                        <button class="lang-btn" data-lang="fr">FR</button>
+                    </div>
+                    
+                    <!-- This will be replaced dynamically -->
+                    <div id="authSection">
+                        <a href="login.html" class="login-btn">
+                            <i class="fas fa-user"></i>
+                            <span class="login-text" data-translate="login">Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navigation" id="mainNavigation">
+        <div class="container">
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-certificate"></i>
+                        <span data-translate="certificates">Certificates</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="jobs.html" class="nav-link">
+                        <i class="fas fa-briefcase"></i>
+                        <span data-translate="jobs">Jobs</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bishop-meeting.html" class="nav-link">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span data-translate="bishop_meeting">Bishop Meeting</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="blog.html" class="nav-link">
+                        <i class="fas fa-blog"></i>
+                        <span data-translate="blog">Blog</span>
+                    </a>
+                </li>
+
+                <!-- Mobile-only items -->
+                <li class="nav-item mobile-only">
+                    <div class="mobile-language-toggle">
+                        <span class="mobile-lang-label">Language:</span>
+                        <div class="mobile-lang-buttons">
+                            <button class="lang-btn active" data-lang="en">EN</button>
+                            <button class="lang-btn" data-lang="rw">RW</button>
+                            <button class="lang-btn" data-lang="fr">FR</button>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item mobile-only" id="mobileAuthSection">
+                    <a href="login.html" class="nav-link mobile-login">
+                        <i class="fas fa-user"></i>
+                        <span data-translate="login">Login</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+</header>
+
+<!-- Header Loading Indicator -->
+<div id="headerLoadingIndicator" style="display: none; position: fixed; top: 0; left: 0; right: 0; background: rgba(30, 117, 63, 0.9); color: white; text-align: center; padding: 10px; z-index: 10001;">
+    <i class="fas fa-spinner fa-spin"></i> Loading header...
+</div>
+
+<script>
+// Initialize header manager when this template is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure header manager is loaded
+    if (typeof HeaderManager !== 'undefined' && !window.headerManager) {
+        window.headerManager = new HeaderManager();
+    }
+    
+    // If header manager exists, refresh it
+    if (window.headerManager) {
+        window.headerManager.refreshAuthStatus();
+    }
+});
+</script>
