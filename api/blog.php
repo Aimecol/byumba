@@ -1,32 +1,59 @@
 <?php
 /**
- * Blog API Endpoint for Diocese of Byumba System
- * Handles blog posts, categories, and related operations
+ * Blog API Endpoints for Diocese of Byumba Website
+ * Handles blog post retrieval, categories, and related posts
  */
 
-// Include database configuration
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
+
 require_once '../config/database.php';
 
-// Get request method and action
-$method = $_SERVER['REQUEST_METHOD'];
+// Initialize database connection
+$database = new Database();
+$db = $database->getConnection();
+
+if (!$db) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Database connection failed']);
+    exit;
+}
+
+// Get the action from the request
 $action = $_GET['action'] ?? '';
 
-// Set content type
-header('Content-Type: application/json');
-
 try {
-    switch ($method) {
-        case 'GET':
-            handleGetRequest($action);
+    switch ($action) {
+        case 'get_posts':
+            getPosts($db);
             break;
-        case 'POST':
-            handlePostRequest($action);
+        case 'get_post':
+            getPost($db);
+            break;
+        case 'get_categories':
+            getCategories($db);
+            break;
+        case 'get_related_posts':
+            getRelatedPosts($db);
+            break;
+        case 'increment_views':
+            incrementViews($db);
             break;
         default:
-            ResponseHelper::error('Method not allowed', 405);
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid action']);
+            break;
     }
 } catch (Exception $e) {
-    ResponseHelper::error('Server error: ' . $e->getMessage(), 500);
+    http_response_code(500);
+    echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
 }
 
 /**

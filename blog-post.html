@@ -728,19 +728,6 @@
                         </div>
                     </div>
 
-                    <!-- Categories -->
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">Categories</h3>
-                        <ul class="category-list">
-                            <li><a href="#">Diocese News <span class="category-count">12</span></a></li>
-                            <li><a href="#">Spiritual Reflections <span class="category-count">8</span></a></li>
-                            <li><a href="#">Events <span class="category-count">15</span></a></li>
-                            <li><a href="#">Announcements <span class="category-count">6</span></a></li>
-                            <li><a href="#">Youth Ministry <span class="category-count">9</span></a></li>
-                            <li><a href="#">Community <span class="category-count">11</span></a></li>
-                        </ul>
-                    </div>
-
                     <!-- Newsletter Signup -->
                     <div class="sidebar-section">
                         <div class="newsletter-signup">
@@ -825,8 +812,72 @@
     <script src="js/language.js"></script>
 
     <script>
-        // Blog Post Data - In a real application, this would come from a database or API
-        const blogPosts = {
+        // Blog Post API Configuration
+        const API_BASE_URL = 'api/blog-posts.php';
+
+        // Cache for loaded blog posts
+        let blogPostCache = {};
+
+        /**
+         * Fetch blog post data from API
+         */
+        async function fetchBlogPost(postSlug) {
+            // Check cache first
+            if (blogPostCache[postSlug]) {
+                return blogPostCache[postSlug];
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}?action=get_post&slug=${encodeURIComponent(postSlug)}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    // Cache the result
+                    blogPostCache[postSlug] = result.data;
+                    return result.data;
+                } else {
+                    console.error('Failed to fetch blog post:', result.error || 'Unknown error');
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching blog post:', error);
+                return null;
+            }
+        }
+
+        /**
+         * Fetch related posts from API
+         */
+        async function fetchRelatedPosts(postId, limit = 3) {
+            try {
+                const response = await fetch(`${API_BASE_URL}?action=get_related_posts&post_id=${postId}&limit=${limit}`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    return result.data;
+                } else {
+                    console.error('Failed to fetch related posts:', result.error || 'Unknown error');
+                    return [];
+                }
+            } catch (error) {
+                console.error('Error fetching related posts:', error);
+                return [];
+            }
+        }
+
+        /**
+         * Increment post view count
+         */
+        async function incrementViewCount(postId) {
+            try {
+                await fetch(`${API_BASE_URL}?action=increment_views&post_id=${postId}`);
+            } catch (error) {
+                console.error('Error incrementing view count:', error);
+            }
+        }
+
+        // Fallback blog post data for development/testing
+        const fallbackBlogPosts = {
             'advent-reflection': {
                 title: 'Advent: A Time of Preparation and Reflection',
                 author: 'Fr. Emmanuel Nzeyimana',
@@ -1538,60 +1589,99 @@
         }
 
         // Load blog post content
-        function loadBlogPost() {
-            const postId = getPostId();
-            const post = blogPosts[postId];
+        async function loadBlogPost() {
+            const postSlug = getPostId();
 
-            if (!post) {
-                // Handle post not found
-                document.getElementById('postTitle').textContent = 'Post Not Found';
-                document.getElementById('postContent').innerHTML = '<p>The requested blog post could not be found.</p>';
-                return;
+            // Show loading state
+            document.getElementById('postTitle').textContent = 'Loading...';
+            document.getElementById('postContent').innerHTML = '<div class="loading-spinner">Loading blog post...</div>';
+
+            try {
+                // Fetch post from API
+                let post = await fetchBlogPost(postSlug);
+
+                // Fallback to hardcoded data if API fails
+                if (!post && fallbackBlogPosts[postSlug]) {
+                    post = fallbackBlogPosts[postSlug];
+                    console.warn('Using fallback data for post:', postSlug);
+                }
+
+                if (!post) {
+                    // Handle post not found
+                    document.getElementById('postTitle').textContent = 'Post Not Found';
+                    document.getElementById('postContent').innerHTML = '<p>The requested blog post could not be found.</p>';
+                    return;
+                }
+
+                // Increment view count
+                if (post.id) {
+                    incrementViewCount(post.id);
+                }
+
+                // Update page title and meta tags
+                document.title = post.title + ' - Diocese of Byumba';
+                document.getElementById('pageTitle').textContent = post.title + ' - Diocese of Byumba';
+
+                const description = post.seo_description || post.excerpt || post.content.substring(0, 160).replace(/<[^>]*>/g, '');
+                const keywords = post.seo_keywords || (post.tags ? post.tags.join(', ') : '');
+
+                document.getElementById('pageDescription').content = description;
+                document.getElementById('pageKeywords').content = keywords;
+
+                // Update Open Graph tags
+                document.getElementById('ogTitle').content = post.title;
+                document.getElementById('ogDescription').content = description;
+                document.getElementById('ogUrl').content = window.location.href;
+
+                // Update Twitter Card tags
+                document.getElementById('twitterTitle').content = post.title;
+                document.getElementById('twitterDescription').content = description;
+
+                // Update breadcrumb
+                document.getElementById('breadcrumbTitle').textContent = post.title;
+
+                // Update post content
+                document.getElementById('postTitle').textContent = post.title;
+                document.getElementById('postDate').textContent = post.date;
+                document.getElementById('postAuthor').textContent = post.author;
+                document.getElementById('readingTime').textContent = post.reading_time || '5 min read';
+
+                // Handle category display
+                const categoryName = post.category_name || post.category || 'General';
+                document.getElementById('postCategory').textContent = categoryName;
+                document.getElementById('postContent').innerHTML = post.content;
+
+                // Update featured image
+                const imageContainer = document.getElementById('postImageContainer');
+                if (post.featured_image) {
+                    imageContainer.innerHTML = `<img src="${post.featured_image}" alt="${post.title}">`;
+                } else {
+                    imageContainer.innerHTML = '';
+                }
+
+                // Update tags
+                const tagsContainer = document.getElementById('postTags');
+                if (post.tags && post.tags.length > 0) {
+                    tagsContainer.innerHTML = post.tags.map(tag =>
+                        `<a href="blog.html?tag=${encodeURIComponent(tag)}" class="tag">${tag}</a>`
+                    ).join('');
+                } else {
+                    tagsContainer.innerHTML = '';
+                }
+
+                // Setup social sharing
+                setupSocialSharing(post);
+
+                // Load related posts
+                if (post.id) {
+                    loadRelatedPosts(post.id);
+                }
+
+            } catch (error) {
+                console.error('Error loading blog post:', error);
+                document.getElementById('postTitle').textContent = 'Error Loading Post';
+                document.getElementById('postContent').innerHTML = '<p>Sorry, there was an error loading this blog post. Please try again later.</p>';
             }
-
-            // Update page title and meta tags
-            document.title = post.title + ' - Diocese of Byumba';
-            document.getElementById('pageTitle').textContent = post.title + ' - Diocese of Byumba';
-            document.getElementById('pageDescription').content = post.seo?.description || post.content.substring(0, 160);
-            document.getElementById('pageKeywords').content = post.seo?.keywords || post.tags.join(', ');
-
-            // Update Open Graph tags
-            document.getElementById('ogTitle').content = post.title;
-            document.getElementById('ogDescription').content = post.seo?.description || post.content.substring(0, 160);
-            document.getElementById('ogUrl').content = window.location.href;
-
-            // Update Twitter Card tags
-            document.getElementById('twitterTitle').content = post.title;
-            document.getElementById('twitterDescription').content = post.seo?.description || post.content.substring(0, 160);
-
-            // Update breadcrumb
-            document.getElementById('breadcrumbTitle').textContent = post.title;
-
-            // Update post content
-            document.getElementById('postTitle').textContent = post.title;
-            document.getElementById('postDate').textContent = post.date;
-            document.getElementById('postAuthor').textContent = post.author;
-            document.getElementById('readingTime').textContent = post.readingTime;
-            document.getElementById('postCategory').textContent = post.category;
-            document.getElementById('postContent').innerHTML = post.content;
-
-            // Update featured image
-            const imageContainer = document.getElementById('postImageContainer');
-            if (post.image) {
-                imageContainer.innerHTML = `<img src="${post.image}" alt="${post.title}">`;
-            }
-
-            // Update tags
-            const tagsContainer = document.getElementById('postTags');
-            tagsContainer.innerHTML = post.tags.map(tag =>
-                `<a href="blog.html?tag=${encodeURIComponent(tag)}" class="tag">${tag}</a>`
-            ).join('');
-
-            // Setup social sharing
-            setupSocialSharing(post);
-
-            // Load related posts
-            loadRelatedPosts(postId);
         }
 
         // Setup social sharing buttons
@@ -1607,42 +1697,48 @@
         }
 
         // Load related posts
-        function loadRelatedPosts(currentPostId) {
+        async function loadRelatedPosts(currentPostId) {
             const relatedContainer = document.getElementById('relatedPosts');
-            const currentPost = blogPosts[currentPostId];
-            const relatedPosts = [];
 
-            // Find posts with similar tags or category
-            Object.keys(blogPosts).forEach(postId => {
-                if (postId !== currentPostId) {
-                    const post = blogPosts[postId];
-                    const hasCommonTags = post.tags.some(tag => currentPost.tags.includes(tag));
-                    const sameCategory = post.category === currentPost.category;
+            try {
+                // Fetch related posts from API
+                const relatedPosts = await fetchRelatedPosts(currentPostId, 3);
 
-                    if (hasCommonTags || sameCategory) {
-                        relatedPosts.push({ id: postId, ...post });
-                    }
+                if (relatedPosts && relatedPosts.length > 0) {
+                    displayRelatedPosts(relatedPosts);
+                } else {
+                    // Fallback to showing no related posts
+                    relatedContainer.innerHTML = '<p>No related posts found.</p>';
                 }
-            });
+            } catch (error) {
+                console.error('Error loading related posts:', error);
+                relatedContainer.innerHTML = '<p>Unable to load related posts.</p>';
+            }
+        }
 
-            // Limit to 3 related posts
-            const displayPosts = relatedPosts.slice(0, 3);
+        // Display related posts
+        function displayRelatedPosts(posts) {
+            const relatedContainer = document.getElementById('relatedPosts');
 
-            if (displayPosts.length === 0) {
+            if (!posts || posts.length === 0) {
                 relatedContainer.innerHTML = '<p style="color: #666; font-style: italic;">No related articles found.</p>';
                 return;
             }
 
-            relatedContainer.innerHTML = displayPosts.map(post => `
+            relatedContainer.innerHTML = posts.map(post => `
                 <div class="related-post">
                     <div class="related-post-image">
-                        <i class="fas fa-image" style="color: rgba(255,255,255,0.3); font-size: 20px;"></i>
+                        ${post.featured_image ?
+                            `<img src="${post.featured_image}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;">` :
+                            '<i class="fas fa-image" style="color: rgba(255,255,255,0.3); font-size: 20px;"></i>'
+                        }
                     </div>
                     <div class="related-post-content">
-                        <a href="blog-post.html?post=${post.id}">
+                        <a href="blog-post.html?post=${post.slug}">
                             <h4>${post.title}</h4>
                         </a>
                         <div class="related-post-date">${post.date}</div>
+                        <div class="related-post-reading-time">${post.reading_time || '5 min read'}</div>
                     </div>
                 </div>
             `).join('');
