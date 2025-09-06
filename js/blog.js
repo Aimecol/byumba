@@ -412,24 +412,6 @@ function initializeNewsletterSubscription() {
     }
 }
 
-// Read More Links
-function initializeReadMoreLinks() {
-    // Use event delegation to handle dynamically added links
-    document.addEventListener('click', function(e) {
-        if (e.target.matches('.read-more, .read-more-btn') || e.target.closest('.read-more, .read-more-btn')) {
-            e.preventDefault();
-
-            const link = e.target.matches('.read-more, .read-more-btn') ? e.target : e.target.closest('.read-more, .read-more-btn');
-            const postId = link.getAttribute('data-post-id');
-            const postSlug = link.getAttribute('data-post-slug');
-
-            if (postId || postSlug) {
-                loadAndShowBlogPost(postId, postSlug);
-            }
-        }
-    });
-}
-
 // Load and show blog post details
 async function loadAndShowBlogPost(postId, postSlug) {
     try {
@@ -825,14 +807,6 @@ function updateBlogTranslatableElements() {
     const featuredBadges = document.querySelectorAll('.featured-badge');
     featuredBadges.forEach(badge => {
         badge.textContent = translations.featured || 'Featured';
-    });
-
-    // Update read more buttons
-    const readMoreBtns = document.querySelectorAll('.read-more-btn .fas + span, .read-more');
-    readMoreBtns.forEach(btn => {
-        if (btn.textContent.includes('Read') || btn.textContent.includes('Lire') || btn.textContent.includes('Soma')) {
-            btn.textContent = translations.read_more || 'Read More';
-        }
     });
 
     // Update load more button

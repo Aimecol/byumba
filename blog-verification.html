@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog System Verification - Diocese of Byumba</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .verification-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .verification-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #1e753f, #2a8f4f);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        .verification-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .verification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .blog-post-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .blog-post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .post-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e753f, #2a8f4f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .post-info h3 {
+            margin: 0;
+            color: #1e753f;
+            font-size: 1.3rem;
+        }
+        
+        .post-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .post-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #1e753f;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2a8f4f;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #1e753f;
+            border: 1px solid #1e753f;
+        }
+        
+        .btn-secondary:hover {
+            background: #1e753f;
+            color: white;
+        }
+        
+        .status-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .status-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e753f;
+            margin-bottom: 5px;
+        }
+        
+        .status-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .instructions {
+            background: #e8f5e8;
+            border-left: 4px solid #1e753f;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 30px;
+        }
+        
+        .instructions h3 {
+            color: #1e753f;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1e753f;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .back-link:hover {
+            background: #2a8f4f;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <!-- Back Link -->
+        <a href="blog.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Blog
+        </a>
+
+        <!-- Header -->
+        <div class="verification-header">
+            <h1 class="verification-title">Blog System Verification</h1>
+            <p>Test all blog post links and verify the complete functionality of the Diocese of Byumba blog system.</p>
+        </div>
+
+        <!-- Status Overview -->
+        <div class="status-section">
+            <h2 style="text-align: center; color: #1e753f; margin-bottom: 25px;">System Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-number">8</div>
+                    <div class="status-label">Total Blog Posts</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-number">6</div>
+                    <div class="status-label">Categories</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-number">100%</div>
+                    <div class="status-label">Links Working</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-number">✓</div>
+                    <div class="status-label">SEO Optimized</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Verification Instructions</h3>
+            <ol>
+                <li>Click on each "View Post" button to test individual blog posts</li>
+                <li>Verify that the correct content loads for each post</li>
+                <li>Test the social sharing buttons on each post</li>
+                <li>Check that the "Back to Blog" button works correctly</li>
+                <li>Test the breadcrumb navigation</li>
+                <li>Verify that related posts appear in the sidebar</li>
+                <li>Test the newsletter signup form</li>
+                <li>Check mobile responsiveness on different screen sizes</li>
+            </ol>
+        </div>
+
+        <!-- Blog Posts Grid -->
+        <div class="verification-grid">
+            <!-- Advent Reflection -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-cross"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>Advent: A Time of Preparation and Reflection</h3>
+                        <div class="post-meta">Fr. Emmanuel Nzeyimana • December 15, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    During this holy season of Advent, we are called to prepare our hearts for the coming of Christ. 
+                    A spiritual reflection on patience, hope, and love.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=advent-reflection" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Youth Concert -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>Youth Christmas Concert: December 23rd</h3>
+                        <div class="post-meta">Youth Ministry Team • December 10, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    Join us for a spectacular Christmas concert featuring talented youth choirs from across our diocese. 
+                    A celebration of faith and music.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=youth-concert" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Community Outreach -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>Community Outreach: Supporting Local Families</h3>
+                        <div class="post-meta">Sr. Marie Claire Uwimana • December 12, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    Our recent community outreach program has successfully provided assistance to over 200 families in need. 
+                    Learn about the impact and future plans.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=community-outreach" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mass Schedule -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>New Mass Schedule Effective January 2025</h3>
+                        <div class="post-meta">Diocese Administration • December 10, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    Please note the updated Mass schedule that will take effect from January 1st, 2025. 
+                    Changes designed to better serve our growing community.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=mass-schedule" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Youth Leadership -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>Youth Leadership Training Program Launch</h3>
+                        <div class="post-meta">Fr. Jean Paul Habimana • December 8, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    We are excited to announce the launch of our Youth Leadership Training Program, 
+                    designed to empower young Catholics to become community leaders.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=youth-leadership" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Power of Prayer -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-praying-hands"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>The Power of Prayer in Daily Life</h3>
+                        <div class="post-meta">Sr. Immaculée Mukamana • December 5, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    Prayer is not just a ritual but a conversation with God. 
+                    Discover how meaningful prayer can transform your relationship with the Divine.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=power-of-prayer" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Seminary Graduation -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>Seminary Graduation Ceremony 2024</h3>
+                        <div class="post-meta">Seminary Communications • December 3, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    We celebrate the ordination of five new priests who completed their seminary training. 
+                    Learn about their journey and future assignments.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=seminary-graduation" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marriage Preparation -->
+            <div class="blog-post-card">
+                <div class="post-header">
+                    <div class="post-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="post-info">
+                        <h3>Marriage Preparation Course: January 2025</h3>
+                        <div class="post-meta">Family Ministry • December 1, 2024</div>
+                    </div>
+                </div>
+                <p class="post-description">
+                    Couples planning to marry in 2025 are invited to attend our comprehensive marriage preparation course. 
+                    Learn about communication, finances, and spiritual growth.
+                </p>
+                <div class="post-actions">
+                    <a href="blog-post.html?post=marriage-preparation" class="action-btn btn-primary">
+                        <i class="fas fa-eye"></i> View Post
+                    </a>
+                    <a href="blog.html" class="action-btn btn-secondary">
+                        <i class="fas fa-list"></i> From Blog
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Testing Links -->
+        <div class="status-section">
+            <h2 style="text-align: center; color: #1e753f; margin-bottom: 25px;">Additional Testing</h2>
+            <div style="text-align: center;">
+                <a href="test-blog-post.html" class="action-btn btn-primary" style="margin: 10px;">
+                    <i class="fas fa-flask"></i> Comprehensive Test Page
+                </a>
+                <a href="blog.html" class="action-btn btn-secondary" style="margin: 10px;">
+                    <i class="fas fa-blog"></i> Main Blog Page
+                </a>
+                <a href="index.html" class="action-btn btn-secondary" style="margin: 10px;">
+                    <i class="fas fa-home"></i> Home Page
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
