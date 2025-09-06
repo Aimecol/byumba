@@ -146,7 +146,7 @@ body {
 }
 
 .header-top {
-  padding: 20px 0;
+  padding: 5px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -159,12 +159,12 @@ body {
 .logo-section {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
 }
 
 .logo-container {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid #dcdcdc;
@@ -190,28 +190,28 @@ body {
 }
 
 .logo-placeholder {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   background: #f2c97e;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 16px;
   color: #d14438;
   border: 3px solid #dcdcdc;
 }
 
 .diocese-info h1 {
   color: white;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .diocese-subtitle {
   color: #dcdcdc;
-  font-size: 14px;
+  font-size: 12px;
   font-style: italic;
 }
 
@@ -248,7 +248,7 @@ body {
   background: #d14438;
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 8px 16px;
   border-radius: 25px;
   cursor: pointer;
   display: flex;
@@ -286,7 +286,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 20px;
+  padding: 5px;
   color: white;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -1462,7 +1462,7 @@ body {
   }
 
   .diocese-info h1 {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .nav-link {
@@ -1504,12 +1504,12 @@ body {
   }
 
   .logo-container {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
 
   .diocese-info h1 {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .diocese-subtitle {
@@ -1674,7 +1674,7 @@ body {
   }
 
   .diocese-info h1 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .navigation {
