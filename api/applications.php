@@ -17,6 +17,12 @@ $user_id = $_SESSION['user_id'];
 // Get global variables
 $method = $_SERVER['REQUEST_METHOD'];
 $current_language = $GLOBALS['current_language'] ?? 'en';
+$db = $GLOBALS['db'] ?? null;
+
+// Check if database connection is available
+if (!$db) {
+    ResponseHelper::error('Database connection not available', 500);
+}
 
 if ($method === 'GET') {
     try {

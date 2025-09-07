@@ -3,6 +3,13 @@
  * Main API Router for Diocese of Byumba System
  */
 
+// Suppress PHP errors for API responses
+error_reporting(0);
+ini_set('display_errors', 0);
+
+// Set JSON content type
+header('Content-Type: application/json');
+
 // Enable CORS
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
