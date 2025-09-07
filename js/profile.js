@@ -6,38 +6,170 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeProfile() {
+    // Load profile data from API
+    loadProfileData();
+
     // Initialize user menu
     initializeUserMenu();
-    
+
     // Initialize profile picture upload
     initializeProfilePicture();
-    
+
     // Initialize form handling
     initializeFormHandling();
-    
+
     // Initialize save/cancel buttons
     initializeSaveCancel();
-    
+
     // Track form changes
     trackFormChanges();
+}
+
+// Load Profile Data from API
+async function loadProfileData() {
+    try {
+        const response = await fetch('api/index.php?endpoint=profile');
+        const data = await response.json();
+
+        if (data.success) {
+            updateProfileContent(data.data);
+        } else {
+            console.error('Failed to load profile data:', data.message);
+            showNotification('Failed to load profile data', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading profile data:', error);
+        showNotification('Error loading profile data', 'error');
+    }
+}
+
+// Update Profile Content
+function updateProfileContent(data) {
+    const { profile, parish_membership, statistics } = data;
+
+    // Update profile header
+    updateProfileHeader(profile, statistics);
+
+    // Update personal information form
+    updatePersonalInfoForm(profile);
+
+    // Update contact information form
+    updateContactInfoForm(profile);
+
+    // Update parish membership if available
+    if (parish_membership) {
+        updateParishMembership(parish_membership);
+    }
+}
+
+// Update Profile Header
+function updateProfileHeader(profile, statistics) {
+    // Update name
+    const nameElement = document.querySelector('.profile-picture-info h3');
+    if (nameElement) {
+        nameElement.textContent = `${profile.first_name} ${profile.last_name}`;
+    }
+
+    // Update member since
+    const memberSinceElement = document.querySelector('.profile-picture-info p');
+    if (memberSinceElement && profile.member_since) {
+        memberSinceElement.textContent = `Member since ${profile.member_since}`;
+    }
+
+    // Update statistics
+    const statItems = document.querySelectorAll('.stat-item');
+    if (statItems.length >= 3 && statistics) {
+        statItems[0].querySelector('.stat-number').textContent = statistics.total_applications || 0;
+        statItems[1].querySelector('.stat-number').textContent = statistics.upcoming_meetings || 0;
+        statItems[2].querySelector('.stat-number').textContent = statistics.completed_applications || 0;
+    }
+
+    // Update profile picture if available
+    if (profile.profile_picture) {
+        const profileImage = document.getElementById('profileImage');
+        if (profileImage) {
+            profileImage.src = profile.profile_picture;
+        }
+    }
+}
+
+// Update Personal Information Form
+function updatePersonalInfoForm(profile) {
+    const fields = {
+        'firstName': profile.first_name,
+        'lastName': profile.last_name,
+        'dateOfBirth': profile.date_of_birth,
+        'gender': profile.gender,
+        'nationalId': profile.national_id,
+        'placeOfBirth': profile.place_of_birth,
+        'address': profile.address
+    };
+
+    Object.entries(fields).forEach(([fieldName, value]) => {
+        const field = document.getElementById(fieldName);
+        if (field && value) {
+            field.value = value;
+        }
+    });
+}
+
+// Update Contact Information Form
+function updateContactInfoForm(profile) {
+    const fields = {
+        'email': profile.email,
+        'phone': profile.phone
+    };
+
+    Object.entries(fields).forEach(([fieldName, value]) => {
+        const field = document.getElementById(fieldName);
+        if (field && value) {
+            field.value = value;
+        }
+    });
+
+    // Update verification status
+    updateVerificationStatus('email', profile.email_verified);
+    updateVerificationStatus('phone', profile.phone_verified);
+}
+
+// Update Verification Status
+function updateVerificationStatus(fieldType, isVerified) {
+    const fieldGroup = document.getElementById(fieldType).closest('.form-group');
+    const statusElement = fieldGroup.querySelector('.field-status');
+
+    if (statusElement) {
+        if (isVerified) {
+            statusElement.className = 'field-status verified';
+            statusElement.innerHTML = '<i class="fas fa-check-circle"></i><span>Verified</span>';
+        } else {
+            statusElement.className = 'field-status unverified';
+            statusElement.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>Not Verified</span>';
+        }
+    }
+}
+
+// Update Parish Membership
+function updateParishMembership(membership) {
+    // This would update parish membership information if the form has such fields
+    console.log('Parish membership:', membership);
 }
 
 // User Menu Functionality (same as dashboard)
 function initializeUserMenu() {
     const userMenuToggle = document.getElementById('userMenuToggle');
     const userDropdown = document.getElementById('userDropdown');
-    
+
     if (userMenuToggle && userDropdown) {
         userMenuToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             userDropdown.classList.toggle('active');
         });
-        
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function() {
             userDropdown.classList.remove('active');
         });
-        
+
         // Prevent dropdown from closing when clicking inside
         userDropdown.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -251,45 +383,85 @@ function storeOriginalFormData() {
 }
 
 // Save Profile
-function saveProfile() {
+async function saveProfile() {
     if (!formChanged) {
         showNotification('No changes to save', 'info');
         return;
     }
-    
+
     // Validate required fields
     if (!validateRequiredFields()) {
         return;
     }
-    
+
     // Show loading state
     const saveButton = document.getElementById('saveProfile');
     const originalText = saveButton.innerHTML;
     saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     saveButton.disabled = true;
-    
-    // Simulate API call
-    setTimeout(() => {
-        // Collect all form data
-        const profileData = collectProfileData();
-        
-        // In real app, this would be an API call
-        console.log('Saving profile data:', profileData);
-        
+
+    try {
+        // Collect form data for API
+        const profileData = collectApiFormData();
+
+        // Send to API
+        const response = await fetch('api/index.php?endpoint=profile', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(profileData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Mark as saved
+            markFormAsSaved();
+
+            // Store new original data
+            storeOriginalFormData();
+
+            // Show success message
+            showNotification('Profile updated successfully!', 'success');
+        } else {
+            showNotification('Failed to update profile: ' + data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error saving profile:', error);
+        showNotification('Error saving profile', 'error');
+    } finally {
         // Reset button state
         saveButton.innerHTML = originalText;
         saveButton.disabled = false;
-        
-        // Mark as saved
-        markFormAsSaved();
-        
-        // Store new original data
-        storeOriginalFormData();
-        
-        // Show success message
-        showNotification('Profile updated successfully!', 'success');
-        
-    }, 2000);
+    }
+}
+
+// Collect Form Data for API
+function collectApiFormData() {
+    const data = {};
+
+    // Personal information fields
+    const personalFields = ['firstName', 'lastName', 'dateOfBirth', 'gender', 'placeOfBirth', 'address'];
+    personalFields.forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        if (field && field.value) {
+            // Convert camelCase to snake_case for API
+            const apiFieldName = fieldName.replace(/([A-Z])/g, '_$1').toLowerCase();
+            data[apiFieldName] = field.value;
+        }
+    });
+
+    // Contact information fields
+    const contactFields = ['phone'];
+    contactFields.forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        if (field && field.value) {
+            data[fieldName] = field.value;
+        }
+    });
+
+    return data;
 }
 
 // Cancel Changes
@@ -298,9 +470,10 @@ function cancelChanges() {
         showNotification('No changes to cancel', 'info');
         return;
     }
-    
+
     if (confirm('Are you sure you want to discard all changes?')) {
-        restoreOriginalFormData();
+        // Reload profile data from API
+        loadProfileData();
         markFormAsSaved();
         showNotification('Changes discarded', 'info');
     }

@@ -59,6 +59,8 @@ if ($action === 'register') {
     handleLogout();
 } elseif ($action === 'check-session') {
     checkSession();
+} elseif ($action === 'user') {
+    getCurrentUser($db);
 } else {
     error('Invalid action');
 }
@@ -214,6 +216,28 @@ function checkSession() {
         success([
             'logged_in' => false
         ], 'User is not logged in');
+    }
+}
+
+function getCurrentUser($db) {
+    session_start();
+
+    if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+        error('Authentication required', null);
+    }
+
+    try {
+        $stmt = $db->prepare("SELECT id, first_name, last_name, email, phone, profile_picture, preferred_language FROM users WHERE id = ?");
+        $stmt->execute([$_SESSION['user_id']]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            success($user, 'User data retrieved');
+        } else {
+            error('User not found');
+        }
+    } catch (PDOException $e) {
+        error('Database error: ' . $e->getMessage());
     }
 }
 ?>

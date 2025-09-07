@@ -135,17 +135,82 @@ const meetingsData = [
 ];
 
 let currentPage = 1;
+let totalPages = 1;
 const itemsPerPage = 5;
 let filteredMeetings = [...meetingsData];
 let currentView = 'list';
 let currentMonth = new Date();
 
-// Load Meetings Data
-function loadMeetingsData() {
+// Current filters state
+let currentFilters = {
+    status: 'all',
+    type: 'all',
+    date: 'all'
+};
+
+// Load Meetings Data from API
+async function loadMeetingsData() {
+    try {
+        const queryParams = new URLSearchParams({
+            status: currentFilters.status,
+            type: currentFilters.type,
+            date: currentFilters.date,
+            page: currentPage,
+            limit: itemsPerPage
+        });
+
+        const response = await fetch(`api/index.php?endpoint=meetings&${queryParams}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Update global data
+            meetingsData.length = 0;
+            meetingsData.push(...data.data.meetings);
+            totalPages = data.data.pagination.total_pages;
+
+            // Update summary if available
+            if (data.data.summary) {
+                updateMeetingsSummary(data.data.summary);
+            }
+
+            // Render meetings
+            filteredMeetings = [...meetingsData];
+            renderMeetings();
+            updatePagination();
+            renderCalendar();
+        } else {
+            console.error('Failed to load meetings:', data.message);
+            showNotification('Failed to load meetings', 'error');
+            // Fallback to existing static data
+            loadStaticMeetingsData();
+        }
+    } catch (error) {
+        console.error('Error loading meetings:', error);
+        showNotification('Error loading meetings', 'error');
+        // Fallback to existing static data
+        loadStaticMeetingsData();
+    }
+}
+
+// Load Static Meetings Data (fallback)
+function loadStaticMeetingsData() {
     applyFilters();
     renderMeetings();
     updatePagination();
     renderCalendar();
+}
+
+// Update Meetings Summary
+function updateMeetingsSummary(summary) {
+    // Update summary cards if they exist
+    const summaryCards = document.querySelectorAll('.summary-card');
+
+    if (summaryCards.length >= 4) {
+        summaryCards[0].querySelector('h3').textContent = summary.pending || 0;
+        summaryCards[1].querySelector('h3').textContent = summary.confirmed || 0;
+        summaryCards[2].querySelector('h3').textContent = summary.completed || 0;
+        summaryCards[3].querySelector('h3').textContent = summary.cancelled || 0;
+    }
 }
 
 // Initialize Filters

@@ -3,8 +3,20 @@
  * Applications API Endpoint
  */
 
-// Mock user ID for demo
-$user_id = 1;
+// Start session and check authentication
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+    ResponseHelper::error('Authentication required', 401);
+}
+
+// Get user ID from session
+$user_id = $_SESSION['user_id'];
+
+// Get global variables
+$method = $_SERVER['REQUEST_METHOD'];
+$current_language = $GLOBALS['current_language'] ?? 'en';
 
 if ($method === 'GET') {
     try {

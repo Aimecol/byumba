@@ -14,6 +14,10 @@ if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true)
 // Get user ID from session
 $user_id = $_SESSION['user_id'];
 
+// Get global variables
+$method = $_SERVER['REQUEST_METHOD'];
+$current_language = $GLOBALS['current_language'] ?? 'en';
+
 if ($method === 'GET') {
     try {
         // Get dashboard statistics

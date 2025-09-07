@@ -68,31 +68,131 @@ async function loadDashboardData() {
             updateDashboardContent(data.data);
         } else {
             console.error('Failed to load dashboard data:', data.message);
-            // Fallback to static data
-            loadStaticDashboardData();
+            showDashboardError('Failed to load dashboard data: ' + data.message);
         }
     } catch (error) {
         console.error('Error loading dashboard data:', error);
-        // Fallback to static data
-        loadStaticDashboardData();
+        showDashboardError('Unable to connect to the server. Please check your internet connection and try again.');
     }
 }
 
 // Global function for language manager to update content
 window.updateDashboardContent = function(data) {
     updateStatistics(data.stats);
-    updateRecentApplications(data.recent_applications);
-    updateUpcomingMeetings(data.upcoming_meetings);
-    updateRecentNotifications(data.recent_notifications);
-    updateActivityTimeline(data.activity_timeline);
+
+    // Update sections with data or show empty states
+    if (data.recent_applications && data.recent_applications.length > 0) {
+        updateRecentApplications(data.recent_applications);
+    } else {
+        showEmptyApplications();
+    }
+
+    if (data.upcoming_meetings && data.upcoming_meetings.length > 0) {
+        updateUpcomingMeetings(data.upcoming_meetings);
+    } else {
+        showEmptyMeetings();
+    }
+
+    if (data.recent_notifications && data.recent_notifications.length > 0) {
+        updateRecentNotifications(data.recent_notifications);
+    } else {
+        showEmptyNotifications();
+    }
+
+    if (data.activity_timeline && data.activity_timeline.length > 0) {
+        updateActivityTimeline(data.activity_timeline);
+    } else {
+        showEmptyActivityTimeline();
+    }
+
+    updateWelcomeMessage();
 };
 
-// Fallback to static data if API fails
-function loadStaticDashboardData() {
-    loadRecentApplications();
-    loadUpcomingMeetings();
-    loadRecentNotifications();
-    loadActivityTimeline();
+// Update welcome message with user's name
+async function updateWelcomeMessage() {
+    try {
+        const response = await fetch('api/index.php?endpoint=auth&action=user');
+        const data = await response.json();
+
+        if (data.success && data.data) {
+            const welcomeTitle = document.getElementById('welcomeTitle');
+            if (welcomeTitle) {
+                welcomeTitle.textContent = `Welcome back, ${data.data.first_name}!`;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading user data:', error);
+        // Keep default welcome message
+    }
+}
+
+// Show dashboard error message
+function showDashboardError(message) {
+    // Show error in each dashboard section
+    showSectionError('recentApplications', 'Unable to load recent applications');
+    showSectionError('upcomingMeetings', 'Unable to load upcoming meetings');
+    showSectionError('recentNotifications', 'Unable to load recent notifications');
+    showSectionError('activityTimeline', 'Unable to load activity timeline');
+
+    // Show main error message
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'dashboard-error';
+    errorContainer.innerHTML = `
+        <div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Unable to Load Dashboard Data</h3>
+            <p>${message}</p>
+            <button class="retry-btn" onclick="loadDashboardData()">
+                <i class="fas fa-refresh"></i>
+                Try Again
+            </button>
+        </div>
+    `;
+
+    // Insert error message at the top of dashboard content
+    const dashboardContent = document.querySelector('.dashboard-grid');
+    if (dashboardContent) {
+        dashboardContent.insertBefore(errorContainer, dashboardContent.firstChild);
+    }
+}
+
+// Show section-specific error
+function showSectionError(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `
+            <div class="section-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+// Show dashboard notification
+function showDashboardNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `dashboard-notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+        <button class="notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    // Add to page
+    document.body.appendChild(notification);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
 }
 
 // Update Statistics
@@ -100,16 +200,23 @@ function updateStatistics(stats) {
     if (!stats) return;
 
     const statsElements = {
-        applications: document.querySelector('.stats-card:nth-child(1) .stats-number'),
-        jobs: document.querySelector('.stats-card:nth-child(2) .stats-number'),
-        meetings: document.querySelector('.stats-card:nth-child(3) .stats-number'),
-        notifications: document.querySelector('.stats-card:nth-child(4) .stats-number')
+        applications: document.querySelector('.stat-card:nth-child(1) .stat-number'),
+        jobs: document.querySelector('.stat-card:nth-child(2) .stat-number'),
+        meetings: document.querySelector('.stat-card:nth-child(3) .stat-number'),
+        notifications: document.querySelector('.stat-card:nth-child(4) .stat-number')
     };
 
     if (statsElements.applications) statsElements.applications.textContent = stats.applications || 0;
     if (statsElements.jobs) statsElements.jobs.textContent = stats.job_applications || 0;
     if (statsElements.meetings) statsElements.meetings.textContent = stats.meetings || 0;
     if (statsElements.notifications) statsElements.notifications.textContent = stats.notifications || 0;
+
+    // Update notification badge in navigation
+    const notificationBadge = document.querySelector('.notification-badge');
+    if (notificationBadge && stats.notifications) {
+        notificationBadge.textContent = stats.notifications;
+        notificationBadge.style.display = stats.notifications > 0 ? 'inline' : 'none';
+    }
 }
 
 // Update Recent Applications with API data
@@ -120,44 +227,46 @@ function updateRecentApplications(applications) {
     renderApplications(applications);
 }
 
-// Load Recent Applications (fallback)
-function loadRecentApplications() {
+// Update Upcoming Meetings with API data
+function updateUpcomingMeetings(meetings) {
+    const container = document.getElementById('upcomingMeetings');
+    if (!container || !meetings) return;
+
+    renderMeetings(meetings);
+}
+
+// Update Recent Notifications with API data
+function updateRecentNotifications(notifications) {
+    const container = document.getElementById('recentNotifications');
+    if (!container || !notifications) return;
+
+    renderNotifications(notifications);
+}
+
+// Update Activity Timeline with API data
+function updateActivityTimeline(activities) {
+    const container = document.getElementById('activityTimeline');
+    if (!container || !activities) return;
+
+    renderActivityTimeline(activities);
+}
+
+// Show empty state for applications
+function showEmptyApplications() {
     const container = document.getElementById('recentApplications');
     if (!container) return;
 
-    // Sample data - fallback when API is not available
-    const applications = [
-        {
-            id: 'APP001',
-            type: 'Baptism Certificate',
-            status: 'approved',
-            date: '2024-01-15',
-            fee: 'RWF 2,000'
-        },
-        {
-            id: 'APP002',
-            type: 'Marriage Certificate',
-            status: 'pending',
-            date: '2024-01-12',
-            fee: 'RWF 5,000'
-        },
-        {
-            id: 'APP003',
-            type: 'Confirmation Certificate',
-            status: 'processing',
-            date: '2024-01-10',
-            fee: 'RWF 2,500'
-        },
-        {
-            id: 'APP004',
-            type: 'Membership Certificate',
-            status: 'completed',
-            date: '2024-01-08',
-            fee: 'RWF 1,500'
-        }
-    ];
-
-    renderApplications(applications);
+    container.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-file-alt"></i>
+            <h4>No Applications Yet</h4>
+            <p>You haven't submitted any certificate applications.</p>
+            <a href="application.html" class="empty-action-btn">
+                <i class="fas fa-plus"></i>
+                Submit Your First Application
+            </a>
+        </div>
+    `;
 }
 
 // Render Applications
@@ -204,38 +313,29 @@ function renderApplications(applications) {
     });
 }
 
-// Load Upcoming Meetings
-function loadUpcomingMeetings() {
+// Show empty state for meetings
+function showEmptyMeetings() {
     const container = document.getElementById('upcomingMeetings');
     if (!container) return;
-    
-    const meetings = [
-        {
-            id: 'MTG001',
-            title: 'Marriage Counseling Session',
-            date: '2024-01-20',
-            time: '10:00 AM',
-            type: 'counseling',
-            status: 'confirmed'
-        },
-        {
-            id: 'MTG002',
-            title: 'Baptism Preparation',
-            date: '2024-01-22',
-            time: '2:00 PM',
-            type: 'preparation',
-            status: 'pending'
-        },
-        {
-            id: 'MTG003',
-            title: 'General Consultation',
-            date: '2024-01-25',
-            time: '11:00 AM',
-            type: 'consultation',
-            status: 'confirmed'
-        }
-    ];
-    
+
+    container.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-calendar-check"></i>
+            <h4>No Upcoming Meetings</h4>
+            <p>You don't have any scheduled meetings with the Bishop.</p>
+            <a href="bishop-meeting.html" class="empty-action-btn">
+                <i class="fas fa-plus"></i>
+                Schedule a Meeting
+            </a>
+        </div>
+    `;
+}
+
+// Render Meetings
+function renderMeetings(meetings) {
+    const container = document.getElementById('upcomingMeetings');
+    if (!container) return;
+
     container.innerHTML = meetings.map(meeting => `
         <div class="meeting-item">
             <div class="meeting-info">
@@ -249,6 +349,12 @@ function loadUpcomingMeetings() {
                         <i class="fas fa-clock"></i>
                         ${meeting.time}
                     </span>
+                    ${meeting.location ? `
+                        <span class="meeting-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${meeting.location}
+                        </span>
+                    ` : ''}
                 </div>
                 <span class="meeting-status status-${meeting.status}">${getStatusText(meeting.status)}</span>
             </div>
@@ -262,7 +368,7 @@ function loadUpcomingMeetings() {
             </div>
         </div>
     `).join('');
-    
+
     // Add event listeners
     container.querySelectorAll('.action-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -276,54 +382,29 @@ function loadUpcomingMeetings() {
     });
 }
 
-// Load Recent Notifications
-function loadRecentNotifications() {
+// Show empty state for notifications
+function showEmptyNotifications() {
     const container = document.getElementById('recentNotifications');
     if (!container) return;
-    
-    const notifications = [
-        {
-            id: 'NOT001',
-            title: 'Application Approved',
-            message: 'Your Baptism Certificate application has been approved. Payment code: BC2024001',
-            type: 'success',
-            date: '2024-01-15T14:30:00',
-            read: false
-        },
-        {
-            id: 'NOT002',
-            title: 'Meeting Reminder',
-            message: 'Your marriage counseling session is scheduled for tomorrow at 10:00 AM',
-            type: 'info',
-            date: '2024-01-19T09:00:00',
-            read: false
-        },
-        {
-            id: 'NOT003',
-            title: 'Document Required',
-            message: 'Additional documentation needed for your Marriage Certificate application',
-            type: 'warning',
-            date: '2024-01-18T16:45:00',
-            read: true
-        },
-        {
-            id: 'NOT004',
-            title: 'Payment Received',
-            message: 'Payment confirmed for Membership Certificate. Certificate will be ready in 2-3 days',
-            type: 'success',
-            date: '2024-01-17T11:20:00',
-            read: true
-        },
-        {
-            id: 'NOT005',
-            title: 'New Job Posting',
-            message: 'A new position matching your profile has been posted: Parish Coordinator',
-            type: 'info',
-            date: '2024-01-16T08:15:00',
-            read: false
-        }
-    ];
-    
+
+    container.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-bell"></i>
+            <h4>No Recent Notifications</h4>
+            <p>You're all caught up! No new notifications at this time.</p>
+            <a href="notifications.html" class="empty-action-btn">
+                <i class="fas fa-eye"></i>
+                View All Notifications
+            </a>
+        </div>
+    `;
+}
+
+// Render Notifications
+function renderNotifications(notifications) {
+    const container = document.getElementById('recentNotifications');
+    if (!container) return;
+
     container.innerHTML = notifications.map(notification => `
         <div class="notification-item ${notification.read ? 'read' : 'unread'}" data-id="${notification.id}">
             <div class="notification-icon ${notification.type}">
@@ -333,6 +414,14 @@ function loadRecentNotifications() {
                 <h4 class="notification-title">${notification.title}</h4>
                 <p class="notification-message">${notification.message}</p>
                 <span class="notification-time">${formatTimeAgo(notification.date)}</span>
+                ${notification.action_required && notification.action_text ? `
+                    <div class="notification-action">
+                        <a href="${notification.action_url}" class="action-link">
+                            <i class="fas fa-arrow-right"></i>
+                            ${notification.action_text}
+                        </a>
+                    </div>
+                ` : ''}
             </div>
             <div class="notification-actions">
                 ${!notification.read ? `
@@ -346,7 +435,7 @@ function loadRecentNotifications() {
             </div>
         </div>
     `).join('');
-    
+
     // Add event listeners
     container.querySelectorAll('.action-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -359,7 +448,7 @@ function loadRecentNotifications() {
             }
         });
     });
-    
+
     // Mark as read when clicked
     container.querySelectorAll('.notification-item').forEach(item => {
         item.addEventListener('click', function() {
@@ -371,59 +460,35 @@ function loadRecentNotifications() {
     });
 }
 
-// Load Activity Timeline
-function loadActivityTimeline() {
+// Show empty state for activity timeline
+function showEmptyActivityTimeline() {
     const container = document.getElementById('activityTimeline');
     if (!container) return;
-    
-    const activities = [
-        {
-            id: 'ACT001',
-            type: 'application',
-            title: 'Baptism Certificate Application Approved',
-            description: 'Your application for Baptism Certificate has been approved. Payment code sent via email.',
-            date: '2024-01-15T14:30:00',
-            icon: 'fas fa-check-circle',
-            color: 'success'
-        },
-        {
-            id: 'ACT002',
-            type: 'meeting',
-            title: 'Meeting Scheduled',
-            description: 'Marriage counseling session scheduled for January 20, 2024 at 10:00 AM',
-            date: '2024-01-14T16:20:00',
-            icon: 'fas fa-calendar-plus',
-            color: 'info'
-        },
-        {
-            id: 'ACT003',
-            type: 'application',
-            title: 'Marriage Certificate Application Submitted',
-            description: 'Application submitted with all required documents. Processing time: 5-7 business days.',
-            date: '2024-01-12T11:45:00',
-            icon: 'fas fa-file-upload',
-            color: 'primary'
-        },
-        {
-            id: 'ACT004',
-            type: 'jobs',
-            title: 'Job Application Submitted',
-            description: 'Applied for Parish Coordinator position at St. Mary\'s Parish',
-            date: '2024-01-10T09:30:00',
-            icon: 'fas fa-briefcase',
-            color: 'warning'
-        },
-        {
-            id: 'ACT005',
-            type: 'application',
-            title: 'Confirmation Certificate Completed',
-            description: 'Certificate ready for pickup. Payment confirmed.',
-            date: '2024-01-08T13:15:00',
-            icon: 'fas fa-certificate',
-            color: 'success'
-        }
-    ];
-    
+
+    container.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-history"></i>
+            <h4>No Recent Activity</h4>
+            <p>Your activity timeline will appear here as you interact with the system.</p>
+            <div class="empty-actions">
+                <a href="application.html" class="empty-action-btn">
+                    <i class="fas fa-file-alt"></i>
+                    Submit Application
+                </a>
+                <a href="bishop-meeting.html" class="empty-action-btn">
+                    <i class="fas fa-calendar-plus"></i>
+                    Schedule Meeting
+                </a>
+            </div>
+        </div>
+    `;
+}
+
+// Render Activity Timeline
+function renderActivityTimeline(activities) {
+    const container = document.getElementById('activityTimeline');
+    if (!container) return;
+
     container.innerHTML = `
         <div class="timeline">
             ${activities.map(activity => `
@@ -570,10 +635,10 @@ function editMeeting(meetingId) {
 
 function cancelMeeting(meetingId) {
     if (confirm('Are you sure you want to cancel this meeting?')) {
-        showNotification(`Meeting ${meetingId} cancelled`, 'success');
+        showDashboardNotification(`Meeting ${meetingId} cancelled`, 'success');
         // In real app, this would make API call to cancel meeting
         setTimeout(() => {
-            loadUpcomingMeetings(); // Refresh the list
+            loadDashboardData(); // Refresh the dashboard data
         }, 1000);
     }
 }
@@ -600,7 +665,7 @@ function deleteNotification(notificationId) {
         const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
         if (notificationItem) {
             notificationItem.remove();
-            showNotification('Notification deleted', 'success');
+            showDashboardNotification('Notification deleted', 'success');
         }
         
         // Update notification count in stats

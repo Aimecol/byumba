@@ -178,16 +178,87 @@ const notificationsData = [
 ];
 
 let currentPage = 1;
+let totalPages = 1;
 const itemsPerPage = 8;
 let filteredNotifications = [...notificationsData];
 let selectedNotifications = new Set();
 
-// Load Notifications Data
-function loadNotificationsData() {
+// Current filters state
+let currentFilters = {
+    status: 'all',
+    type: 'all',
+    priority: 'all'
+};
+
+// Load Notifications Data from API
+async function loadNotificationsData() {
+    try {
+        const queryParams = new URLSearchParams({
+            status: currentFilters.status,
+            type: currentFilters.type,
+            priority: currentFilters.priority,
+            page: currentPage,
+            limit: itemsPerPage
+        });
+
+        const response = await fetch(`api/index.php?endpoint=notifications&${queryParams}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Update global data
+            notificationsData.length = 0;
+            notificationsData.push(...data.data.notifications);
+            totalPages = data.data.pagination.total_pages;
+
+            // Update summary if available
+            if (data.data.summary) {
+                updateNotificationsSummary(data.data.summary);
+            }
+
+            // Render notifications
+            filteredNotifications = [...notificationsData];
+            renderNotifications();
+            updatePagination();
+            updateSummary();
+        } else {
+            console.error('Failed to load notifications:', data.message);
+            showNotification('Failed to load notifications', 'error');
+            // Fallback to existing static data
+            loadStaticNotificationsData();
+        }
+    } catch (error) {
+        console.error('Error loading notifications:', error);
+        showNotification('Error loading notifications', 'error');
+        // Fallback to existing static data
+        loadStaticNotificationsData();
+    }
+}
+
+// Load Static Notifications Data (fallback)
+function loadStaticNotificationsData() {
     applyFilters();
     renderNotifications();
     updatePagination();
     updateSummary();
+}
+
+// Update Notifications Summary
+function updateNotificationsSummary(summary) {
+    // Update summary cards if they exist
+    const summaryCards = document.querySelectorAll('.summary-card');
+
+    if (summaryCards.length >= 3) {
+        summaryCards[0].querySelector('h3').textContent = summary.unread || 0;
+        summaryCards[1].querySelector('h3').textContent = summary.total || 0;
+        summaryCards[2].querySelector('h3').textContent = summary.high_priority || 0;
+    }
+
+    // Update notification badge in navigation
+    const notificationBadge = document.querySelector('.notification-badge');
+    if (notificationBadge && summary.unread) {
+        notificationBadge.textContent = summary.unread;
+        notificationBadge.style.display = summary.unread > 0 ? 'inline' : 'none';
+    }
 }
 
 // Initialize Filters

@@ -129,15 +129,76 @@ const applicationsData = [
 ];
 
 let currentPage = 1;
+let totalPages = 1;
 const itemsPerPage = 5;
 let filteredApplications = [...applicationsData];
 let currentView = 'list';
 
-// Load Applications Data
-function loadApplicationsData() {
+// Current filters state
+let currentFilters = {
+    status: 'all',
+    type: 'all',
+    date: 'all'
+};
+
+// Load Applications Data from API
+async function loadApplicationsData() {
+    try {
+        const queryParams = new URLSearchParams({
+            status: currentFilters.status,
+            type: currentFilters.type,
+            date: currentFilters.date,
+            page: currentPage,
+            limit: itemsPerPage
+        });
+
+        const response = await fetch(`api/index.php?endpoint=applications&${queryParams}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Update global data
+            applicationsData.length = 0;
+            applicationsData.push(...data.data.applications);
+            totalPages = data.data.pagination.total_pages;
+
+            // Update summary
+            updateApplicationsSummary(data.data.summary);
+
+            // Render applications
+            filteredApplications = [...applicationsData];
+            renderApplications();
+            updatePagination();
+        } else {
+            console.error('Failed to load applications:', data.message);
+            showNotification('Failed to load applications', 'error');
+            // Fallback to existing static data
+            loadStaticApplicationsData();
+        }
+    } catch (error) {
+        console.error('Error loading applications:', error);
+        showNotification('Error loading applications', 'error');
+        // Fallback to existing static data
+        loadStaticApplicationsData();
+    }
+}
+
+// Load Static Applications Data (fallback)
+function loadStaticApplicationsData() {
     applyFilters();
     renderApplications();
     updatePagination();
+}
+
+// Update Applications Summary
+function updateApplicationsSummary(summary) {
+    const summaryCards = document.querySelectorAll('.summary-card');
+
+    if (summaryCards.length >= 4) {
+        summaryCards[0].querySelector('h3').textContent = summary.pending || 0;
+        summaryCards[1].querySelector('h3').textContent = summary.processing || 0;
+        summaryCards[2].querySelector('h3').textContent = summary.approved || 0;
+        summaryCards[3].querySelector('h3').textContent = summary.completed || 0;
+    }
 }
 
 // Initialize Filters
@@ -146,24 +207,40 @@ function initializeFilters() {
     const typeFilter = document.getElementById('typeFilter');
     const dateFilter = document.getElementById('dateFilter');
     const clearFilters = document.getElementById('clearFilters');
-    const applyFilters = document.getElementById('applyFilters');
-    
-    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
-    if (typeFilter) typeFilter.addEventListener('change', applyFilters);
-    if (dateFilter) dateFilter.addEventListener('change', applyFilters);
-    
+    const applyFiltersBtn = document.getElementById('applyFilters');
+
+    if (statusFilter) statusFilter.addEventListener('change', handleFilterChange);
+    if (typeFilter) typeFilter.addEventListener('change', handleFilterChange);
+    if (dateFilter) dateFilter.addEventListener('change', handleFilterChange);
+
     if (clearFilters) {
         clearFilters.addEventListener('click', function() {
             statusFilter.value = 'all';
             typeFilter.value = 'all';
             dateFilter.value = 'all';
-            applyFilters();
+            currentFilters = { status: 'all', type: 'all', date: 'all' };
+            currentPage = 1;
+            loadApplicationsData();
         });
     }
-    
-    if (applyFilters) {
-        applyFilters.addEventListener('click', applyFilters);
+
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', handleFilterChange);
     }
+}
+
+// Handle Filter Change
+function handleFilterChange() {
+    const statusFilter = document.getElementById('statusFilter');
+    const typeFilter = document.getElementById('typeFilter');
+    const dateFilter = document.getElementById('dateFilter');
+
+    currentFilters.status = statusFilter.value;
+    currentFilters.type = typeFilter.value;
+    currentFilters.date = dateFilter.value;
+    currentPage = 1;
+
+    loadApplicationsData();
 }
 
 // Apply Filters

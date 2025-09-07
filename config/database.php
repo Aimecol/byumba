@@ -364,6 +364,22 @@ $GLOBALS['current_language'] = $current_language;
 if ($db === null) {
     error_log("Database connection failed. Please check if MySQL server is running.");
 
+    // Check if this is an API request
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+    $is_api_request = strpos($request_uri, '/api/') !== false;
+
+    if ($is_api_request) {
+        // Return JSON error for API requests
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database connection failed. Please try again later.',
+            'error_code' => 'DB_CONNECTION_FAILED'
+        ]);
+        exit;
+    }
+
     // If this is an admin page request, show a user-friendly error
     if (defined('ADMIN_PAGE') && ADMIN_PAGE === true) {
         showDatabaseError();
