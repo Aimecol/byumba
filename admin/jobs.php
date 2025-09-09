@@ -115,9 +115,9 @@ $total_jobs = $count_stmt->fetch()['total'];
 $total_pages = ceil($total_jobs / $per_page);
 
 // Get jobs
-$query = "SELECT j.*, 
+$query = "SELECT j.*,
                  jct.name as category_name,
-                 p.name as parish_name
+                 COALESCE(p.name_en, p.name) as parish_name
           FROM jobs j
           JOIN job_categories jc ON j.job_category_id = jc.id
           JOIN job_category_translations jct ON jc.id = jct.job_category_id
@@ -145,7 +145,7 @@ $cat_stmt = $db->prepare($cat_query);
 $cat_stmt->execute();
 $categories = $cat_stmt->fetchAll();
 
-$parish_query = "SELECT id, name FROM parishes WHERE is_active = 1 ORDER BY name";
+$parish_query = "SELECT id, COALESCE(name_en, name) as name FROM parishes WHERE is_active = 1 ORDER BY COALESCE(name_en, name)";
 $parish_stmt = $db->prepare($parish_query);
 $parish_stmt->execute();
 $parishes = $parish_stmt->fetchAll();

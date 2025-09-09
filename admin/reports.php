@@ -130,13 +130,13 @@ try {
         $report_data['user_trends'] = $stmt->fetchAll();
         
         // Users by parish
-        $users_by_parish_query = "SELECT 
-            p.name as parish_name,
+        $users_by_parish_query = "SELECT
+            COALESCE(p.name_en, p.name) as parish_name,
             COUNT(upm.user_id) as member_count
             FROM parishes p
             LEFT JOIN user_parish_membership upm ON p.id = upm.parish_id AND upm.is_active = 1
             WHERE p.is_active = 1
-            GROUP BY p.id, p.name
+            GROUP BY p.id, COALESCE(p.name_en, p.name)
             ORDER BY member_count DESC";
         $stmt = $db->prepare($users_by_parish_query);
         $stmt->execute();

@@ -29,10 +29,10 @@ $error = '';
 
 // Get user details
 try {
-    $user_query = "SELECT u.*, 
+    $user_query = "SELECT u.*,
                           COUNT(DISTINCT a.id) as application_count,
                           COUNT(DISTINCT m.id) as meeting_count,
-                          p.name as parish_name
+                          COALESCE(p.name_en, p.name) as parish_name
                    FROM users u
                    LEFT JOIN applications a ON u.id = a.user_id
                    LEFT JOIN meetings m ON u.id = m.user_id

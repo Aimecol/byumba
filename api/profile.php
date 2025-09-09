@@ -99,11 +99,11 @@ function getUserProfile($db, $user_id) {
 }
 
 function getUserParishMembership($db, $user_id) {
-    $query = "SELECT upm.*, p.name as parish_name, p.location 
-              FROM user_parish_membership upm 
-              JOIN parishes p ON upm.parish_id = p.id 
-              WHERE upm.user_id = :user_id AND upm.is_active = 1 
-              ORDER BY upm.created_at DESC 
+    $query = "SELECT upm.*, COALESCE(p.name_en, p.name) as parish_name, p.location
+              FROM user_parish_membership upm
+              JOIN parishes p ON upm.parish_id = p.id
+              WHERE upm.user_id = :user_id AND upm.is_active = 1
+              ORDER BY upm.created_at DESC
               LIMIT 1";
     
     $stmt = $db->prepare($query);

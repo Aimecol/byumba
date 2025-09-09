@@ -11,6 +11,9 @@ This error occurred when accessing:
 - `http://localhost/byumba/api/index.php?endpoint=jobs`
 - The jobs.html page when loading job listings
 - Any frontend JavaScript trying to fetch job data
+- Admin interfaces that displayed parish information
+
+**The issue persisted even after initial fixes because multiple files contained the same column reference problem.**
 
 ### 🔍 **Root Cause Analysis**
 
@@ -83,9 +86,36 @@ After applying the fix:
 
 ### 🔧 **Files Modified**
 
-1. **`api/jobs.php`** (Line 54):
+**COMPREHENSIVE FIX - All Parish Name References Updated:**
+
+1. **`api/jobs.php`** (Line 55):
    - Changed `p.name as parish_name` to `COALESCE(p.name_en, p.name) as parish_name`
-   - Maintains compatibility with both database schemas
+   - Main jobs API endpoint fix
+
+2. **`admin/jobs.php`** (Lines 120, 148):
+   - Updated jobs query: `COALESCE(p.name_en, p.name) as parish_name`
+   - Updated parish filter query: `COALESCE(name_en, name) as name`
+   - Admin jobs management interface
+
+3. **`admin/parishes.php`** (Lines 84, 120):
+   - Updated search query: `COALESCE(p.name_en, p.name) LIKE :search`
+   - Updated ORDER BY: `COALESCE(p.name_en, p.name) ASC`
+   - Admin parishes management interface
+
+4. **`admin/reports.php`** (Lines 134, 139):
+   - Updated parish reports: `COALESCE(p.name_en, p.name) as parish_name`
+   - Updated GROUP BY: `COALESCE(p.name_en, p.name)`
+   - Admin reporting system
+
+5. **`admin/user_view.php`** (Line 35):
+   - Updated user details query: `COALESCE(p.name_en, p.name) as parish_name`
+   - Admin user management interface
+
+6. **`api/profile.php`** (Line 102):
+   - Updated parish membership query: `COALESCE(p.name_en, p.name) as parish_name`
+   - User profile API endpoint
+
+**Total: 6 files fixed with 8 specific query updates**
 
 ### 📋 **Additional Improvements**
 

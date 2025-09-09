@@ -81,7 +81,7 @@ $where_conditions = [];
 $params = [];
 
 if ($search) {
-    $where_conditions[] = "(p.name LIKE :search OR p.location LIKE :search OR p.priest_name LIKE :search)";
+    $where_conditions[] = "(COALESCE(p.name_en, p.name) LIKE :search OR p.location LIKE :search OR p.priest_name LIKE :search)";
     $params[':search'] = "%$search%";
 }
 
@@ -117,7 +117,7 @@ $query = "SELECT p.*,
           LEFT JOIN user_parish_membership upm ON p.id = upm.parish_id AND upm.is_active = 1
           $where_clause
           GROUP BY p.id
-          ORDER BY p.name ASC
+          ORDER BY COALESCE(p.name_en, p.name) ASC
           LIMIT :limit OFFSET :offset";
 
 $stmt = $db->prepare($query);
