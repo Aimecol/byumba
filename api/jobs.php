@@ -49,9 +49,10 @@ if ($method === 'GET') {
         $total = $stmt->fetch()['total'];
         
         // Get jobs with category and job translations
+        // Handle both old and new parishes table schema
         $query = "SELECT j.*, jc.category_key, jc.icon as category_icon,
                          jct.name as category_name, jct.description as category_description,
-                         p.name as parish_name,
+                         COALESCE(p.name_en, p.name) as parish_name,
                          COALESCE(jt.title, j.title) as translated_title,
                          COALESCE(jt.description, j.description) as translated_description,
                          COALESCE(jt.requirements, j.requirements) as translated_requirements

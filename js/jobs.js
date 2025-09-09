@@ -707,7 +707,7 @@ function showJobApplicationModal(jobTitle, department, jobType) {
 
   // Handle form submission
   const applicationForm = modalOverlay.querySelector(".job-application-form");
-  applicationForm.addEventListener("submit", (e) => {
+  applicationForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     // Validate required fields
@@ -715,7 +715,10 @@ function showJobApplicationModal(jobTitle, department, jobType) {
     let isValid = true;
 
     requiredFields.forEach((field) => {
-      if (!field.value.trim()) {
+      if (!field.value.trim() && field.type !== 'file') {
+        isValid = false;
+        field.style.borderColor = "#d14438";
+      } else if (field.type === 'file' && field.hasAttribute('required') && field.files.length === 0) {
         isValid = false;
         field.style.borderColor = "#d14438";
       } else {
@@ -723,18 +726,209 @@ function showJobApplicationModal(jobTitle, department, jobType) {
       }
     });
 
-    if (isValid) {
+    if (!isValid) {
+      showNotification("Please fill in all required fields.", "error");
+      return;
+    }
+
+    // Submit the application
+    await submitJobApplication(applicationForm, modalOverlay, styleSheet, jobTitle, department, jobType);
+  });
+}
+
+// Submit job application to API
+async function submitJobApplication(form, modalOverlay, styleSheet, jobTitle, department, jobType) {
+  const submitButton = form.querySelector('.submit-application-btn');
+  const originalButtonText = submitButton.innerHTML;
+
+  // Show loading state
+  submitButton.disabled = true;
+  submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting Application...';
+
+  try {
+    // Create FormData object for file uploads
+    const formData = new FormData(form);
+
+    // Add job context information
+    formData.append('jobTitle', jobTitle);
+    formData.append('jobDepartment', department);
+    formData.append('jobType', jobType);
+
+    const response = await fetch('api/job-applications.php', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
       // Show success message
       showNotification(
-        "Application submitted successfully! You will receive a confirmation email shortly.",
+        `Application submitted successfully! Reference number: ${result.data.application_number}. ${result.data.message}`,
         "success"
       );
+
+      // Show detailed confirmation
+      showJobApplicationConfirmation(result.data, jobTitle);
+
+      // Close modal
       document.body.removeChild(modalOverlay);
       document.head.removeChild(styleSheet);
+
     } else {
-      showNotification("Please fill in all required fields.", "error");
+      throw new Error(result.message || 'Failed to submit application');
     }
-  });
+
+  } catch (error) {
+    console.error('Job application submission error:', error);
+    showNotification(
+      'Failed to submit application: ' + error.message,
+      "error"
+    );
+
+    // Restore button state
+    submitButton.disabled = false;
+    submitButton.innerHTML = originalButtonText;
+  }
+}
+
+// Show job application confirmation
+function showJobApplicationConfirmation(data, jobTitle) {
+  const confirmationModal = document.createElement('div');
+  confirmationModal.className = 'job-confirmation-modal';
+  confirmationModal.innerHTML = `
+    <div class="confirmation-overlay">
+      <div class="confirmation-content">
+        <div class="confirmation-header">
+          <i class="fas fa-check-circle"></i>
+          <h3>Application Submitted Successfully</h3>
+        </div>
+        <div class="confirmation-body">
+          <p><strong>Position:</strong> ${jobTitle}</p>
+          <p><strong>Application Number:</strong> ${data.application_number}</p>
+          <p><strong>Status:</strong> ${data.status}</p>
+          <p class="confirmation-message">${data.message}</p>
+          ${data.uploaded_files ? `<p><strong>Files Uploaded:</strong> ${data.uploaded_files} document(s)</p>` : ''}
+          <div class="next-steps">
+            <h4>What Happens Next:</h4>
+            <ul>
+              <li>Your application will be reviewed by our HR team</li>
+              <li>You will receive email updates on your application status</li>
+              <li>If shortlisted, we will contact you for an interview</li>
+              <li>Keep your application number for future reference</li>
+            </ul>
+          </div>
+        </div>
+        <div class="confirmation-footer">
+          <button onclick="closeJobConfirmation()" class="close-confirmation-btn">
+            <i class="fas fa-times"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(confirmationModal);
+
+  // Add styles
+  const styles = `
+    .job-confirmation-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+    }
+    .confirmation-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .confirmation-content {
+      background: white;
+      border-radius: 15px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .confirmation-header {
+      background: #1e753f;
+      color: white;
+      padding: 25px;
+      border-radius: 15px 15px 0 0;
+      text-align: center;
+    }
+    .confirmation-header i {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    .confirmation-header h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .confirmation-body {
+      padding: 30px;
+    }
+    .confirmation-message {
+      background: #f0f8f0;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #1e753f;
+      margin: 15px 0;
+    }
+    .next-steps {
+      margin-top: 20px;
+    }
+    .next-steps h4 {
+      color: #1e753f;
+      margin-bottom: 10px;
+    }
+    .next-steps ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .next-steps li {
+      margin-bottom: 5px;
+    }
+    .confirmation-footer {
+      padding: 20px 30px;
+      text-align: center;
+      border-top: 1px solid #eee;
+    }
+    .close-confirmation-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .close-confirmation-btn:hover {
+      background: #5a6268;
+    }
+  `;
+
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = styles;
+  document.head.appendChild(styleSheet);
+}
+
+// Close job application confirmation
+function closeJobConfirmation() {
+  const modal = document.querySelector('.job-confirmation-modal');
+  if (modal) {
+    modal.remove();
+  }
 }
 
 // Utility function for notifications (if not already defined in main script)
@@ -742,26 +936,33 @@ if (typeof showNotification === "undefined") {
   function showNotification(message, type = "info") {
     const notification = document.createElement("div");
     notification.className = `notification notification-${type}`;
-    notification.textContent = message;
+    notification.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+      </div>
+    `;
 
     notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 1001;
-            animation: slideIn 0.3s ease;
-            background: ${
-              type === "success"
-                ? "#1e753f"
-                : type === "error"
-                ? "#d14438"
-                : "#f2c97e"
-            };
-        `;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1001;
+      max-width: 400px;
+      animation: slideIn 0.3s ease;
+      background: ${
+        type === "success"
+          ? "#1e753f"
+          : type === "error"
+          ? "#d14438"
+          : "#f2c97e"
+      };
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    `;
 
     document.body.appendChild(notification);
 
@@ -772,6 +973,6 @@ if (typeof showNotification === "undefined") {
           document.body.removeChild(notification);
         }
       }, 300);
-    }, 3000);
+    }, 5000);
   }
 }

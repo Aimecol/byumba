@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs API Frontend Test - Diocese of Byumba</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-briefcase me-2"></i>Jobs API Frontend Test</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <button id="testApiBtn" class="btn btn-success">
+                                    <i class="fas fa-play me-2"></i>Test Jobs API
+                                </button>
+                                <button id="clearResultsBtn" class="btn btn-secondary ms-2">
+                                    <i class="fas fa-trash me-2"></i>Clear Results
+                                </button>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <span id="statusIndicator" class="badge bg-secondary">Ready</span>
+                            </div>
+                        </div>
+                        
+                        <div id="loadingSpinner" class="text-center d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Testing API endpoint...</p>
+                        </div>
+                        
+                        <div id="results" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const testApiBtn = document.getElementById('testApiBtn');
+            const clearResultsBtn = document.getElementById('clearResultsBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const results = document.getElementById('results');
+            const statusIndicator = document.getElementById('statusIndicator');
+
+            testApiBtn.addEventListener('click', testJobsAPI);
+            clearResultsBtn.addEventListener('click', clearResults);
+
+            async function testJobsAPI() {
+                // Show loading state
+                testApiBtn.disabled = true;
+                loadingSpinner.classList.remove('d-none');
+                statusIndicator.textContent = 'Testing...';
+                statusIndicator.className = 'badge bg-warning';
+                results.innerHTML = '';
+
+                try {
+                    console.log('Testing Jobs API endpoint...');
+                    
+                    const response = await fetch('api/index.php?endpoint=jobs', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    });
+
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+
+                    const responseText = await response.text();
+                    console.log('Raw response:', responseText);
+
+                    let data;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (parseError) {
+                        throw new Error(`JSON Parse Error: ${parseError.message}. Raw response: ${responseText.substring(0, 500)}...`);
+                    }
+
+                    if (data.success) {
+                        displaySuccessResults(data);
+                        statusIndicator.textContent = 'Success';
+                        statusIndicator.className = 'badge bg-success';
+                    } else {
+                        throw new Error(data.message || 'API returned error without message');
+                    }
+
+                } catch (error) {
+                    console.error('API Test Error:', error);
+                    displayErrorResults(error);
+                    statusIndicator.textContent = 'Error';
+                    statusIndicator.className = 'badge bg-danger';
+                } finally {
+                    testApiBtn.disabled = false;
+                    loadingSpinner.classList.add('d-none');
+                }
+            }
+
+            function displaySuccessResults(data) {
+                const jobs = data.data.jobs || [];
+                const categories = data.data.categories || [];
+                const pagination = data.data.pagination || {};
+
+                results.innerHTML = `
+                    <div class="alert alert-success">
+                        <h4><i class="fas fa-check-circle me-2"></i>API Test Successful!</h4>
+                        <p class="mb-0">The jobs API is working correctly.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title"><i class="fas fa-briefcase me-2"></i>Jobs</h5>
+                                    <h2 class="text-primary">${jobs.length}</h2>
+                                    <p class="card-text">Total jobs found</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title"><i class="fas fa-tags me-2"></i>Categories</h5>
+                                    <h2 class="text-info">${categories.length}</h2>
+                                    <p class="card-text">Job categories</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title"><i class="fas fa-list me-2"></i>Total Items</h5>
+                                    <h2 class="text-success">${pagination.total_items || 0}</h2>
+                                    <p class="card-text">In database</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${jobs.length > 0 ? `
+                        <div class="mt-4">
+                            <h5><i class="fas fa-list me-2"></i>Sample Jobs</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Number</th>
+                                            <th>Title</th>
+                                            <th>Location</th>
+                                            <th>Type</th>
+                                            <th>Category</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${jobs.slice(0, 5).map(job => `
+                                            <tr>
+                                                <td><code>${job.job_number}</code></td>
+                                                <td>${escapeHtml(job.title)}</td>
+                                                <td>${escapeHtml(job.location)}</td>
+                                                <td><span class="badge bg-secondary">${job.employment_type_display}</span></td>
+                                                <td><i class="${job.category_icon} me-1"></i>${escapeHtml(job.category_name)}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${categories.length > 0 ? `
+                        <div class="mt-4">
+                            <h5><i class="fas fa-tags me-2"></i>Job Categories</h5>
+                            <div class="row">
+                                ${categories.map(category => `
+                                    <div class="col-md-4 mb-2">
+                                        <div class="card">
+                                            <div class="card-body py-2">
+                                                <h6 class="card-title mb-1">
+                                                    <i class="${category.icon} me-2"></i>${escapeHtml(category.name)}
+                                                </h6>
+                                                <small class="text-muted">${escapeHtml(category.description)}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="mt-4">
+                        <h5><i class="fas fa-info-circle me-2"></i>API Response Details</h5>
+                        <pre class="bg-light p-3 rounded" style="max-height: 300px; overflow-y: auto; font-size: 12px;">${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            }
+
+            function displayErrorResults(error) {
+                results.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h4><i class="fas fa-exclamation-triangle me-2"></i>API Test Failed</h4>
+                        <p><strong>Error:</strong> ${escapeHtml(error.message)}</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-tools me-2"></i>Troubleshooting Steps</h5>
+                        </div>
+                        <div class="card-body">
+                            <ol>
+                                <li><strong>Check Database Connection:</strong> Ensure MySQL is running in XAMPP</li>
+                                <li><strong>Verify Database Schema:</strong> Run the database setup scripts</li>
+                                <li><strong>Check API Endpoint:</strong> <a href="api/index.php?endpoint=jobs" target="_blank">Test directly</a></li>
+                                <li><strong>Run Diagnostic:</strong> <a href="fix_jobs_api_issues.php" target="_blank">Jobs API Fix Script</a></li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <h6>Console Output:</h6>
+                        <p class="text-muted">Check the browser console (F12) for more detailed error information.</p>
+                    </div>
+                `;
+            }
+
+            function clearResults() {
+                results.innerHTML = '';
+                statusIndicator.textContent = 'Ready';
+                statusIndicator.className = 'badge bg-secondary';
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Auto-run test on page load
+            setTimeout(() => {
+                testJobsAPI();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,405 @@
 // Bishop Meeting Page Specific JavaScript
+// Diocese of Byumba - Bishop Meeting Form Handler
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeBishopMeetingForm();
+});
+
+function initializeBishopMeetingForm() {
+    const meetingForm = document.getElementById('meetingForm');
+
+    if (meetingForm) {
+        meetingForm.addEventListener('submit', handleMeetingFormSubmission);
+
+        // Add form validation
+        addFormValidation();
+
+        // Initialize form enhancements
+        enhanceFormFields();
+    }
+}
+
+function handleMeetingFormSubmission(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // Convert FormData to object
+    const meetingData = {};
+    for (let [key, value] of formData.entries()) {
+        meetingData[key] = value;
+    }
+
+    // Validate required fields
+    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'meetingType', 'purpose', 'terms'];
+    const missingFields = requiredFields.filter(field => !meetingData[field] || meetingData[field].trim() === '');
+
+    if (missingFields.length > 0) {
+        showNotification('Please fill in all required fields: ' + missingFields.join(', '), 'error');
+        return;
+    }
+
+    // Validate email
+    if (!isValidEmail(meetingData.email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return;
+    }
+
+    // Validate phone
+    if (!isValidPhone(meetingData.phone)) {
+        showNotification('Please enter a valid phone number', 'error');
+        return;
+    }
+
+    // Submit the meeting request
+    submitMeetingRequest(meetingData, form);
+}
+
+async function submitMeetingRequest(meetingData, form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
+
+    try {
+        const response = await fetch('api/bishop-meeting.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify(meetingData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Show success message
+            showNotification(
+                `Meeting request submitted successfully! Reference number: ${result.data.meeting_number}. ${result.data.message}`,
+                'success'
+            );
+
+            // Reset form
+            form.reset();
+
+            // Show confirmation details
+            showMeetingConfirmation(result.data);
+
+        } else {
+            throw new Error(result.message || 'Failed to submit meeting request');
+        }
+
+    } catch (error) {
+        console.error('Meeting submission error:', error);
+        showNotification(
+            'Failed to submit meeting request: ' + error.message,
+            'error'
+        );
+    } finally {
+        // Restore button state
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+    }
+}
+
+function showMeetingConfirmation(data) {
+    const confirmationModal = document.createElement('div');
+    confirmationModal.className = 'meeting-confirmation-modal';
+    confirmationModal.innerHTML = `
+        <div class="confirmation-overlay">
+            <div class="confirmation-content">
+                <div class="confirmation-header">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Meeting Request Submitted</h3>
+                </div>
+                <div class="confirmation-body">
+                    <p><strong>Reference Number:</strong> ${data.meeting_number}</p>
+                    <p><strong>Status:</strong> ${data.status}</p>
+                    <p class="confirmation-message">${data.message}</p>
+                    <div class="next-steps">
+                        <h4>Next Steps:</h4>
+                        <ul>
+                            <li>You will receive confirmation within 24-48 hours</li>
+                            <li>Check your email for updates</li>
+                            <li>Keep your reference number for future communication</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="confirmation-footer">
+                    <button onclick="closeMeetingConfirmation()" class="close-confirmation-btn">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(confirmationModal);
+
+    // Add styles
+    const styles = `
+        .meeting-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        .confirmation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .confirmation-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .confirmation-header {
+            background: #1e753f;
+            color: white;
+            padding: 25px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+        .confirmation-header i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .confirmation-header h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .confirmation-body {
+            padding: 30px;
+        }
+        .confirmation-message {
+            background: #f0f8f0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1e753f;
+            margin: 15px 0;
+        }
+        .next-steps {
+            margin-top: 20px;
+        }
+        .next-steps h4 {
+            color: #1e753f;
+            margin-bottom: 10px;
+        }
+        .next-steps ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .next-steps li {
+            margin-bottom: 5px;
+        }
+        .confirmation-footer {
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        .close-confirmation-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .close-confirmation-btn:hover {
+            background: #5a6268;
+        }
+    `;
+
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = styles;
+    document.head.appendChild(styleSheet);
+}
+
+function closeMeetingConfirmation() {
+    const modal = document.querySelector('.meeting-confirmation-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function addFormValidation() {
+    const form = document.getElementById('meetingForm');
+    if (!form) return;
+
+    // Real-time validation for email
+    const emailField = form.querySelector('#email');
+    if (emailField) {
+        emailField.addEventListener('blur', function() {
+            if (this.value && !isValidEmail(this.value)) {
+                this.style.borderColor = '#d14438';
+                showFieldError(this, 'Please enter a valid email address');
+            } else {
+                this.style.borderColor = '#dcdcdc';
+                hideFieldError(this);
+            }
+        });
+    }
+
+    // Real-time validation for phone
+    const phoneField = form.querySelector('#phone');
+    if (phoneField) {
+        phoneField.addEventListener('blur', function() {
+            if (this.value && !isValidPhone(this.value)) {
+                this.style.borderColor = '#d14438';
+                showFieldError(this, 'Please enter a valid phone number');
+            } else {
+                this.style.borderColor = '#dcdcdc';
+                hideFieldError(this);
+            }
+        });
+    }
+}
+
+function enhanceFormFields() {
+    // Add character counter for purpose field
+    const purposeField = document.getElementById('purpose');
+    if (purposeField) {
+        const counter = document.createElement('div');
+        counter.className = 'character-counter';
+        counter.style.cssText = 'text-align: right; font-size: 12px; color: #666; margin-top: 5px;';
+        purposeField.parentNode.appendChild(counter);
+
+        purposeField.addEventListener('input', function() {
+            const length = this.value.length;
+            counter.textContent = `${length} characters`;
+
+            if (length < 50) {
+                counter.style.color = '#d14438';
+                counter.textContent += ' (minimum 50 characters recommended)';
+            } else if (length > 500) {
+                counter.style.color = '#d14438';
+                counter.textContent += ' (maximum 500 characters)';
+            } else {
+                counter.style.color = '#666';
+            }
+        });
+    }
+}
+
+function showFieldError(field, message) {
+    hideFieldError(field); // Remove existing error
+
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.style.cssText = 'color: #d14438; font-size: 12px; margin-top: 5px;';
+    errorDiv.textContent = message;
+
+    field.parentNode.appendChild(errorDiv);
+}
+
+function hideFieldError(field) {
+    const existingError = field.parentNode.querySelector('.field-error');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidPhone(phone) {
+    // Remove all non-digit characters except +
+    const cleanPhone = phone.replace(/[^\d+]/g, '');
+
+    // Check if it's a valid Rwandan phone number or international format
+    const rwandaRegex = /^(\+250|250|0)?[7][0-9]{8}$/;
+    const internationalRegex = /^\+[1-9]\d{1,14}$/;
+
+    return rwandaRegex.test(cleanPhone) || internationalRegex.test(cleanPhone);
+}
+
+// Notification function (if not already defined)
+if (typeof showNotification === 'undefined') {
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+            background: ${type === 'success' ? '#1e753f' : type === 'error' ? '#d14438' : '#f2c97e'};
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 5000);
+    }
+}
+
+// Add CSS animations
+const animationStyles = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = animationStyles;
+document.head.appendChild(styleSheet);
 
 // Global variables
 let currentLanguage = 'en';
