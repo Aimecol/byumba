@@ -308,6 +308,11 @@ function getPriorityBadgeClass($priority) {
 $schoolAuth = new SchoolAuth($db);
 $schoolReports = new SchoolReports($db);
 
+// Include file handler if needed
+if (file_exists(__DIR__ . '/file-handler.php')) {
+    require_once __DIR__ . '/file-handler.php';
+}
+
 // Make objects available globally
 $GLOBALS['schoolAuth'] = $schoolAuth;
 $GLOBALS['schoolReports'] = $schoolReports;

@@ -7,6 +7,7 @@
 session_start();
 $pageTitle = 'View Report';
 require_once 'includes/functions.php';
+require_once 'includes/file-handler.php';
 
 $currentUser = $schoolAuth->getCurrentUser();
 $reportId = intval($_GET['id'] ?? 0);
@@ -41,7 +42,11 @@ try {
     // Decode report data
     $reportData = json_decode($report['report_data'], true) ?: [];
     $requiredFields = json_decode($report['required_fields'], true) ?: [];
-    
+
+    // Get report attachments
+    $fileHandler = new FileHandler($db);
+    $attachments = $fileHandler->getReportAttachments($reportId);
+
 } catch(PDOException $e) {
     error_log("View report error: " . $e->getMessage());
     $_SESSION['error_message'] = 'Failed to load report details.';
@@ -202,6 +207,114 @@ require_once 'includes/header.php';
     </div>
 </div>
 
+<!-- Attachments Section -->
+<?php if (!empty($attachments)): ?>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-paperclip me-2"></i>Document Attachments
+                    <span class="badge bg-secondary ms-2"><?php echo count($attachments); ?></span>
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <?php foreach ($attachments as $attachment): ?>
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="attachment-item d-flex align-items-center">
+                                <div class="attachment-icon me-3">
+                                    <i class="<?php echo FileHandler::getFileIcon($attachment['original_name']); ?>"></i>
+                                </div>
+                                <div class="attachment-info">
+                                    <div class="attachment-name">
+                                        <?php echo htmlspecialchars($attachment['original_name']); ?>
+                                    </div>
+                                    <div class="attachment-meta">
+                                        <small>
+                                            <?php echo FileHandler::formatFileSize($attachment['file_size']); ?>
+                                            <?php if ($attachment['uploaded_by_name']): ?>
+                                                • by <?php echo htmlspecialchars($attachment['uploaded_by_name']); ?>
+                                            <?php endif; ?>
+                                            <br>
+                                            <?php echo formatDateTime($attachment['uploaded_at'], 'M j, Y g:i A'); ?>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="attachment-actions ms-auto">
+                                    <a href="download-attachment.php?id=<?php echo $attachment['id']; ?>"
+                                       class="btn btn-sm btn-outline-primary"
+                                       title="Download">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <?php if ($report['status'] === 'draft' && $attachment['uploaded_by'] == $currentUser['id']): ?>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                onclick="deleteAttachment(<?php echo $attachment['id']; ?>)"
+                                                title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- File Upload Section (for draft reports) -->
+<?php if ($report['status'] === 'draft'): ?>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-plus me-2"></i>Add Attachments
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Upload additional documents for this report. Accepted formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, JPG, PNG</p>
+
+                <!-- File Upload Area -->
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                            <h6>Drag and drop files here</h6>
+                            <p class="text-muted">or</p>
+                            <button type="button" class="btn btn-outline-primary" id="selectFilesBtn">
+                                <i class="fas fa-folder-open me-2"></i>Select Files
+                            </button>
+                            <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Progress -->
+                <div id="uploadProgress" class="mt-3" style="display: none;">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-1 d-block">Uploading files...</small>
+                </div>
+
+                <!-- File Size Info -->
+                <div class="mt-2">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Maximum file size: 10MB per file, 50MB total
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- Actions -->
 <div class="row">
     <div class="col-12">
@@ -245,5 +358,184 @@ require_once 'includes/header.php';
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Print functionality
+    document.querySelector('.print-btn')?.addEventListener('click', function() {
+        window.print();
+    });
+
+    // Delete confirmation
+    document.querySelectorAll('.confirm-delete').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // File upload functionality (only for draft reports)
+    <?php if ($report['status'] === 'draft'): ?>
+    initFileUpload();
+    <?php endif; ?>
+});
+
+<?php if ($report['status'] === 'draft'): ?>
+// File upload functionality
+function initFileUpload() {
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const selectFilesBtn = document.getElementById('selectFilesBtn');
+    const uploadProgress = document.getElementById('uploadProgress');
+
+    if (!uploadZone || !fileInput || !selectFilesBtn) return;
+
+    // Select files button
+    selectFilesBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            uploadFiles(e.target.files);
+        }
+    });
+
+    // Drag and drop
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        if (e.dataTransfer.files.length > 0) {
+            uploadFiles(e.dataTransfer.files);
+        }
+    });
+}
+
+function uploadFiles(files) {
+    const formData = new FormData();
+    const uploadProgress = document.getElementById('uploadProgress');
+    const progressBar = uploadProgress.querySelector('.progress-bar');
+
+    // Add files to form data
+    for (let file of files) {
+        formData.append('files[]', file);
+    }
+
+    formData.append('report_id', <?php echo $reportId; ?>);
+    formData.append('action', 'upload');
+
+    // Show progress
+    uploadProgress.style.display = 'block';
+    progressBar.style.width = '0%';
+
+    // Upload files
+    fetch('upload-attachment.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        uploadProgress.style.display = 'none';
+
+        if (data.success) {
+            showAlert('success', `Successfully uploaded ${data.files.length} file(s).`);
+            // Reload page to show new attachments
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            showAlert('danger', data.error || 'Upload failed.');
+            if (data.errors && data.errors.length > 0) {
+                data.errors.forEach(error => {
+                    showAlert('warning', error);
+                });
+            }
+        }
+    })
+    .catch(error => {
+        uploadProgress.style.display = 'none';
+        showAlert('danger', 'Upload failed. Please try again.');
+        console.error('Upload error:', error);
+    });
+
+    // Simulate progress
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress > 90) progress = 90;
+        progressBar.style.width = progress + '%';
+    }, 200);
+
+    // Clear interval when done
+    setTimeout(() => {
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
+    }, 2000);
+}
+
+function deleteAttachment(attachmentId) {
+    if (!confirm('Are you sure you want to delete this attachment?')) {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('report_id', <?php echo $reportId; ?>);
+    formData.append('attachment_id', attachmentId);
+    formData.append('action', 'delete');
+
+    fetch('upload-attachment.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('success', 'Attachment deleted successfully.');
+            // Reload page to update attachments
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } else {
+            showAlert('danger', data.error || 'Failed to delete attachment.');
+        }
+    })
+    .catch(error => {
+        showAlert('danger', 'Failed to delete attachment. Please try again.');
+        console.error('Delete error:', error);
+    });
+}
+
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    const container = document.querySelector('.container-fluid');
+    container.insertBefore(alertDiv, container.firstChild);
+
+    // Auto dismiss after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+<?php endif; ?>
+</script>
 
 <?php require_once 'includes/footer.php'; ?>

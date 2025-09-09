@@ -7,6 +7,7 @@
 session_start();
 $pageTitle = 'Create Report';
 require_once 'includes/functions.php';
+require_once 'includes/file-handler.php';
 
 $currentUser = $schoolAuth->getCurrentUser();
 
@@ -64,26 +65,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
             
             $result = $schoolReports->createReport($createData);
-            
+
             if ($result['success']) {
+                $reportId = $result['report_id'];
+                $uploadErrors = [];
+                $uploadedFiles = [];
+
+                // Handle file uploads if any files were selected
+                if (!empty($_FILES['attachments']['name'][0])) {
+                    $fileHandler = new FileHandler($db);
+
+                    // Process each uploaded file
+                    for ($i = 0; $i < count($_FILES['attachments']['name']); $i++) {
+                        if ($_FILES['attachments']['error'][$i] === UPLOAD_ERR_OK) {
+                            $file = [
+                                'name' => $_FILES['attachments']['name'][$i],
+                                'type' => $_FILES['attachments']['type'][$i],
+                                'tmp_name' => $_FILES['attachments']['tmp_name'][$i],
+                                'error' => $_FILES['attachments']['error'][$i],
+                                'size' => $_FILES['attachments']['size'][$i]
+                            ];
+
+                            $uploadResult = $fileHandler->uploadFile($file, $reportId, $currentUser['user_id']);
+
+                            if ($uploadResult['success']) {
+                                $uploadedFiles[] = $uploadResult['original_name'];
+                            } else {
+                                $uploadErrors = array_merge($uploadErrors, $uploadResult['errors']);
+                            }
+                        }
+                    }
+                }
+
                 // Log activity
                 $action = $status === 'submitted' ? 'submit_report' : 'create_draft';
-                $description = $status === 'submitted' ? 
-                    "Submitted report: {$result['report_number']}" : 
+                $description = $status === 'submitted' ?
+                    "Submitted report: {$result['report_number']}" :
                     "Created draft report: {$result['report_number']}";
-                
+
+                if (!empty($uploadedFiles)) {
+                    $description .= " with " . count($uploadedFiles) . " attachment(s): " . implode(', ', $uploadedFiles);
+                }
+
                 $schoolAuth->logActivity(
-                    $currentUser['school_id'], 
-                    $currentUser['user_id'], 
-                    $action, 
+                    $currentUser['school_id'],
+                    $currentUser['user_id'],
+                    $action,
                     $description
                 );
-                
-                $_SESSION['success_message'] = $status === 'submitted' ? 
-                    'Report submitted successfully!' : 
+
+                // Set success message
+                $successMessage = $status === 'submitted' ?
+                    'Report submitted successfully!' :
                     'Report draft saved successfully!';
-                
-                header('Location: view-report.php?id=' . $result['report_id']);
+
+                if (!empty($uploadedFiles)) {
+                    $successMessage .= ' ' . count($uploadedFiles) . ' file(s) uploaded.';
+                }
+
+                if (!empty($uploadErrors)) {
+                    $successMessage .= ' However, some files failed to upload: ' . implode(', ', $uploadErrors);
+                }
+
+                $_SESSION['success_message'] = $successMessage;
+
+                header('Location: view-report.php?id=' . $reportId);
                 exit;
             } else {
                 $error = $result['message'] ?? 'Failed to create report. Please try again.';
@@ -115,7 +161,7 @@ require_once 'includes/header.php';
     </div>
 <?php endif; ?>
 
-<form method="POST" class="needs-validation auto-save" id="reportForm" novalidate>
+<form method="POST" enctype="multipart/form-data" class="needs-validation auto-save" id="reportForm" novalidate>
     <!-- Report Type Selection -->
     <div class="form-section">
         <h5><i class="fas fa-clipboard-list me-2"></i>Report Information</h5>
@@ -186,7 +232,44 @@ require_once 'includes/header.php';
             <small class="form-text text-muted">Optional notes that will be visible to diocese administrators</small>
         </div>
     </div>
-    
+
+    <!-- File Attachments Section -->
+    <div class="form-section">
+        <h5><i class="fas fa-paperclip me-2"></i>Document Attachments</h5>
+        <p class="text-muted mb-3">Upload supporting documents for this report. Accepted formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, JPG, PNG</p>
+
+        <!-- File Upload Area -->
+        <div class="file-upload-area" id="fileUploadArea">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                    <h6>Drag and drop files here</h6>
+                    <p class="text-muted">or</p>
+                    <button type="button" class="btn btn-outline-primary" id="selectFilesBtn">
+                        <i class="fas fa-folder-open me-2"></i>Select Files
+                    </button>
+                    <input type="file" name="attachments[]" id="fileInput" multiple
+                           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png"
+                           style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <!-- File List -->
+        <div id="fileList" class="mt-3" style="display: none;">
+            <h6>Selected Files:</h6>
+            <div id="fileListContainer"></div>
+        </div>
+
+        <!-- File Size Info -->
+        <div class="mt-2">
+            <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Maximum file size: 10MB per file, 50MB total
+            </small>
+        </div>
+    </div>
+
     <!-- Action Buttons -->
     <div class="form-section">
         <div class="d-flex justify-content-between">
@@ -230,6 +313,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (reportTypeSelect.value) {
         reportTypeSelect.dispatchEvent(new Event('change'));
     }
+
+    // File upload functionality
+    initFileUpload();
 });
 
 function generateDynamicFields(fields, frequency) {
@@ -286,6 +372,253 @@ function generateDynamicFields(fields, frequency) {
         }
     });
 }
+
+// File upload functionality
+let selectedFiles = [];
+let totalSize = 0;
+const maxFileSize = 10 * 1024 * 1024; // 10MB
+const maxTotalSize = 50 * 1024 * 1024; // 50MB
+
+function initFileUpload() {
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const selectFilesBtn = document.getElementById('selectFilesBtn');
+    const fileList = document.getElementById('fileList');
+    const fileListContainer = document.getElementById('fileListContainer');
+
+    if (!uploadZone || !fileInput || !selectFilesBtn) return;
+
+    // Select files button
+    selectFilesBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+        updateFileInput(e.target.files);
+    });
+
+    // Drag and drop
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        handleFiles(e.dataTransfer.files);
+        updateFileInput(e.dataTransfer.files);
+    });
+}
+
+function updateFileInput(files) {
+    // Update the actual file input with the selected files
+    const fileInput = document.getElementById('fileInput');
+    const dt = new DataTransfer();
+
+    for (let file of files) {
+        dt.items.add(file);
+    }
+
+    fileInput.files = dt.files;
+}
+
+function handleFiles(files) {
+    const allowedTypes = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'jpg', 'jpeg', 'png'];
+    const validFiles = [];
+    let newTotalSize = 0;
+
+    // Clear previous selections
+    selectedFiles = [];
+    totalSize = 0;
+
+    for (let file of files) {
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        // Validate file type
+        if (!allowedTypes.includes(extension)) {
+            showAlert('error', `File "${file.name}" has an unsupported format.`);
+            continue;
+        }
+
+        // Validate file size
+        if (file.size > maxFileSize) {
+            showAlert('error', `File "${file.name}" exceeds 10MB limit.`);
+            continue;
+        }
+
+        validFiles.push(file);
+        newTotalSize += file.size;
+    }
+
+    // Check total size
+    if (newTotalSize > maxTotalSize) {
+        showAlert('error', 'Total file size exceeds 50MB limit.');
+        return;
+    }
+
+    // Set valid files
+    selectedFiles = validFiles;
+    totalSize = newTotalSize;
+
+    updateFileList();
+
+    if (validFiles.length > 0) {
+        showAlert('success', `${validFiles.length} file(s) selected and ready for upload.`);
+    }
+}
+
+function updateFileList() {
+    const fileList = document.getElementById('fileList');
+    const fileListContainer = document.getElementById('fileListContainer');
+
+    if (selectedFiles.length === 0) {
+        fileList.style.display = 'none';
+        return;
+    }
+
+    fileList.style.display = 'block';
+    fileListContainer.innerHTML = '';
+
+    selectedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item d-flex align-items-center justify-content-between p-2 border rounded mb-2';
+
+        const fileIcon = getFileIcon(file.name);
+        const fileSize = formatFileSize(file.size);
+
+        fileItem.innerHTML = `
+            <div class="d-flex align-items-center">
+                <i class="${fileIcon} me-2"></i>
+                <div>
+                    <div class="fw-medium">${file.name}</div>
+                    <small class="text-muted">${fileSize}</small>
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile(${index})">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        fileListContainer.appendChild(fileItem);
+    });
+
+    // Update total size display
+    const totalSizeElement = document.createElement('div');
+    totalSizeElement.className = 'mt-2 text-muted';
+    totalSizeElement.innerHTML = `<small>Total size: ${formatFileSize(totalSize)} / ${formatFileSize(maxTotalSize)}</small>`;
+    fileListContainer.appendChild(totalSizeElement);
+}
+
+function removeFile(index) {
+    totalSize -= selectedFiles[index].size;
+    selectedFiles.splice(index, 1);
+    updateFileList();
+
+    // Update the file input
+    const fileInput = document.getElementById('fileInput');
+    const dt = new DataTransfer();
+
+    for (let file of selectedFiles) {
+        dt.items.add(file);
+    }
+
+    fileInput.files = dt.files;
+}
+
+function getFileIcon(filename) {
+    const extension = filename.split('.').pop().toLowerCase();
+
+    switch (extension) {
+        case 'pdf': return 'fas fa-file-pdf text-danger';
+        case 'doc':
+        case 'docx': return 'fas fa-file-word text-primary';
+        case 'xls':
+        case 'xlsx': return 'fas fa-file-excel text-success';
+        case 'ppt':
+        case 'pptx': return 'fas fa-file-powerpoint text-warning';
+        case 'txt': return 'fas fa-file-alt text-secondary';
+        case 'jpg':
+        case 'jpeg':
+        case 'png': return 'fas fa-file-image text-info';
+        default: return 'fas fa-file text-muted';
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes >= 1073741824) {
+        return (bytes / 1073741824).toFixed(2) + ' GB';
+    } else if (bytes >= 1048576) {
+        return (bytes / 1048576).toFixed(2) + ' MB';
+    } else if (bytes >= 1024) {
+        return (bytes / 1024).toFixed(2) + ' KB';
+    } else {
+        return bytes + ' bytes';
+    }
+}
+
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    const container = document.querySelector('.container-fluid');
+    container.insertBefore(alertDiv, container.firstChild);
+
+    // Auto dismiss after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+// Form submission handling
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('reportForm');
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const submitButtons = form.querySelectorAll('button[type="submit"]');
+            const fileInput = document.getElementById('fileInput');
+
+            // Show loading state
+            submitButtons.forEach(btn => {
+                btn.disabled = true;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+
+                // Store original text for restoration
+                btn.dataset.originalText = originalText;
+            });
+
+            // Show progress message if files are selected
+            if (fileInput && fileInput.files.length > 0) {
+                showAlert('info', `Creating report and uploading ${fileInput.files.length} file(s)... Please wait.`);
+            }
+
+            // Re-enable buttons after a timeout (in case of errors)
+            setTimeout(() => {
+                submitButtons.forEach(btn => {
+                    btn.disabled = false;
+                    if (btn.dataset.originalText) {
+                        btn.innerHTML = btn.dataset.originalText;
+                    }
+                });
+            }, 30000); // 30 seconds timeout
+        });
+    }
+});
 </script>
 
 <?php require_once 'includes/footer.php'; ?>

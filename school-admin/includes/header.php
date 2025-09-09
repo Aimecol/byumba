@@ -28,7 +28,7 @@ $currentUser = $schoolAuth->getCurrentUser();
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container-fluid">
             <a class="navbar-brand" href="dashboard.php">
                 <i class="fas fa-school me-2"></i>
