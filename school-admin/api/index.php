@@ -173,28 +173,28 @@ function handleDashboard($method) {
         // Total reports
         $query = "SELECT COUNT(*) as total FROM school_reports WHERE school_id = :school_id";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':school_id', $schoolId);
+        $stmt->bindValue(':school_id', $schoolId);
         $stmt->execute();
         $stats['total_reports'] = $stmt->fetch()['total'];
-        
+
         // Pending reports
         $query = "SELECT COUNT(*) as total FROM school_reports WHERE school_id = :school_id AND status IN ('draft', 'submitted')";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':school_id', $schoolId);
+        $stmt->bindValue(':school_id', $schoolId);
         $stmt->execute();
         $stats['pending_reports'] = $stmt->fetch()['total'];
-        
+
         // Approved reports
         $query = "SELECT COUNT(*) as total FROM school_reports WHERE school_id = :school_id AND status = 'approved'";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':school_id', $schoolId);
+        $stmt->bindValue(':school_id', $schoolId);
         $stmt->execute();
         $stats['approved_reports'] = $stmt->fetch()['total'];
-        
+
         // Monthly reports
         $query = "SELECT COUNT(*) as total FROM school_reports WHERE school_id = :school_id AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':school_id', $schoolId);
+        $stmt->bindValue(':school_id', $schoolId);
         $stmt->execute();
         $stats['monthly_reports'] = $stmt->fetch()['total'];
         
@@ -207,7 +207,7 @@ function handleDashboard($method) {
                  LIMIT 5";
         
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':school_id', $schoolId);
+        $stmt->bindValue(':school_id', $schoolId);
         $stmt->execute();
         $recentReports = $stmt->fetchAll();
         
@@ -252,8 +252,8 @@ function handleReports($method) {
                              WHERE sr.id = :id AND sr.school_id = :school_id";
                     
                     $stmt = $db->prepare($query);
-                    $stmt->bindParam(':id', $reportId);
-                    $stmt->bindParam(':school_id', $schoolId);
+                    $stmt->bindValue(':id', $reportId);
+                    $stmt->bindValue(':school_id', $schoolId);
                     $stmt->execute();
                     
                     $report = $stmt->fetch();

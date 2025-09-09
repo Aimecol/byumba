@@ -26,8 +26,8 @@ try {
              WHERE sr.id = :id AND sr.school_id = :school_id";
     
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':id', $reportId);
-    $stmt->bindParam(':school_id', $currentUser['school_id']);
+    $stmt->bindValue(':id', $reportId);
+    $stmt->bindValue(':school_id', $currentUser['school_id']);
     $stmt->execute();
     
     $report = $stmt->fetch();

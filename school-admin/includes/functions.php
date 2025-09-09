@@ -68,7 +68,7 @@ class SchoolAuth {
         try {
             $query = "UPDATE school_users SET last_login = NOW() WHERE id = :id";
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':id', $userId);
+            $stmt->bindValue(':id', $userId);
             $stmt->execute();
         } catch(PDOException $e) {
             error_log("Update last login error: " . $e->getMessage());
@@ -202,14 +202,14 @@ class SchoolReports {
             }
             
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':school_id', $schoolId);
-            
+            $stmt->bindValue(':school_id', $schoolId);
+
             if ($status) {
-                $stmt->bindParam(':status', $status);
+                $stmt->bindValue(':status', $status);
             }
-            
+
             if ($limit) {
-                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
             }
             
             $stmt->execute();
@@ -241,14 +241,14 @@ class SchoolReports {
                      VALUES (:school_id, :report_type_id, :report_number, :title, :reporting_period, :report_data, :submitted_by, :status)";
             
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':school_id', $data['school_id']);
-            $stmt->bindParam(':report_type_id', $data['report_type_id']);
-            $stmt->bindParam(':report_number', $reportNumber);
-            $stmt->bindParam(':title', $data['title']);
-            $stmt->bindParam(':reporting_period', $data['reporting_period']);
-            $stmt->bindParam(':report_data', json_encode($data['report_data']));
-            $stmt->bindParam(':submitted_by', $data['submitted_by']);
-            $stmt->bindParam(':status', $data['status']);
+            $stmt->bindValue(':school_id', $data['school_id']);
+            $stmt->bindValue(':report_type_id', $data['report_type_id']);
+            $stmt->bindValue(':report_number', $reportNumber);
+            $stmt->bindValue(':title', $data['title']);
+            $stmt->bindValue(':reporting_period', $data['reporting_period']);
+            $stmt->bindValue(':report_data', json_encode($data['report_data']));
+            $stmt->bindValue(':submitted_by', $data['submitted_by']);
+            $stmt->bindValue(':status', $data['status']);
             
             $stmt->execute();
             

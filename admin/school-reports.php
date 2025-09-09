@@ -59,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 case 'approve':
                     $query = "UPDATE school_reports SET status = 'approved', reviewed_by = :admin_id, reviewed_at = NOW() WHERE id = :id";
                     $stmt = $db->prepare($query);
-                    $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
-                    $stmt->bindParam(':id', $reportId);
+                    $stmt->bindValue(':admin_id', $_SESSION['admin_id']);
+                    $stmt->bindValue(':id', $reportId);
                     $stmt->execute();
                     
                     logAdminActivity('approve_school_report', "Approved school report ID: $reportId");
@@ -71,9 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $adminNotes = trim($_POST['admin_notes'] ?? '');
                     $query = "UPDATE school_reports SET status = 'rejected', admin_notes = :notes, reviewed_by = :admin_id, reviewed_at = NOW() WHERE id = :id";
                     $stmt = $db->prepare($query);
-                    $stmt->bindParam(':notes', $adminNotes);
-                    $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
-                    $stmt->bindParam(':id', $reportId);
+                    $stmt->bindValue(':notes', $adminNotes);
+                    $stmt->bindValue(':admin_id', $_SESSION['admin_id']);
+                    $stmt->bindValue(':id', $reportId);
                     $stmt->execute();
                     
                     logAdminActivity('reject_school_report', "Rejected school report ID: $reportId");
@@ -84,9 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     $adminNotes = trim($_POST['admin_notes'] ?? '');
                     $query = "UPDATE school_reports SET status = 'requires_revision', admin_notes = :notes, reviewed_by = :admin_id, reviewed_at = NOW() WHERE id = :id";
                     $stmt = $db->prepare($query);
-                    $stmt->bindParam(':notes', $adminNotes);
-                    $stmt->bindParam(':admin_id', $_SESSION['admin_id']);
-                    $stmt->bindParam(':id', $reportId);
+                    $stmt->bindValue(':notes', $adminNotes);
+                    $stmt->bindValue(':admin_id', $_SESSION['admin_id']);
+                    $stmt->bindValue(':id', $reportId);
                     $stmt->execute();
                     
                     logAdminActivity('request_revision_school_report', "Requested revision for school report ID: $reportId");
