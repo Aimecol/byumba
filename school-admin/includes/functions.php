@@ -28,7 +28,7 @@ class SchoolAuth {
                      LIMIT 1";
             
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':username', $username);
+            $stmt->bindValue(':username', $username);
             $stmt->execute();
             
             $user = $stmt->fetch();
@@ -138,16 +138,16 @@ class SchoolAuth {
      */
     public function logActivity($schoolId, $userId, $activityType, $description) {
         try {
-            $query = "INSERT INTO school_activity_log (school_id, school_user_id, activity_type, description, ip_address, user_agent) 
+            $query = "INSERT INTO school_activity_log (school_id, school_user_id, activity_type, description, ip_address, user_agent)
                      VALUES (:school_id, :user_id, :activity_type, :description, :ip_address, :user_agent)";
-            
+
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam(':school_id', $schoolId);
-            $stmt->bindParam(':user_id', $userId);
-            $stmt->bindParam(':activity_type', $activityType);
-            $stmt->bindParam(':description', $description);
-            $stmt->bindParam(':ip_address', $_SERVER['REMOTE_ADDR'] ?? '');
-            $stmt->bindParam(':user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
+            $stmt->bindValue(':school_id', $schoolId);
+            $stmt->bindValue(':user_id', $userId);
+            $stmt->bindValue(':activity_type', $activityType);
+            $stmt->bindValue(':description', $description);
+            $stmt->bindValue(':ip_address', $_SERVER['REMOTE_ADDR'] ?? '');
+            $stmt->bindValue(':user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
             $stmt->execute();
         } catch(PDOException $e) {
             error_log("Activity log error: " . $e->getMessage());
@@ -269,17 +269,9 @@ class SchoolReports {
  */
 
 /**
- * Format date for display
+ * Format datetime for display (school admin specific)
  */
-function formatDate($date, $format = 'M j, Y') {
-    if (!$date) return 'N/A';
-    return date($format, strtotime($date));
-}
-
-/**
- * Format datetime for display
- */
-function formatDateTime($datetime, $format = 'M j, Y g:i A') {
+function formatSchoolDateTime($datetime, $format = 'M j, Y g:i A') {
     if (!$datetime) return 'N/A';
     return date($format, strtotime($datetime));
 }

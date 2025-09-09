@@ -10,6 +10,33 @@ require_once 'functions.php';
 
 requirePermission('view_reports');
 
+// Helper functions for school reports
+if (!function_exists('getStatusBadgeClass')) {
+    function getStatusBadgeClass($status) {
+        switch ($status) {
+            case 'draft': return 'bg-secondary';
+            case 'submitted': return 'bg-primary';
+            case 'under_review': return 'bg-warning';
+            case 'approved': return 'bg-success';
+            case 'rejected': return 'bg-danger';
+            case 'requires_revision': return 'bg-info';
+            default: return 'bg-secondary';
+        }
+    }
+}
+
+if (!function_exists('getPriorityBadgeClass')) {
+    function getPriorityBadgeClass($priority) {
+        switch ($priority) {
+            case 'low': return 'bg-light text-dark';
+            case 'normal': return 'bg-secondary';
+            case 'high': return 'bg-warning';
+            case 'urgent': return 'bg-danger';
+            default: return 'bg-secondary';
+        }
+    }
+}
+
 $pageTitle = 'School Reports';
 
 // Get filter parameters
@@ -457,29 +484,6 @@ function showNotesModal(reportId, action) {
     document.getElementById('modalSubmitBtn').className = 'btn ' + btnClass;
     
     new bootstrap.Modal(document.getElementById('notesModal')).show();
-}
-
-// Helper functions for status badges
-function getStatusBadgeClass(status) {
-    switch (status) {
-        case 'draft': return 'bg-secondary';
-        case 'submitted': return 'bg-primary';
-        case 'under_review': return 'bg-warning';
-        case 'approved': return 'bg-success';
-        case 'rejected': return 'bg-danger';
-        case 'requires_revision': return 'bg-info';
-        default: return 'bg-secondary';
-    }
-}
-
-function getPriorityBadgeClass(priority) {
-    switch (priority) {
-        case 'low': return 'bg-light text-dark';
-        case 'normal': return 'bg-secondary';
-        case 'high': return 'bg-warning';
-        case 'urgent': return 'bg-danger';
-        default: return 'bg-secondary';
-    }
 }
 </script>
 
