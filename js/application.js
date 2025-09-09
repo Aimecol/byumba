@@ -6,7 +6,7 @@ function getCertificateInfo(certificateType) {
         'Abasheshakanguhe': {
             icon: 'fas fa-certificate',
             processingTime: '7 business days',
-            fee: 'RWF 2,000',
+            fee: 'RWF 2,00',
             documents: [
                 'National ID Copy',
                 'Membership Proof',
@@ -16,7 +16,7 @@ function getCertificateInfo(certificateType) {
         'Ebenezer': {
             icon: 'fas fa-star',
             processingTime: '7 business days',
-            fee: 'RWF 2,000',
+            fee: 'RWF 2,00',
             documents: [
                 'National ID Copy',
                 'Group Membership Proof',
@@ -26,7 +26,7 @@ function getCertificateInfo(certificateType) {
         'Father\'s Union': {
             icon: 'fas fa-users',
             processingTime: '5 business days',
-            fee: 'RWF 2,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Marriage Certificate',
@@ -46,7 +46,7 @@ function getCertificateInfo(certificateType) {
         'Icyemezo cyuko winjiye mumuryango wa GFS': {
             icon: 'fas fa-female',
             processingTime: '5 business days',
-            fee: 'RWF 2,000',
+            fee: 'RWF 2,00',
             documents: [
                 'National ID Copy',
                 'Application Form',
@@ -56,7 +56,7 @@ function getCertificateInfo(certificateType) {
         'Icyemezo cyumukirisitu': {
             icon: 'fas fa-cross',
             processingTime: '3 business days',
-            fee: 'RWF 1,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Baptism Certificate',
@@ -66,7 +66,7 @@ function getCertificateInfo(certificateType) {
         'Marriage': {
             icon: 'fas fa-ring',
             processingTime: '7 business days',
-            fee: 'RWF 5,000',
+            fee: 'RWF 5,00',
             documents: [
                 'National ID Copy',
                 'Birth Certificate',
@@ -77,7 +77,7 @@ function getCertificateInfo(certificateType) {
         'Mother\'s Union': {
             icon: 'fas fa-heart',
             processingTime: '5 business days',
-            fee: 'RWF 2,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Marriage Certificate',
@@ -87,7 +87,7 @@ function getCertificateInfo(certificateType) {
         'Youth Union': {
             icon: 'fas fa-graduation-cap',
             processingTime: '3 business days',
-            fee: 'RWF 1,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'School Certificate',
@@ -99,7 +99,7 @@ function getCertificateInfo(certificateType) {
     return certificateData[certificateType] || {
         icon: 'fas fa-certificate',
         processingTime: '3-5 business days',
-        fee: 'RWF 2,000',
+        fee: 'RWF 2,00',
         documents: [
             'National ID or Passport copy',
             'Supporting Documents',

@@ -1,0 +1,14 @@
+{
+    "requestTransactionId": "CERT_1757418538_533",
+    "phoneNumber": "250788371020",
+    "amount": 2000,
+    "description": "Certificate Application Fee",
+    "timestamp": "20250909134858",
+    "status": "pending",
+    "intouchpayResponse": {
+        "message": "The total amount to be paid should be less or equal to 1000 RWF",
+        "responsecode": "2300",
+        "success": false
+    },
+    "createdAt": "2025-09-09 13:48:59"
+}

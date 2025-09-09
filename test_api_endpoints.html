@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Endpoints Test - Diocese Certificate System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .status { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🔧 API Endpoints Test - Diocese Certificate System</h1>
+    <p>This page tests the API endpoints to diagnose the JavaScript errors.</p>
+
+    <div class="test-section">
+        <h2>1. Certificate Types API Test</h2>
+        <button onclick="testCertificateTypes()">Test Certificate Types API</button>
+        <div id="certTypesResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Applications API Test</h2>
+        <button onclick="testApplicationsAPI()">Test Applications API (GET)</button>
+        <button onclick="testApplicationSubmission()">Test Application Submission (POST)</button>
+        <div id="applicationsResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Payment API Test</h2>
+        <button onclick="testPaymentAPI()">Test Payment Request API</button>
+        <div id="paymentResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. File Structure Check</h2>
+        <button onclick="checkFileStructure()">Check File Structure</button>
+        <div id="fileStructureResult"></div>
+    </div>
+
+    <script>
+        // Test Certificate Types API
+        async function testCertificateTypes() {
+            const resultDiv = document.getElementById('certTypesResult');
+            resultDiv.innerHTML = '<p class="status">Testing...</p>';
+
+            try {
+                const response = await fetch('api/certificate_types.php');
+                const status = response.status;
+                const statusText = response.statusText;
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Certificate Types API Failed</h3>
+                            <p><strong>Status:</strong> ${status} ${statusText}</p>
+                            <p><strong>Error Response:</strong></p>
+                            <pre>${errorText}</pre>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const result = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Certificate Types API Success</h3>
+                        <p><strong>Status:</strong> ${status} ${statusText}</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Certificate Types API Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Stack:</strong></p>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        // Test Applications API
+        async function testApplicationsAPI() {
+            const resultDiv = document.getElementById('applicationsResult');
+            resultDiv.innerHTML = '<p class="status">Testing GET...</p>';
+
+            try {
+                const response = await fetch('api/applications.php');
+                const status = response.status;
+                const statusText = response.statusText;
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Applications API (GET) Failed</h3>
+                            <p><strong>Status:</strong> ${status} ${statusText}</p>
+                            <p><strong>Error Response:</strong></p>
+                            <pre>${errorText}</pre>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const result = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Applications API (GET) Success</h3>
+                        <p><strong>Status:</strong> ${status} ${statusText}</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Applications API (GET) Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Test Application Submission
+        async function testApplicationSubmission() {
+            const resultDiv = document.getElementById('applicationsResult');
+            resultDiv.innerHTML += '<p class="status">Testing POST...</p>';
+
+            const testData = {
+                certificate_type_id: 1,
+                form_data: {
+                    fullName: 'Test User',
+                    email: 'test@example.com',
+                    phone: '250788123456'
+                },
+                notification_methods: ['email'],
+                notes: 'Test application submission'
+            };
+
+            try {
+                const response = await fetch('api/applications.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const status = response.status;
+                const statusText = response.statusText;
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML += `
+                        <div class="error">
+                            <h3>❌ Applications API (POST) Failed</h3>
+                            <p><strong>Status:</strong> ${status} ${statusText}</p>
+                            <p><strong>Error Response:</strong></p>
+                            <pre>${errorText}</pre>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const result = await response.json();
+                resultDiv.innerHTML += `
+                    <div class="success">
+                        <h3>✅ Applications API (POST) Success</h3>
+                        <p><strong>Status:</strong> ${status} ${statusText}</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML += `
+                    <div class="error">
+                        <h3>❌ Applications API (POST) Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Test Payment API
+        async function testPaymentAPI() {
+            const resultDiv = document.getElementById('paymentResult');
+            resultDiv.innerHTML = '<p class="status">Testing...</p>';
+
+            const testData = {
+                phoneNumber: '250788123456',
+                amount: 200,
+                description: 'Test Certificate Application Fee'
+            };
+
+            try {
+                const response = await fetch('api/payment-request.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const status = response.status;
+                const statusText = response.statusText;
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Payment API Failed</h3>
+                            <p><strong>Status:</strong> ${status} ${statusText}</p>
+                            <p><strong>Error Response:</strong></p>
+                            <pre>${errorText}</pre>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const result = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Payment API Success</h3>
+                        <p><strong>Status:</strong> ${status} ${statusText}</p>
+                        <p><strong>Response:</strong></p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Payment API Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Check File Structure
+        async function checkFileStructure() {
+            const resultDiv = document.getElementById('fileStructureResult');
+            resultDiv.innerHTML = '<p class="status">Checking file structure...</p>';
+
+            const filesToCheck = [
+                'api/certificate_types.php',
+                'api/applications.php',
+                'api/payment-request.php',
+                'js/review.js',
+                'js/payment-api.js'
+            ];
+
+            let results = '<h3>File Structure Check Results:</h3>';
+
+            for (const file of filesToCheck) {
+                try {
+                    const response = await fetch(file, { method: 'HEAD' });
+                    if (response.ok) {
+                        results += `<p>✅ ${file} - EXISTS</p>`;
+                    } else {
+                        results += `<p>❌ ${file} - NOT FOUND (${response.status})</p>`;
+                    }
+                } catch (error) {
+                    results += `<p>❌ ${file} - ERROR: ${error.message}</p>`;
+                }
+            }
+
+            resultDiv.innerHTML = `<div class="info">${results}</div>`;
+        }
+
+        // Auto-run basic checks on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('API Test Page Loaded');
+            checkFileStructure();
+        });
+    </script>
+</body>
+</html>

@@ -6,7 +6,7 @@ function getCertificateInfo(certificateType) {
         'Abasheshakanguhe': {
             icon: 'fas fa-certificate',
             processingTime: '7 business days',
-            fee: 'RWF 2,000',
+            fee: 'RWF 200',
             documents: [
                 'National ID Copy',
                 'Membership Proof',
@@ -16,7 +16,7 @@ function getCertificateInfo(certificateType) {
         'Ebenezer': {
             icon: 'fas fa-star',
             processingTime: '7 business days',
-            fee: 'RWF 2,000',
+            fee: 'RWF 200',
             documents: [
                 'National ID Copy',
                 'Group Membership Proof',
@@ -26,7 +26,7 @@ function getCertificateInfo(certificateType) {
         'Father\'s Union': {
             icon: 'fas fa-users',
             processingTime: '5 business days',
-            fee: 'RWF 2,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Marriage Certificate',
@@ -36,7 +36,7 @@ function getCertificateInfo(certificateType) {
         'Icyemezo cyo gusura kwa korare': {
             icon: 'fas fa-home',
             processingTime: '3 business days',
-            fee: 'RWF 1,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Request Letter',
@@ -46,7 +46,7 @@ function getCertificateInfo(certificateType) {
         'Icyemezo cyuko winjiye mumuryango wa GFS': {
             icon: 'fas fa-female',
             processingTime: '5 business days',
-            fee: 'RWF 2,000',
+            fee: 'RWF 200',
             documents: [
                 'National ID Copy',
                 'Application Form',
@@ -56,7 +56,7 @@ function getCertificateInfo(certificateType) {
         'Icyemezo cyumukirisitu': {
             icon: 'fas fa-cross',
             processingTime: '3 business days',
-            fee: 'RWF 1,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Baptism Certificate',
@@ -66,7 +66,7 @@ function getCertificateInfo(certificateType) {
         'Marriage': {
             icon: 'fas fa-ring',
             processingTime: '7 business days',
-            fee: 'RWF 5,000',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Birth Certificate',
@@ -77,7 +77,7 @@ function getCertificateInfo(certificateType) {
         'Mother\'s Union': {
             icon: 'fas fa-heart',
             processingTime: '5 business days',
-            fee: 'RWF 2,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'Marriage Certificate',
@@ -87,7 +87,7 @@ function getCertificateInfo(certificateType) {
         'Youth Union': {
             icon: 'fas fa-graduation-cap',
             processingTime: '3 business days',
-            fee: 'RWF 1,500',
+            fee: 'RWF 500',
             documents: [
                 'National ID Copy',
                 'School Certificate',
@@ -99,7 +99,7 @@ function getCertificateInfo(certificateType) {
     return certificateData[certificateType] || {
         icon: 'fas fa-certificate',
         processingTime: '3-5 business days',
-        fee: 'RWF 2,000',
+        fee: 'RWF 200',
         documents: [
             'National ID or Passport copy',
             'Supporting Documents',
@@ -944,9 +944,11 @@ function initializeReviewForm(certificateType, applicationData) {
         // For testing purposes - simulate payment success after 30 seconds if backend is not available
         const testingMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
         if (testingMode) {
+            console.log('Testing mode: Will simulate payment success after 30 seconds if payment is still processing');
             setTimeout(() => {
                 if (paymentBtn.innerHTML.includes('Processing Payment')) {
                     console.log('Testing mode: Simulating payment success after 30 seconds');
+                    showNotification('Testing mode: Simulating payment success', 'info');
                     handlePaymentSuccess();
                 }
             }, 30000); // 30 seconds for testing
@@ -956,10 +958,13 @@ function initializeReviewForm(certificateType, applicationData) {
             attempts++;
 
             try {
+                console.log(`Checking payment status (attempt ${attempts})...`);
                 const statusResult = await paymentAPI.getTransactionStatus(
                     currentPaymentTransaction.transactionId,
                     currentPaymentTransaction.intouchpayTransactionId
                 );
+
+                console.log('Payment status result:', statusResult);
 
                 // Reset error counter on successful API call
                 consecutiveErrors = 0;
@@ -1074,13 +1079,48 @@ function initializeReviewForm(certificateType, applicationData) {
         showNotification(message, 'error');
     }
 
+    // Check if user is authenticated
+    async function checkAuthentication() {
+        try {
+            const response = await fetch('api/auth.php', {
+                method: 'GET',
+                credentials: 'same-origin' // Include session cookies
+            });
+
+            if (response.ok) {
+                const result = await response.text();
+                if (result.includes('authenticated') || result.includes('logged_in')) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (error) {
+            console.warn('Authentication check failed:', error);
+            return false;
+        }
+    }
+
     async function completeApplicationSubmission() {
         try {
+            // Check authentication first
+            const isAuthenticated = await checkAuthentication();
+            if (!isAuthenticated) {
+                console.warn('User not authenticated, attempting to proceed anyway...');
+                showNotification('Authentication warning: You may need to log in for full functionality.', 'warning');
+            }
+
             // Get certificate type ID from API
             let certificate_type_id = 1; // Default fallback
 
             try {
-                const certTypesResponse = await fetch('/api/certificate_types.php');
+                const certTypesResponse = await fetch('api/certificate_types.php', {
+                    credentials: 'same-origin' // Include session cookies
+                });
+
+                if (!certTypesResponse.ok) {
+                    throw new Error(`Certificate types API error: ${certTypesResponse.status}`);
+                }
+
                 const certTypesResult = await certTypesResponse.json();
 
                 if (certTypesResult.success) {
@@ -1090,10 +1130,15 @@ function initializeReviewForm(certificateType, applicationData) {
 
                     if (certType) {
                         certificate_type_id = certType.id;
+                        console.log(`Found certificate type ID: ${certificate_type_id} for ${certificateType}`);
+                    } else {
+                        console.warn(`Certificate type not found in API: ${certificateType}`);
                     }
+                } else {
+                    console.warn('Certificate types API returned error:', certTypesResult.message);
                 }
             } catch (certError) {
-                console.warn('Could not fetch certificate types, using fallback mapping');
+                console.warn('Could not fetch certificate types, using fallback mapping:', certError.message);
 
                 // Fallback mapping if API fails
                 const certificateTypeMap = {
@@ -1121,15 +1166,51 @@ function initializeReviewForm(certificateType, applicationData) {
             };
 
             // Submit application to API
-            const response = await fetch('/api/applications.php', {
+            const response = await fetch('api/applications.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'same-origin', // Include session cookies
                 body: JSON.stringify(submissionData)
             });
 
-            const result = await response.json();
+            // Check if response is OK
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Response Error:', response.status, errorText);
+                throw new Error(`Server error: ${response.status} - ${errorText.substring(0, 100)}`);
+            }
+
+            // Get response text first to check content type
+            const responseText = await response.text();
+            console.log('API Response Text:', responseText.substring(0, 200));
+
+            // Check if response looks like JSON
+            if (!responseText.trim().startsWith('{') && !responseText.trim().startsWith('[')) {
+                console.error('API returned non-JSON response:', responseText);
+
+                // Check for common error patterns
+                if (responseText.includes('Authentication required')) {
+                    throw new Error('Authentication required. Please log in first.');
+                } else if (responseText.includes('Fatal error') || responseText.includes('Parse error')) {
+                    throw new Error('Server error occurred. Please check server logs.');
+                } else if (responseText.includes('<br />') || responseText.includes('<html>')) {
+                    throw new Error('Server returned HTML error page instead of JSON. Check server configuration.');
+                } else {
+                    throw new Error(`API returned unexpected response format: ${responseText.substring(0, 200)}`);
+                }
+            }
+
+            // Parse JSON
+            let result;
+            try {
+                result = JSON.parse(responseText);
+            } catch (parseError) {
+                console.error('JSON Parse Error:', parseError);
+                console.error('Response content:', responseText);
+                throw new Error(`Invalid JSON response from server: ${parseError.message}`);
+            }
 
             if (result.success) {
                 // Store application and payment data

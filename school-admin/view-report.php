@@ -4,19 +4,35 @@
  * Diocese of Byumba - School Management System
  */
 
+// Clear any opcache to ensure changes take effect
+if (function_exists('opcache_reset')) {
+    opcache_reset();
+}
+
+// Ultra-defensive parameter checking using filter_input (safest method)
+$reportId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+// Check if ID parameter exists and is valid
+if ($reportId === null) {
+    session_start();
+    $_SESSION['error_message'] = 'Report ID is required.';
+    header('Location: reports.php');
+    exit;
+}
+
+if ($reportId === false || $reportId <= 0) {
+    session_start();
+    $_SESSION['error_message'] = 'Invalid report ID format.';
+    header('Location: reports.php');
+    exit;
+}
+
 session_start();
 $pageTitle = 'View Report';
 require_once 'includes/functions.php';
 require_once 'includes/file-handler.php';
 
 $currentUser = $schoolAuth->getCurrentUser();
-$reportId = intval($_GET['id'] ?? 0);
-
-if (!$reportId) {
-    $_SESSION['error_message'] = 'Invalid report ID.';
-    header('Location: reports.php');
-    exit;
-}
 
 // Get report details
 try {
@@ -93,9 +109,11 @@ require_once 'includes/header.php';
                         <span class="badge <?php echo getStatusBadgeClass($report['status']); ?> fs-6">
                             <?php echo ucfirst(str_replace('_', ' ', $report['status'])); ?>
                         </span>
+                        <?php if (isset($report['priority']) && !empty($report['priority'])): ?>
                         <span class="badge <?php echo getPriorityBadgeClass($report['priority']); ?> fs-6 ms-2">
                             <?php echo ucfirst($report['priority']); ?> Priority
                         </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -107,25 +125,25 @@ require_once 'includes/header.php';
                     </div>
                     <div class="col-md-3">
                         <strong>Reporting Period:</strong><br>
-                        <?php echo htmlspecialchars($report['reporting_period'] ?: 'Not specified'); ?>
+                        <?php echo htmlspecialchars($report['reporting_period'] ?? 'Not specified'); ?>
                     </div>
                     <div class="col-md-3">
                         <strong>Created:</strong><br>
-                        <?php echo formatDateTime($report['created_at']); ?>
+                        <?php echo formatDateTime($report['created_at'] ?? ''); ?>
                     </div>
                     <div class="col-md-3">
                         <strong>Submitted:</strong><br>
-                        <?php echo $report['submitted_at'] ? formatDateTime($report['submitted_at']) : 'Not submitted'; ?>
+                        <?php echo isset($report['submitted_at']) && $report['submitted_at'] ? formatDateTime($report['submitted_at']) : 'Not submitted'; ?>
                     </div>
                 </div>
                 
-                <?php if ($report['submitted_by_name']): ?>
+                <?php if (isset($report['submitted_by_name']) && $report['submitted_by_name']): ?>
                     <div class="row mt-3">
                         <div class="col-md-3">
                             <strong>Submitted By:</strong><br>
                             <?php echo htmlspecialchars($report['submitted_by_name']); ?>
                         </div>
-                        <?php if ($report['reviewed_at']): ?>
+                        <?php if (isset($report['reviewed_at']) && $report['reviewed_at']): ?>
                             <div class="col-md-3">
                                 <strong>Reviewed:</strong><br>
                                 <?php echo formatDateTime($report['reviewed_at']); ?>
@@ -178,7 +196,7 @@ require_once 'includes/header.php';
 <!-- Notes Section -->
 <div class="row mb-4">
     <div class="col-md-6">
-        <?php if ($report['school_notes']): ?>
+        <?php if (isset($report['school_notes']) && $report['school_notes']): ?>
             <div class="card">
                 <div class="card-header">
                     <h6 class="mb-0">
@@ -192,7 +210,7 @@ require_once 'includes/header.php';
         <?php endif; ?>
     </div>
     <div class="col-md-6">
-        <?php if ($report['admin_notes']): ?>
+        <?php if (isset($report['admin_notes']) && $report['admin_notes']): ?>
             <div class="card">
                 <div class="card-header">
                     <h6 class="mb-0">

@@ -3,25 +3,51 @@
  * Applications API Endpoint
  */
 
-// Start session and check authentication
-session_start();
+// Include required files
+require_once '../config/database.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    ResponseHelper::error('Authentication required', 401);
+// Set JSON response headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
 }
 
-// Get user ID from session
-$user_id = $_SESSION['user_id'];
+// Start session and check authentication
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Get global variables
+// For certificate applications, we'll allow public access but track user if logged in
+$user_id = $_SESSION['user_id'] ?? null;
+$is_authenticated = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true;
+
+// Get request method and language
 $method = $_SERVER['REQUEST_METHOD'];
-$current_language = $GLOBALS['current_language'] ?? 'en';
-$db = $GLOBALS['db'] ?? null;
+$current_language = $_GET['lang'] ?? 'en';
 
-// Check if database connection is available
-if (!$db) {
-    ResponseHelper::error('Database connection not available', 500);
+// Database connection should be available from config/database.php
+// If not, create a new connection
+if (!isset($db) || !$db) {
+    try {
+        $db = new PDO(
+            'mysql:host=localhost;dbname=diocese_byumba;charset=utf8mb4',
+            'root',
+            '',
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]
+        );
+    } catch (PDOException $e) {
+        ResponseHelper::error('Database connection failed: ' . $e->getMessage(), 500);
+    }
 }
 
 if ($method === 'GET') {
@@ -33,9 +59,14 @@ if ($method === 'GET') {
         $limit = (int)($_GET['limit'] ?? 10);
         $offset = ($page - 1) * $limit;
         
-        // Build query
-        $where_conditions = ['a.user_id = :user_id', 'ctt.language_code = :language'];
-        $params = [':user_id' => $user_id, ':language' => $current_language];
+        // Build query - if user is authenticated, filter by user_id, otherwise show public applications
+        $where_conditions = ['ctt.language_code = :language'];
+        $params = [':language' => $current_language];
+
+        if ($is_authenticated && $user_id) {
+            $where_conditions[] = 'a.user_id = :user_id';
+            $params[':user_id'] = $user_id;
+        }
         
         if ($status !== 'all') {
             $where_conditions[] = 'a.status = :status';
@@ -86,7 +117,7 @@ if ($method === 'GET') {
             // Get documents for this application
             $doc_query = "SELECT * FROM application_documents WHERE application_id = :app_id";
             $doc_stmt = $db->prepare($doc_query);
-            $doc_stmt->bindParam(':app_id', $row['id']);
+            $doc_stmt->bindValue(':app_id', $row['id']);
             $doc_stmt->execute();
             $documents = $doc_stmt->fetchAll();
             
@@ -154,16 +185,19 @@ if ($method === 'POST') {
         $notification_methods = isset($input['notification_methods']) ?
             json_encode($input['notification_methods']) : json_encode(['email']);
 
+        // For public applications, use a default user_id or null
+        $effective_user_id = $user_id ?? 1; // Use user_id 1 for public applications or create a public user
+
         // Insert application
         $query = "INSERT INTO applications (user_id, certificate_type_id, application_number, notes, notification_methods)
                   VALUES (:user_id, :certificate_type_id, :application_number, :notes, :notification_methods)";
 
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':certificate_type_id', $input['certificate_type_id']);
-        $stmt->bindParam(':application_number', $application_number);
-        $stmt->bindParam(':notes', $input['notes'] ?? '');
-        $stmt->bindParam(':notification_methods', $notification_methods);
+        $stmt->bindValue(':user_id', $effective_user_id);
+        $stmt->bindValue(':certificate_type_id', $input['certificate_type_id']);
+        $stmt->bindValue(':application_number', $application_number);
+        $stmt->bindValue(':notes', $input['notes'] ?? '');
+        $stmt->bindValue(':notification_methods', $notification_methods);
         $stmt->execute();
 
         $application_id = $db->lastInsertId();
@@ -176,9 +210,9 @@ if ($method === 'POST') {
         foreach ($input['form_data'] as $field_name => $field_value) {
             // Skip empty values and files (files are handled separately)
             if ($field_value !== '' && $field_value !== null && !is_array($field_value)) {
-                $form_data_stmt->bindParam(':application_id', $application_id);
-                $form_data_stmt->bindParam(':field_name', $field_name);
-                $form_data_stmt->bindParam(':field_value', $field_value);
+                $form_data_stmt->bindValue(':application_id', $application_id);
+                $form_data_stmt->bindValue(':field_name', $field_name);
+                $form_data_stmt->bindValue(':field_value', $field_value);
                 $form_data_stmt->execute();
             }
         }
@@ -191,11 +225,11 @@ if ($method === 'POST') {
 
             foreach ($input['documents'] as $document) {
                 if (isset($document['name']) && isset($document['path'])) {
-                    $doc_stmt->bindParam(':application_id', $application_id);
-                    $doc_stmt->bindParam(':document_name', $document['name']);
-                    $doc_stmt->bindParam(':file_path', $document['path']);
-                    $doc_stmt->bindParam(':file_size', $document['size'] ?? null);
-                    $doc_stmt->bindParam(':mime_type', $document['type'] ?? null);
+                    $doc_stmt->bindValue(':application_id', $application_id);
+                    $doc_stmt->bindValue(':document_name', $document['name']);
+                    $doc_stmt->bindValue(':file_path', $document['path']);
+                    $doc_stmt->bindValue(':file_size', $document['size'] ?? null);
+                    $doc_stmt->bindValue(':mime_type', $document['type'] ?? null);
                     $doc_stmt->execute();
                 }
             }
@@ -225,7 +259,7 @@ function getApplicationsSummary($db, $user_id) {
     // Count by status
     $query = "SELECT status, COUNT(*) as count FROM applications WHERE user_id = :user_id GROUP BY status";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindValue(':user_id', $user_id);
     $stmt->execute();
     
     $status_counts = [
@@ -248,7 +282,7 @@ function getApplicationsSummary($db, $user_id) {
     // Pending payment count
     $query = "SELECT COUNT(*) as count FROM applications WHERE user_id = :user_id AND payment_status = 'pending' AND status = 'approved'";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindValue(':user_id', $user_id);
     $stmt->execute();
     $summary['pending_payment'] = (int)$stmt->fetch()['count'];
     

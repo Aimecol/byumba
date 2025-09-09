@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug API Response</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; white-space: pre-wrap; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug API Response</h1>
+    <p>This page helps debug the exact API response that's causing the JSON parse error.</p>
+
+    <button onclick="testApplicationsAPI()">Test Applications API</button>
+    <button onclick="testCertificateTypesAPI()">Test Certificate Types API</button>
+    <button onclick="testApplicationSubmission()">Test Application Submission</button>
+
+    <div id="results"></div>
+
+    <script>
+        async function testApplicationsAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="info">Testing Applications API...</div>';
+
+            try {
+                const response = await fetch('api/applications.php');
+                
+                const responseInfo = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    url: response.url
+                };
+
+                const responseText = await response.text();
+
+                resultsDiv.innerHTML = `
+                    <div class="result ${response.ok ? 'success' : 'error'}">
+                        <h3>Applications API Response</h3>
+                        <h4>Response Info:</h4>
+                        <pre>${JSON.stringify(responseInfo, null, 2)}</pre>
+                        <h4>Response Body:</h4>
+                        <pre>${responseText}</pre>
+                        <h4>Analysis:</h4>
+                        <p><strong>Content Type:</strong> ${response.headers.get('content-type') || 'Not specified'}</p>
+                        <p><strong>Is JSON:</strong> ${responseText.trim().startsWith('{') || responseText.trim().startsWith('[') ? 'Yes' : 'No'}</p>
+                        <p><strong>Starts with:</strong> "${responseText.substring(0, 50)}"</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Applications API Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function testCertificateTypesAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="info">Testing Certificate Types API...</div>';
+
+            try {
+                const response = await fetch('api/certificate_types.php');
+                
+                const responseInfo = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    url: response.url
+                };
+
+                const responseText = await response.text();
+
+                resultsDiv.innerHTML = `
+                    <div class="result ${response.ok ? 'success' : 'error'}">
+                        <h3>Certificate Types API Response</h3>
+                        <h4>Response Info:</h4>
+                        <pre>${JSON.stringify(responseInfo, null, 2)}</pre>
+                        <h4>Response Body:</h4>
+                        <pre>${responseText}</pre>
+                        <h4>Analysis:</h4>
+                        <p><strong>Content Type:</strong> ${response.headers.get('content-type') || 'Not specified'}</p>
+                        <p><strong>Is JSON:</strong> ${responseText.trim().startsWith('{') || responseText.trim().startsWith('[') ? 'Yes' : 'No'}</p>
+                        <p><strong>Starts with:</strong> "${responseText.substring(0, 50)}"</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Certificate Types API Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        async function testApplicationSubmission() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="info">Testing Application Submission...</div>';
+
+            const testData = {
+                certificate_type_id: 1,
+                form_data: {
+                    fullName: 'Test User',
+                    email: 'test@example.com',
+                    phone: '250788123456',
+                    nationalId: '1234567890123456',
+                    address: 'Test Address'
+                },
+                notification_methods: ['email'],
+                notes: 'Test application submission from debug page'
+            };
+
+            try {
+                const response = await fetch('api/applications.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                const responseInfo = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    url: response.url
+                };
+
+                const responseText = await response.text();
+
+                resultsDiv.innerHTML = `
+                    <div class="result ${response.ok ? 'success' : 'error'}">
+                        <h3>Application Submission Response</h3>
+                        <h4>Request Data:</h4>
+                        <pre>${JSON.stringify(testData, null, 2)}</pre>
+                        <h4>Response Info:</h4>
+                        <pre>${JSON.stringify(responseInfo, null, 2)}</pre>
+                        <h4>Response Body:</h4>
+                        <pre>${responseText}</pre>
+                        <h4>Analysis:</h4>
+                        <p><strong>Content Type:</strong> ${response.headers.get('content-type') || 'Not specified'}</p>
+                        <p><strong>Is JSON:</strong> ${responseText.trim().startsWith('{') || responseText.trim().startsWith('[') ? 'Yes' : 'No'}</p>
+                        <p><strong>Starts with:</strong> "${responseText.substring(0, 50)}"</p>
+                        ${responseText.includes('<br />') ? '<p><strong>⚠️ Contains HTML:</strong> This is likely a PHP error page!</p>' : ''}
+                        ${responseText.includes('Fatal error') ? '<p><strong>🚨 PHP Fatal Error:</strong> Check server logs!</p>' : ''}
+                        ${responseText.includes('Parse error') ? '<p><strong>🚨 PHP Parse Error:</strong> Syntax error in PHP code!</p>' : ''}
+                    </div>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Application Submission Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Debug page loaded');
+        });
+    </script>
+</body>
+</html>

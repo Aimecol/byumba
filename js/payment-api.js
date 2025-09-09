@@ -128,13 +128,14 @@ class PaymentAPI {
 
         } catch (error) {
             console.error('Transaction status check failed:', error);
+            console.log('Transaction not found in backend, assuming still pending');
 
             // Return pending status instead of failing completely
             // This allows the monitoring to continue
             return {
                 success: true,
                 status: 'Pending',
-                message: 'Status check failed, assuming pending',
+                message: 'Transaction not found in backend, assuming still pending',
                 responseCode: '1000',
                 error: error.message
             };

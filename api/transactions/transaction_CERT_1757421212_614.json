@@ -1,0 +1,17 @@
+{
+    "requestTransactionId": "CERT_1757421212_614",
+    "phoneNumber": "250789375245",
+    "amount": 200,
+    "description": "Certificate Application Fee",
+    "timestamp": "20250909143332",
+    "status": "pending",
+    "intouchpayResponse": {
+        "status": "Pending",
+        "requesttransactionid": "CERT_1757421212_614",
+        "success": true,
+        "responsecode": "1000",
+        "transactionid": "241188320250909123336977566",
+        "message": "Your Payment transaction of 200RWF is Pending. Dial *182*7*1# to approve it."
+    },
+    "createdAt": "2025-09-09 14:33:35"
+}
